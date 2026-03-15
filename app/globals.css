@@ -131,4 +131,8 @@ body {
   html {
     @apply font-sans;
   }
+  /* Visible focus rings for keyboard navigation */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
 }

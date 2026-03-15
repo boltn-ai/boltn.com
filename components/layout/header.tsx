@@ -32,7 +32,7 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
           <Link
             href="/about"
             className="text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -56,6 +56,8 @@ export function Header() {
           className="inline-flex items-center justify-center text-foreground md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

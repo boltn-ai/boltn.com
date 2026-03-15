@@ -22,19 +22,29 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
       }
     }
 
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [open, onClose]);
 
   return (
     <div
+      id="mobile-nav"
       ref={navRef}
+      aria-hidden={!open}
       className={cn(
         "overflow-hidden border-t border-[#3f3f46] bg-[#0a0a0a] transition-all duration-200 ease-in-out md:hidden",
         open ? "max-h-64 opacity-100" : "max-h-0 opacity-0",
       )}
     >
-      <nav className="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-6">
+      <nav aria-label="Mobile navigation" className="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-6">
         <Link
           href="/about"
           onClick={onClose}

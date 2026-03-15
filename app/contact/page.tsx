@@ -20,7 +20,10 @@ export default function ContactPage() {
 
       <Section className="pt-0">
         {state.success ? (
-          <div className="rounded-md border border-[#22c55e]/30 bg-[#22c55e]/10 p-6">
+          <div
+            role="alert"
+            className="rounded-md border border-[#22c55e]/30 bg-[#22c55e]/10 p-6"
+          >
             <p className="text-lg font-medium text-foreground">Message sent.</p>
             <p className="mt-2 text-muted-foreground">
               Thanks for reaching out. You will hear back soon.
@@ -29,7 +32,11 @@ export default function ContactPage() {
         ) : (
           <form action={formAction} className="max-w-xl space-y-6">
             {state.error && (
-              <div className="rounded-md border border-red-500/30 bg-red-500/10 p-4">
+              <div
+                role="alert"
+                aria-live="assertive"
+                className="rounded-md border border-red-500/30 bg-red-500/10 p-4"
+              >
                 <p className="text-sm text-red-400">{state.error}</p>
               </div>
             )}

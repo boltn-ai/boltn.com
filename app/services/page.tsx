@@ -81,7 +81,7 @@ export default function ServicesPage() {
               <ul className="mt-3 space-y-2">
                 {engagement.includes.map((item) => (
                   <li key={item} className="flex items-start gap-2 text-muted-foreground">
-                    <span className="mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-[#22c55e]" />
+                    <span aria-hidden="true" className="mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-[#22c55e]" />
                     {item}
                   </li>
                 ))}

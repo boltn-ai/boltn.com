@@ -32,6 +32,29 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://boltn.com/#organization",
+      name: "boltn",
+      url: "https://boltn.com",
+      description:
+        "AI-first software development and consulting agency helping engineering leaders navigate AI adoption with architectural integrity.",
+      founder: { "@id": "https://boltn.com/#person" },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://boltn.com/#person",
+      name: "Steve Bolton",
+      jobTitle: "Founder",
+      worksFor: { "@id": "https://boltn.com/#organization" },
+      url: "https://boltn.com/about",
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,8 +65,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
       >
+        <script
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: controlled static JSON-LD
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-[#22c55e] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#0a0a0a]"
+        >
+          Skip to main content
+        </a>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

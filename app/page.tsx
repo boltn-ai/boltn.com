@@ -96,7 +96,8 @@ export default function Home() {
                 href={service.href}
                 className="mt-3 inline-block text-sm font-medium text-[#22c55e] hover:text-[#4ade80]"
               >
-                Learn more &rarr;
+                Learn more<span className="sr-only"> about {service.name}</span>
+                <span aria-hidden="true"> →</span>
               </Link>
             </div>
           ))}
