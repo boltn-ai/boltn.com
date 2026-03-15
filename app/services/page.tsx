@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 
 const engagements = [
 	{
+		number: "01",
 		title: "Assessment",
 		tagline: "See where you actually stand",
 		description:
@@ -23,6 +24,7 @@ const engagements = [
 		],
 	},
 	{
+		number: "02",
 		title: "Advisory",
 		tagline: "Architecture before tooling",
 		description:
@@ -35,6 +37,7 @@ const engagements = [
 		],
 	},
 	{
+		number: "03",
 		title: "Project",
 		tagline: "Build it right the first time",
 		description:
@@ -56,54 +59,65 @@ export default function ServicesPage() {
 				subtitle="Not every company needs the same engagement. The right approach depends on where you are, what you have built, and what is actually blocking progress."
 			/>
 
-			<div className="mx-auto max-w-5xl px-6">
-				{engagements.map((engagement, index) => (
+			<div
+				className="grid grid-cols-1 md:grid-cols-3"
+				style={{ gap: "1px", background: "var(--border)" }}
+			>
+				{engagements.map((engagement) => (
 					<div
 						key={engagement.title}
-						className={
-							index < engagements.length - 1
-								? "border-b border-zinc-800 pb-16 mb-16"
-								: "pb-16"
-						}
+						style={{ background: "var(--bg)" }}
+						className="group p-6 transition-colors duration-200 hover:bg-[--bg-subtle]"
 					>
-						<p className="text-sm font-medium uppercase tracking-wider text-[#22c55e]">
-							{engagement.title}
-						</p>
-						<h2 className="mt-2 text-2xl font-medium tracking-tight text-foreground md:text-3xl">
+						<span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[--accent]">
+							{engagement.number} / {engagement.title}
+						</span>
+						<h2
+							className="mt-3 text-xl font-medium tracking-tight text-foreground"
+							style={{ fontFamily: "var(--font-display)" }}
+						>
 							{engagement.tagline}
 						</h2>
-						<p className="mt-4 max-w-3xl text-lg leading-relaxed text-muted-foreground">
+						<p
+							className="mt-3 text-[12px] text-[--text-muted]"
+							style={{
+								fontFamily: "Georgia, 'Times New Roman', serif",
+								fontStyle: "italic",
+							}}
+						>
 							{engagement.description}
 						</p>
 
-						<div className="mt-8">
-							<h3 className="text-sm font-medium uppercase tracking-wider text-zinc-400">
-								What's included
+						<div className="mt-6">
+							<h3 className="font-mono text-[9px] uppercase tracking-[0.22em] text-[--text-faint]">
+								What&apos;s included
 							</h3>
 							<ul className="mt-3 space-y-2">
 								{engagement.includes.map((item) => (
 									<li
 										key={item}
-										className="flex items-start gap-2 text-muted-foreground"
+										className="flex items-start gap-2 text-[12px] text-[--text-muted]"
 									>
 										<span
-											aria-hidden="true"
-											className="mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-[#22c55e]"
-										/>
+											className="transition-colors duration-200 group-hover:text-[--accent]"
+											style={{ color: "rgba(200,132,42,0)" }}
+										>
+											→
+										</span>
 										{item}
 									</li>
 								))}
 							</ul>
 						</div>
 
-						<div className="mt-8">
+						<div className="mt-6">
 							<CtaButton href="/book">Book a discovery call</CtaButton>
 						</div>
 					</div>
 				))}
 			</div>
 
-			<Section className="border-t border-zinc-800 text-center">
+			<Section className="border-t border-[--border] text-center">
 				<p className="text-lg text-muted-foreground">
 					Every engagement starts with a conversation.
 				</p>
