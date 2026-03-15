@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Playfair_Display, IBM_Plex_Mono } from "next/font/google";
 import { CookieBanner } from "@/components/layout/cookie-banner";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import "./globals.css";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const playfair = Playfair_Display({
+	variable: "--font-display",
 	subsets: ["latin"],
+	display: "swap",
 });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
+const ibmPlexMono = IBM_Plex_Mono({
+	variable: "--font-mono",
 	subsets: ["latin"],
+	weight: ["400", "500"],
+	display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -62,9 +65,9 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className="dark">
+		<html lang="en">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
+				className={`${playfair.variable} ${ibmPlexMono.variable} flex min-h-screen flex-col antialiased`}
 			>
 				<script
 					type="application/ld+json"
@@ -73,7 +76,7 @@ export default function RootLayout({
 				/>
 				<a
 					href="#main-content"
-					className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-[#22c55e] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#0a0a0a]"
+					className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-[--accent] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[--bg]"
 				>
 					Skip to main content
 				</a>
