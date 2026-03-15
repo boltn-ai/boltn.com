@@ -219,7 +219,81 @@ export default function Home() {
 				</div>
 			</div>
 
-			{/* Services grid placeholder — Task 2 */}
+			{/* Services section */}
+			<section className="mx-auto max-w-6xl px-6 pb-24">
+				{/* Section marker */}
+				<div className="mb-8">
+					<div className="mb-2 h-px w-5 bg-[--accent]" />
+					<span
+						className="font-mono text-[9px] uppercase tracking-[0.25em]"
+						style={{ color: "rgba(200,132,42,0.75)" }}
+					>
+						Services
+					</span>
+				</div>
+
+				{/* Gap-grid */}
+				<div
+					className="grid grid-cols-1 md:grid-cols-3"
+					style={{ gap: "1px", background: "var(--border)" }}
+				>
+					{[
+						{
+							number: "01",
+							slug: "Assessment",
+							name: "AI Maturity Assessment",
+							description:
+								"A structured diagnostic of where you actually stand — architecture, organisation, and team readiness. Not a survey. A scored instrument that surfaces the specific gaps.",
+						},
+						{
+							number: "02",
+							slug: "Advisory",
+							name: "Architecture Advisory",
+							description:
+								"Ongoing architectural guidance through the adoption curve. Weekly sessions, async review, decision support when the pressure is on.",
+						},
+						{
+							number: "03",
+							slug: "Build",
+							name: "Accelerated Build",
+							description:
+								"Hands-on delivery for teams that need an architect embedded in the work. Scoped engagements with clear boundaries and measurable outcomes.",
+						},
+					].map((service) => (
+						<div
+							key={service.number}
+							className="group p-6 transition-colors duration-200 hover:bg-[--bg-subtle]"
+							style={{ background: "var(--bg)" }}
+						>
+							<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-[--accent]">
+								{service.number} / {service.slug}
+							</p>
+							<h3
+								className="mb-3 text-[20px] font-normal leading-[1.2] text-[--text-primary]"
+								style={{ fontFamily: "var(--font-display)" }}
+							>
+								{service.name}
+							</h3>
+							<p
+								className="mb-4 text-[12px] leading-[1.6] text-[--text-muted]"
+								style={{
+									fontFamily: "Georgia, 'Times New Roman', serif",
+									fontStyle: "italic",
+								}}
+							>
+								{service.description}
+							</p>
+							<span
+								className="font-mono text-[12px] transition-colors duration-200 group-hover:text-[--accent]"
+								style={{ color: "rgba(200,132,42,0)" }}
+								aria-hidden="true"
+							>
+								&rarr;
+							</span>
+						</div>
+					))}
+				</div>
+			</section>
 		</main>
 	);
 }
