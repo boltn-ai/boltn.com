@@ -29,7 +29,7 @@ export default function CookiePolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: What are cookies */}
@@ -49,7 +49,7 @@ export default function CookiePolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Cookies this site uses */}
@@ -136,7 +136,7 @@ export default function CookiePolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Managing cookies */}
@@ -160,7 +160,7 @@ export default function CookiePolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Changes to this policy */}
@@ -180,7 +180,7 @@ export default function CookiePolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: More information */}

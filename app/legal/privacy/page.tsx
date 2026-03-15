@@ -30,7 +30,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Who we are */}
@@ -62,7 +62,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: What we collect and why */}
@@ -123,7 +123,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Third-party processors */}
@@ -188,7 +188,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: How long we keep your data */}
@@ -225,7 +225,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Your rights */}
@@ -292,7 +292,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Right to object — MUST be separate and prominent per ICO guidance */}
@@ -328,7 +328,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Automated decision-making */}
@@ -347,7 +347,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Cookies */}
@@ -374,7 +374,7 @@ export default function PrivacyPolicy() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-zinc-800" />
+				<div className="border-b border-[--border]" />
 			</Section>
 
 			{/* Section: Changes to this policy */}
