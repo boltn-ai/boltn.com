@@ -50,3 +50,71 @@
 		outline-offset: 2px;
 	}
 }
+
+@layer components {
+	.prose-boltn h2 {
+		font-family: var(--font-display);
+		font-size: 28px;
+		font-weight: 400;
+		line-height: 1.2;
+		color: var(--text-primary);
+		margin-top: 2.5rem;
+		margin-bottom: 1rem;
+	}
+	.prose-boltn h3 {
+		font-family: var(--font-display);
+		font-size: 20px;
+		font-weight: 400;
+		line-height: 1.2;
+		color: var(--text-primary);
+		margin-top: 2rem;
+		margin-bottom: 0.75rem;
+	}
+	.prose-boltn p {
+		font-family: Georgia, "Times New Roman", serif;
+		font-style: italic;
+		font-size: 14px;
+		line-height: 1.75;
+		color: var(--text-muted);
+		margin-bottom: 1.25rem;
+	}
+	.prose-boltn a {
+		color: var(--accent);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+	.prose-boltn ul,
+	.prose-boltn ol {
+		font-family: Georgia, "Times New Roman", serif;
+		font-style: italic;
+		font-size: 14px;
+		line-height: 1.75;
+		color: var(--text-muted);
+		padding-left: 1.5rem;
+		margin-bottom: 1.25rem;
+	}
+	.prose-boltn blockquote {
+		border-left: 2px solid var(--border-mid);
+		padding-left: 1rem;
+		font-style: italic;
+		color: var(--text-faint);
+		margin: 1.5rem 0;
+	}
+	.prose-boltn hr {
+		border-color: var(--border);
+		margin: 2rem 0;
+	}
+	.prose-boltn strong {
+		color: var(--text-body);
+		font-weight: 600;
+	}
+	/* Code blocks break out wider than 65ch prose column */
+	.prose-boltn pre {
+		max-width: none;
+	}
+	.prose-boltn > div:has(> pre) {
+		max-width: none;
+		margin-left: -2rem;
+		margin-right: -2rem;
+	}
+}
