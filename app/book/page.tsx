@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/page-header";
 import { Section } from "@/components/ui/section";
+
+export const metadata: Metadata = {
+  title: "Book a Discovery Call",
+  description:
+    "30 minutes to talk through where your team is and what is not working yet. No pitch, no obligation.",
+};
 
 const calEmbedUrl = process.env.NEXT_PUBLIC_CAL_EMBED_URL;
 

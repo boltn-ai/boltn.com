@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { CtaButton } from "@/components/ui/cta-button";
 import { PageHeader } from "@/components/ui/page-header";
 import { Section } from "@/components/ui/section";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Twenty years of watching technology adoption cycles repeat. The lens Steve brings to every boltn engagement is pattern recognition, not prediction.",
+};
 
 export default function About() {
   return (

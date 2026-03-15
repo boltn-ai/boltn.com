@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaButton } from "@/components/ui/cta-button";
 import { Section } from "@/components/ui/section";
+
+export const metadata: Metadata = {
+  title: "boltn — Architecture-first AI adoption",
+  description:
+    "The complexity did not disappear when you moved it into agents. boltn helps engineering leaders see the wall before they hit it.",
+};
 
 const claims = [
   {

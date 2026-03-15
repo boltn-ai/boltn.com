@@ -15,9 +15,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "boltn",
+  metadataBase: new URL("https://boltn.com"),
+  title: {
+    default: "boltn",
+    template: "%s | boltn",
+  },
   description:
-    "AI-first software development and consulting for teams who have outgrown vibe coding.",
+    "The quick wins are real. The trajectory is not. boltn helps engineering leaders see the complexity wall before they hit it.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "boltn",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

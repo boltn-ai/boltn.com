@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { CtaButton } from "@/components/ui/cta-button";
 import { PageHeader } from "@/components/ui/page-header";
 import { Section } from "@/components/ui/section";
+
+export const metadata: Metadata = {
+  title: "Services",
+  description:
+    "Assessment, advisory, and project engagements for engineering teams navigating AI adoption. Every engagement starts from where you actually are.",
+};
 
 const engagements = [
   {
