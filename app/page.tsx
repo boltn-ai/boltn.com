@@ -167,8 +167,7 @@ export default function Home() {
 								fontSize: "clamp(42px, 5.5vw, 64px)",
 							}}
 						>
-							The complexity didn&rsquo;t disappear when you moved it into
-							agents.{" "}
+							The complexity didn&rsquo;t disappear when you moved it into agents.{" "}
 							<em style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
 								You just can&rsquo;t see it yet.
 							</em>
@@ -185,10 +184,9 @@ export default function Home() {
 								fontStyle: "italic",
 							}}
 						>
-							<span style={{ color: "var(--accent)" }}>&sect;</span>{" "}
-							The teams that will outpace everyone else are the ones who know
-							how their systems actually work — and can direct AI precisely at
-							the hard parts. boltn helps you get there.
+							<span style={{ color: "var(--accent)" }}>&sect;</span> The teams that will outpace
+							everyone else are the ones who know how their systems actually work — and can direct
+							AI precisely at the hard parts. boltn helps you get there.
 						</p>
 					</div>
 

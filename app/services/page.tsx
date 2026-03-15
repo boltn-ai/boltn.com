@@ -94,10 +94,7 @@ export default function ServicesPage() {
 							</h3>
 							<ul className="mt-3 space-y-2">
 								{engagement.includes.map((item) => (
-									<li
-										key={item}
-										className="flex items-start gap-2 text-[12px] text-[--text-muted]"
-									>
+									<li key={item} className="flex items-start gap-2 text-[12px] text-[--text-muted]">
 										<span
 											className="transition-colors duration-200 group-hover:text-[--accent]"
 											style={{ color: "rgba(200,132,42,0)" }}
@@ -122,9 +119,7 @@ export default function ServicesPage() {
 					Every engagement starts with a conversation.
 				</p>
 				<div className="mt-6">
-					<CtaButton href="/book">
-						Book a discovery call
-					</CtaButton>
+					<CtaButton href="/book">Book a discovery call</CtaButton>
 				</div>
 			</Section>
 		</>

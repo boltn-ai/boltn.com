@@ -34,10 +34,7 @@ export function Header() {
 				</Link>
 
 				{/* Desktop nav */}
-				<nav
-					aria-label="Main navigation"
-					className="hidden items-center gap-6 md:flex"
-				>
+				<nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
 					<Link
 						href="/about"
 						className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"

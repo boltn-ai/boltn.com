@@ -9,10 +9,7 @@ import { submitContact } from "./actions";
 const initialState = { success: false, error: null };
 
 export default function ContactPage() {
-	const [state, formAction, isPending] = useActionState(
-		submitContact,
-		initialState,
-	);
+	const [state, formAction, isPending] = useActionState(submitContact, initialState);
 
 	return (
 		<>
@@ -23,10 +20,7 @@ export default function ContactPage() {
 
 			<Section className="pt-0">
 				{state.success ? (
-					<div
-						role="alert"
-						className="border border-[--border] bg-[--accent-faint] p-6"
-					>
+					<div role="alert" className="border border-[--border] bg-[--accent-faint] p-6">
 						<p className="text-lg font-medium text-foreground">Message sent.</p>
 						<p className="mt-2 text-muted-foreground">
 							Thanks for reaching out. You will hear back soon.
@@ -45,10 +39,7 @@ export default function ContactPage() {
 						)}
 
 						<div>
-							<label
-								htmlFor="name"
-								className="block text-sm font-medium text-foreground"
-							>
+							<label htmlFor="name" className="block text-sm font-medium text-foreground">
 								Name
 							</label>
 							<input
@@ -62,10 +53,7 @@ export default function ContactPage() {
 						</div>
 
 						<div>
-							<label
-								htmlFor="email"
-								className="block text-sm font-medium text-foreground"
-							>
+							<label htmlFor="email" className="block text-sm font-medium text-foreground">
 								Email
 							</label>
 							<input
@@ -79,10 +67,7 @@ export default function ContactPage() {
 						</div>
 
 						<div>
-							<label
-								htmlFor="message"
-								className="block text-sm font-medium text-foreground"
-							>
+							<label htmlFor="message" className="block text-sm font-medium text-foreground">
 								Message
 							</label>
 							<textarea

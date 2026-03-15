@@ -18,8 +18,8 @@ export default function BookPage() {
 
 			<Section className="pt-0">
 				<p className="max-w-2xl text-lg leading-relaxed text-muted-foreground">
-					30 minutes. No pitch, no obligation. We will talk about where your
-					team is and what is not working yet.
+					30 minutes. No pitch, no obligation. We will talk about where your team is and what is not
+					working yet.
 				</p>
 
 				<div className="mt-10">

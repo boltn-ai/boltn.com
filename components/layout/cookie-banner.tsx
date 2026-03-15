@@ -25,10 +25,7 @@ export function CookieBanner() {
 			<div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
 				<p className="font-mono text-[10px] text-[--text-muted]">
 					This site uses cookies for booking and analytics.{" "}
-					<Link
-						href="/legal/cookies"
-						className="underline hover:text-[--text-body]"
-					>
+					<Link href="/legal/cookies" className="underline hover:text-[--text-body]">
 						Cookie policy
 					</Link>
 				</p>
