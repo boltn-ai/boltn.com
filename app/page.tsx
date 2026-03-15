@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { CtaButton } from "@/components/ui/cta-button";
-import { Section } from "@/components/ui/section";
 
 export const metadata: Metadata = {
 	title: "boltn — Architecture-first AI adoption",
@@ -9,121 +7,219 @@ export const metadata: Metadata = {
 		"The complexity did not disappear when you moved it into agents. boltn helps engineering leaders see the wall before they hit it.",
 };
 
-const claims = [
-	{
-		headline: "The pattern repeats",
-		body: "Every major technology adoption cycle follows the same arc. Client-server, web, cloud, microservices — quick wins arrive fast, confidence builds, organisations scale their usage. Then the wall: the things that were easy at small scale become unmanageable at medium scale. Not because the technology failed, but because the underlying architecture was never designed for the new load. AI is in the false confidence phase right now. The quick wins are real. The trajectory is not.",
-	},
-	{
-		headline: "Complexity moves. It doesn't disappear.",
-		body: "When you move logic from code into an agent, the complexity of that logic relocates. The agent inherits every problem the previous system had — unclear requirements, brittle dependencies, implicit knowledge that only existed in one person's head — and operates on it autonomously, at speed, without the contextual judgment the human had. Hundreds of unarchitected agents is a distributed monolith by another name.",
-	},
-	{
-		headline: "Start where you actually are",
-		body: "Your architecture has 15 years of decisions baked into it. Your team has fears, opinions, and institutional knowledge that no vendor playbook accounts for. Applying a greenfield playbook to a legacy situation is exactly the mistake that creates the wall. The approach has to start from your actual state — tech state, org state, people state — not from an ideal starting point that does not exist.",
-	},
-];
+function AdoptionArcChart() {
+	return (
+		<svg
+			viewBox="0 0 320 200"
+			width="100%"
+			role="img"
+			aria-label="AI adoption arc showing false confidence phase before the complexity wall"
+		>
+			{/* X axis */}
+			<line
+				x1="40"
+				y1="170"
+				x2="300"
+				y2="170"
+				style={{ stroke: "var(--border-mid)", strokeWidth: 1 }}
+			/>
+			{/* Y axis */}
+			<line
+				x1="40"
+				y1="10"
+				x2="40"
+				y2="170"
+				style={{ stroke: "var(--border-mid)", strokeWidth: 1 }}
+			/>
+			{/* Rising amber curve */}
+			<path
+				d="M 40,160 C 100,140 160,80 220,40"
+				fill="none"
+				style={{ stroke: "var(--accent)", strokeWidth: 1.5, opacity: 0.9 }}
+			/>
+			{/* Vertical dashed wall */}
+			<line
+				x1="220"
+				y1="10"
+				x2="220"
+				y2="170"
+				style={{
+					stroke: "var(--accent)",
+					strokeWidth: 1,
+					strokeDasharray: "3,3",
+					opacity: 0.35,
+				}}
+			/>
+			{/* Declining dotted path */}
+			<path
+				d="M 220,40 C 250,60 270,100 290,150"
+				fill="none"
+				style={{
+					stroke: "var(--text-body)",
+					strokeWidth: 1,
+					strokeDasharray: "4,3",
+					opacity: 0.2,
+				}}
+			/>
+			{/* Labels */}
+			<text
+				x="42"
+				y="185"
+				fontSize="8"
+				textAnchor="start"
+				letterSpacing="0.05em"
+				style={{ fill: "var(--text-faint)", textTransform: "uppercase" }}
+			>
+				First agents
+			</text>
+			<text
+				x="165"
+				y="185"
+				fontSize="8"
+				textAnchor="middle"
+				letterSpacing="0.05em"
+				style={{ fill: "var(--text-faint)", textTransform: "uppercase" }}
+			>
+				Scale
+			</text>
+			<text
+				x="290"
+				y="185"
+				fontSize="8"
+				textAnchor="end"
+				letterSpacing="0.05em"
+				style={{ fill: "var(--text-faint)", textTransform: "uppercase" }}
+			>
+				Complexity
+			</text>
+			<text
+				x="224"
+				y="22"
+				fontSize="8"
+				textAnchor="start"
+				letterSpacing="0.05em"
+				style={{ fill: "var(--accent)", textTransform: "uppercase" }}
+			>
+				The wall
+			</text>
+			<text
+				x="170"
+				y="110"
+				fontSize="9"
+				textAnchor="middle"
+				style={{
+					fill: "var(--text-faint)",
+					fontStyle: "italic",
+					fontFamily: "Georgia, serif",
+				}}
+			>
+				false confidence phase
+			</text>
+		</svg>
+	);
+}
 
-const services = [
-	{
-		name: "Assessment",
-		description:
-			"A structured diagnostic of where you actually stand — architecture, organisation, and team readiness. Not a survey. A scored instrument that surfaces the specific gaps.",
-		href: "/services",
-	},
-	{
-		name: "Advisory",
-		description:
-			"Ongoing architectural guidance through the adoption curve. Weekly sessions, async review, decision support when the pressure is on.",
-		href: "/services",
-	},
-	{
-		name: "Project",
-		description:
-			"Hands-on delivery for teams that need an architect embedded in the work. Scoped engagements with clear boundaries and measurable outcomes.",
-		href: "/services",
-	},
-];
+function AvailabilityIndicator() {
+	return (
+		<div className="mt-4 flex items-center gap-2">
+			<span
+				aria-hidden="true"
+				style={{
+					display: "block",
+					flexShrink: 0,
+					width: 5,
+					height: 5,
+					background: "var(--live)",
+					borderRadius: "50%",
+				}}
+			/>
+			<span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[--text-faint]">
+				2 advisory engagements available — Q3 2026
+			</span>
+		</div>
+	);
+}
 
 export default function Home() {
 	return (
-		<>
-			{/* Hero */}
-			<Section className="py-24 md:py-32">
-				<h1 className="max-w-3xl text-4xl font-medium tracking-tight text-foreground md:text-5xl lg:text-6xl">
-					The complexity didn&rsquo;t disappear when you moved it into agents.
-					You just can&rsquo;t see it yet.
-				</h1>
-				<p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-					The quick wins are real. The trajectory is not. boltn helps
-					engineering leaders see the complexity wall before they hit it — and
-					build the architecture to get through it.
-				</p>
-				<div className="mt-10">
-					<CtaButton href="/book">
-						Book a discovery call
-					</CtaButton>
-				</div>
-			</Section>
+		<main>
+			{/* Two-column hero */}
+			<section className="mx-auto max-w-6xl px-6 py-16 lg:py-24">
+				<div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16">
+					{/* Left column */}
+					<div>
+						{/* Section marker */}
+						<div className="mb-6">
+							<div className="mb-2 h-px w-5 bg-[--accent]" />
+							<span
+								className="font-mono text-[9px] uppercase tracking-[0.25em]"
+								style={{ color: "rgba(200,132,42,0.75)" }}
+							>
+								The pattern
+							</span>
+						</div>
 
-			{/* Argument — 3 claims */}
-			<Section className="py-0 md:py-0">
-				{claims.map((claim, i) => (
-					<div
-						key={claim.headline}
-						className={`py-12 md:py-16${i < claims.length - 1 ? " border-b border-zinc-800" : ""}`}
-					>
-						<h2 className="text-2xl font-medium tracking-tight text-foreground md:text-3xl">
-							{claim.headline}
-						</h2>
-						<p className="mt-4 max-w-3xl text-base text-muted-foreground md:text-lg">
-							{claim.body}
+						{/* H1 */}
+						<h1
+							className="font-serif font-normal leading-[1.02] text-[--text-primary]"
+							style={{
+								fontFamily: "var(--font-display)",
+								fontSize: "clamp(42px, 5.5vw, 64px)",
+							}}
+						>
+							The complexity didn&rsquo;t disappear when you moved it into
+							agents.{" "}
+							<em style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
+								You just can&rsquo;t see it yet.
+							</em>
+						</h1>
+
+						{/* Ruled divider */}
+						<div className="my-6 border-t border-[--border]" />
+
+						{/* Lede paragraph */}
+						<p
+							className="text-[14px] leading-[1.75] text-[--text-muted]"
+							style={{
+								fontFamily: "Georgia, 'Times New Roman', serif",
+								fontStyle: "italic",
+							}}
+						>
+							<span style={{ color: "var(--accent)" }}>&sect;</span>{" "}
+							The teams that will outpace everyone else are the ones who know
+							how their systems actually work — and can direct AI precisely at
+							the hard parts. boltn helps you get there.
 						</p>
 					</div>
-				))}
-			</Section>
 
-			{/* Services overview */}
-			<Section>
-				<h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-					How we work
-				</h2>
-				<div className="mt-8 grid gap-8 md:grid-cols-3">
-					{services.map((service) => (
-						<div key={service.name}>
-							<h3 className="text-lg font-medium text-foreground">
-								{service.name}
-							</h3>
-							<p className="mt-2 text-sm text-muted-foreground">
-								{service.description}
-							</p>
-							<Link
-								href={service.href}
-								className="mt-3 inline-block text-sm font-medium text-[#22c55e] hover:text-[#4ade80]"
-							>
-								Learn more<span className="sr-only"> about {service.name}</span>
-								<span aria-hidden="true"> →</span>
-							</Link>
+					{/* Right column */}
+					<div>
+						<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-[--text-faint]">
+							The adoption arc
+						</p>
+						<div className="border border-[--border] p-4">
+							<AdoptionArcChart />
 						</div>
-					))}
+						<div className="mt-6">
+							<CtaButton href="/book">Book a discovery call</CtaButton>
+							<AvailabilityIndicator />
+						</div>
+					</div>
 				</div>
-			</Section>
+			</section>
 
-			{/* Closing CTA */}
-			<Section className="py-24 text-center md:py-32">
-				<h2 className="text-2xl font-medium tracking-tight text-foreground md:text-3xl">
-					See the wall before you hit it.
-				</h2>
-				<p className="mt-4 text-muted-foreground">
-					30 minutes. No pitch, no obligation. We talk about where your team is
-					and what is not working yet.
-				</p>
-				<div className="mt-8">
-					<CtaButton href="/book">
-						Book a discovery call
-					</CtaButton>
+			{/* Section divider */}
+			<div className="mx-auto max-w-6xl px-6">
+				<div className="my-12 flex items-center gap-4">
+					<div className="flex-1 border-t border-[--border]" />
+					<span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[--text-faint]">
+						&sect; 01 — The pattern
+					</span>
+					<div className="flex-1 border-t border-[--border]" />
 				</div>
-			</Section>
-		</>
+			</div>
+
+			{/* Services grid placeholder — Task 2 */}
+		</main>
 	);
 }
