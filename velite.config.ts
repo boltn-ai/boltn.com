@@ -7,17 +7,22 @@ import { defineCollection, defineConfig, s } from "velite";
 const posts = defineCollection({
 	name: "Post",
 	pattern: "blog/**/*.mdx",
-	schema: s.object({
-		title: s.string().max(120),
-		date: s.isodate(),
-		excerpt: s.string().max(200),
-		category: s.string(),
-		published: s.boolean().default(false),
-		slug: s.slug("blog"),
-		metadata: s.metadata(),
-		content: s.mdx(),
-		html: s.markdown(),
-	}),
+	schema: s
+		.object({
+			title: s.string().max(120),
+			date: s.isodate(),
+			excerpt: s.string().max(200),
+			category: s.string(),
+			published: s.boolean().default(false),
+			slug: s.path(),
+			metadata: s.metadata(),
+			content: s.mdx(),
+			html: s.markdown(),
+		})
+		.transform((data) => ({
+			...data,
+			slug: data.slug.replace(/^blog\//, ""),
+		})),
 });
 
 export default defineConfig({
