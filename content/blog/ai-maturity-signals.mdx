@@ -1,0 +1,97 @@
+---
+title: "AI Maturity Signals: What Engineering Leaders Should Measure"
+date: 2026-03-13
+excerpt: "Six signals that reveal where your engineering org actually stands on AI adoption."
+category: framework
+published: true
+---
+
+Most AI maturity frameworks measure the wrong things. They count tools deployed, models integrated, agents running. These are activity metrics. They tell you how much AI you have adopted, not how well.
+
+The difference matters. An organisation with 50 agents and no architectural coherence is not more mature than one with 5 agents and clean service boundaries. It is more exposed.
+
+Here are six signals that actually indicate AI maturity in an engineering organisation. Not tool counts. Not vendor satisfaction scores. Signals that reveal whether your adoption trajectory is sustainable or heading toward a complexity wall.
+
+## Signal 1: Are AI outputs reviewed architecturally or just functionally?
+
+The most common review pattern for AI-generated code: does it work? Does it pass tests? Does it produce the right output?
+
+That is functional review. It is necessary but insufficient.
+
+Architectural review asks different questions. Does this code respect the service boundary? Does it introduce a new dependency that was not in the design? Does it duplicate logic that already exists in another service? Does it follow the data ownership model?
+
+If your teams only review AI outputs functionally, you are accumulating architectural debt at the speed of code generation. The AI does not know about your system's boundaries. It generates locally correct solutions that are globally incoherent. Over time, this produces a codebase that works but cannot be maintained, extended, or reasoned about.
+
+**Mature signal:** Code review for AI-generated changes explicitly includes architectural review. Reviewers check boundary compliance, dependency direction, and pattern consistency -- not just correctness.
+
+## Signal 2: Do you have AI-specific testing patterns?
+
+Standard unit tests verify that code does what it claims. They are important for AI-generated code. But they miss a category of failure that is unique to AI outputs: plausible incorrectness.
+
+AI-generated code has a specific failure mode that human-written code does not. It is often plausible enough to pass a casual review but subtly wrong in ways that only surface under edge conditions. Off-by-one errors in date handling. Incorrect assumptions about null behaviour. Using the wrong enum value when two values have similar names.
+
+Mature organisations develop testing patterns that specifically target this failure mode. Property-based tests that exercise edge cases. Integration tests that verify assumptions about external service behaviour. Snapshot tests that catch when an AI-generated refactor changes behaviour that the unit tests do not cover.
+
+<Callout type="tip">
+If your testing strategy for AI-generated code is the same as your testing strategy for human-written code, you are missing a category of bugs. The failure modes are different. The testing should be too.
+</Callout>
+
+**Mature signal:** Testing strategy explicitly accounts for AI-specific failure modes. Teams have patterns for catching plausible-but-incorrect outputs.
+
+## Signal 3: Is AI adoption measured by tool count or workflow improvement?
+
+A common metric for AI adoption progress: "We have deployed Copilot to 200 developers, integrated 3 LLM providers, and built 12 internal agents."
+
+This measures activity. It does not measure value.
+
+The question is not how many tools you have deployed. The question is which workflows have measurably improved. Has time-to-first-commit for new team members decreased? Has the mean time to resolve production incidents changed? Are pull request cycle times shorter -- and if so, is code quality holding or declining?
+
+Organisations that measure tool count tend to over-invest in breadth and under-invest in depth. They deploy AI everywhere without understanding where it produces genuine value versus where it creates maintenance burden.
+
+**Mature signal:** AI investment decisions are tied to specific workflow metrics, not deployment coverage. Teams can articulate which workflows improved and by how much.
+
+## Signal 4: Can your agents be onboarded like a team member?
+
+Try this thought experiment: if you needed to explain your agent's role, responsibilities, and constraints to a new hire, could you do it in 15 minutes?
+
+If not, your agent does not have clear enough boundaries to operate reliably at scale.
+
+An agent that requires institutional knowledge to understand is an agent that will fail when that institutional knowledge changes. And it will change -- because organisational context shifts constantly. The person who configured the agent leaves. The API it depends on gets versioned. The business logic it encodes gets updated in a meeting that nobody tells the agent about.
+
+Agents need the same operational clarity that team members need: documented responsibilities, explicit inputs and outputs, defined escalation paths, and clear boundaries for what they should and should not do.
+
+**Mature signal:** Every production agent has documented responsibilities, input/output contracts, and failure modes. A new engineer can understand what any agent does and how to debug it without asking the person who built it.
+
+## Signal 5: Do your experienced architects engage with AI tooling or avoid it?
+
+This is a signal that most organisations read incorrectly.
+
+When senior architects are sceptical about AI adoption, the standard interpretation is resistance to change. The actual interpretation is usually different: they can see the complexity that the quick wins are obscuring.
+
+Senior architects understand the system at a level of detail that junior developers do not. They know which dependencies are implicit. They know which documentation is outdated. They know which services have undocumented side effects. When they see an AI tool generating code that ignores all of that context, their scepticism is not about the technology. It is about the gap between what the tool assumes and what the system actually requires.
+
+<Callout type="warning">
+If your most experienced architects are disengaged from your AI adoption efforts, you are missing the perspective that matters most. They are the people who can see the wall before you hit it.
+</Callout>
+
+**Mature signal:** Senior architects are actively involved in AI adoption decisions. They help define where AI should and should not operate based on system complexity, not tool capability.
+
+## Signal 6: Is your AI strategy independent of any single vendor?
+
+This one is straightforward but frequently ignored.
+
+If your AI adoption strategy is built on a single model provider, a single agent framework, or a single vendor's ecosystem, you have a vendor dependency disguised as an AI strategy. The model landscape is shifting every quarter. Capabilities, pricing, and reliability change constantly. An organisation that has coupled its workflow to a specific provider will face a painful migration when -- not if -- that provider's offering changes.
+
+Mature AI adoption separates the workflow design from the model selection. The workflow defines what needs to happen. The model is a pluggable component that handles the AI-specific parts. This is standard software architecture applied to AI integration -- and most organisations skip it because the vendor's SDK makes tight coupling easy.
+
+**Mature signal:** AI workflows are designed around business logic, not provider APIs. Switching the underlying model requires configuration changes, not architectural redesign.
+
+## Using these signals
+
+These six signals are not a maturity score. They are a diagnostic. Each one reveals something specific about how your organisation is adopting AI and whether the trajectory is sustainable.
+
+If most of these signals are absent, you are in the false confidence phase. The quick wins are real, but the foundation is not ready for scale. The investment that matters right now is not more AI tooling. It is architectural clarity, testing discipline, and operational rigour.
+
+If most of these signals are present, you are in a position to scale. The architectural foundation supports compounding gains. Each new AI integration builds on a stable base rather than adding to a growing pile of unmanaged complexity.
+
+The difference between these two positions is not talent, budget, or tool selection. It is whether the organisation did the structural work before scaling or assumed the quick wins meant the hard work was done.

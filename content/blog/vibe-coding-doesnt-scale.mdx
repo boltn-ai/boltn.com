@@ -1,0 +1,77 @@
+---
+title: "Vibe Coding Doesn't Scale. Here's What Does."
+date: 2026-03-11
+excerpt: "AI-assisted coding without architectural thinking produces demos, not systems."
+category: opinion
+published: true
+---
+
+Vibe coding produces impressive demos. Type a prompt. Watch the code appear. Ship it. Repeat.
+
+It works. For a while. And then it stops working -- not with a dramatic failure, but with a slow accumulation of decisions that nobody made deliberately.
+
+The term itself tells you everything you need to know. "Vibe" is the opposite of "intentional." And systems built on vibes have a shelf life.
+
+## What vibe coding actually is
+
+Vibe coding is AI-assisted development where the developer provides intent and the AI provides implementation, with minimal architectural deliberation in between. The developer describes what they want. The AI generates it. If it works, it ships. If it does not work, they prompt again until it does.
+
+The feedback loop is tight. The output is fast. The developer experience feels productive. And for isolated features, standalone tools, or prototypes, it genuinely is productive. There is nothing wrong with using AI to generate boilerplate, scaffold a feature, or explore an implementation approach.
+
+The problem is not the technique. The problem is the assumption that what works for a single feature works for a system.
+
+## Where it breaks down
+
+Vibe coding breaks down at the exact point where systems become interesting: when components need to interact.
+
+**Dependency management.** Vibe-coded features make dependency decisions locally. The AI picks a library that solves the immediate problem. It does not check whether the same problem is already solved elsewhere in the codebase, or whether the library it chose conflicts with another dependency three levels deep. Over 20 features, you end up with 4 HTTP clients, 3 date libraries, and a dependency tree that no human curated.
+
+**Testing strategy.** Each vibe-coded feature gets tests that verify the feature works in isolation. What is missing is the integration test that verifies two features interact correctly. What is missing is the contract test that verifies the API your feature calls has not changed its behaviour. The AI writes tests for what it generated. It does not write tests for the system that its generation sits inside.
+
+**System boundaries.** This is the critical one. Vibe coding does not know where one service ends and another begins. It does not know that the user object it is constructing in service A has different fields than the user object in service B -- because that distinction exists in an architecture document the AI was never given, or in institutional knowledge that was never written down.
+
+<Callout type="warning">
+Every locally correct decision that is globally incoherent creates maintenance debt. Vibe coding generates locally correct decisions faster than any human can. Which means it generates maintenance debt faster than any human can too.
+</Callout>
+
+## The demo problem
+
+Demos are not systems. This is not a new observation, but it applies with particular force to vibe coding.
+
+A demo needs to work once, in one context, under controlled conditions. A system needs to work continuously, in many contexts, under conditions that change over time. A demo needs to impress. A system needs to be maintained, debugged, extended, and operated by people who did not build it.
+
+Vibe coding is optimised for demo production. It generates features that work. It does not generate systems that cohere. The gap between "each feature works" and "the system works" is the gap where vibe coding falls apart -- and it is exactly the gap where architecture lives.
+
+Consider a real scenario. A team vibe-codes an internal dashboard. Each page works. The data loads. The filters function. But the state management approach is different on every page because each page was generated in a separate session. The API calls use inconsistent error handling. The authentication token is refreshed in two different ways depending on which prompt generated which component. Each piece works. The whole does not hang together.
+
+A senior engineer spends three weeks untangling the state management into a consistent pattern. That is three weeks of architectural work that would have taken one day of upfront design -- design that vibe coding skips by definition.
+
+## What does scale
+
+The alternative is not "stop using AI." The alternative is using AI with architectural intent.
+
+**Start with boundaries.** Before generating any code, define the service boundaries, data ownership, and dependency rules. These are the constraints that make AI-generated code coherent across features. Without them, each feature is a standalone island that happens to live in the same repository.
+
+**Codify patterns.** Give the AI your patterns, not just your requirements. If your services use a specific error handling approach, a specific state management pattern, a specific testing convention -- encode those as context. The AI will follow patterns it can see. The patterns it cannot see are the ones it will violate.
+
+**Review architecturally, not just functionally.** "Does it work?" is the first question. "Does it fit?" is the more important one. Does the generated code respect service boundaries? Does it follow the dependency direction? Does it use the patterns the team has agreed on? Functional review catches bugs. Architectural review catches drift.
+
+**Treat AI as a power tool, not an architect.** A power tool amplifies the skill of the person using it. A circular saw in the hands of an experienced carpenter produces precise cuts at speed. The same saw in the hands of someone who has never read a blueprint produces a lot of cut wood and nothing that fits together.
+
+AI code generation works the same way. In the hands of a developer who understands the system architecture, it accelerates implementation dramatically. In the hands of someone who is relying on the AI to make architectural decisions, it produces code that works locally and fails globally.
+
+## The architect variable
+
+This is the thesis. The variable that determines whether AI-assisted development produces lasting value or compounding debt is not the AI. It is the architect.
+
+Experienced architects using AI tooling produce outsized results. They know what to ask for because they understand the system. They catch architectural violations in generated code because they know the patterns. They can direct the AI toward solutions that fit the existing system because they have the context the AI does not.
+
+Developers vibe coding without architectural foundations produce the opposite: impressive output velocity with no structural coherence. The velocity itself becomes the problem, because it is generating complexity faster than anyone can manage it.
+
+The question for engineering leaders is not "how do we get our teams to use AI more?" It is "do our teams have the architectural context to use AI well?" Those are very different questions with very different investment profiles.
+
+One leads to tool procurement and prompt engineering workshops. The other leads to architectural documentation, pattern libraries, and investing in the senior engineers who understand the system well enough to direct AI tooling effectively.
+
+The first approach produces demos. The second produces systems.
+
+Pick one.
