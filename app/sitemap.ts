@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { posts } from "#content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
 	const baseUrl = "https://boltn.com";
 
-	return [
+	const staticEntries: MetadataRoute.Sitemap = [
 		{
 			url: baseUrl,
 			lastModified: new Date(),
@@ -35,6 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			priority: 0.8,
 		},
 		{
+			url: `${baseUrl}/thinking`,
+			lastModified: new Date(),
+			changeFrequency: "weekly",
+			priority: 0.9,
+		},
+		{
 			url: `${baseUrl}/legal/privacy`,
 			lastModified: new Date(),
 			changeFrequency: "yearly",
@@ -47,4 +54,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			priority: 0.3,
 		},
 	];
+
+	const postEntries: MetadataRoute.Sitemap = posts
+		.filter((post) => post.published)
+		.map((post) => ({
+			url: `${baseUrl}/thinking/${post.slug}`,
+			lastModified: new Date(post.date),
+			changeFrequency: "monthly" as const,
+			priority: 0.7,
+		}));
+
+	return [...staticEntries, ...postEntries];
 }

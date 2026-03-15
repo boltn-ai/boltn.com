@@ -48,6 +48,12 @@ export function Header() {
 						Services
 					</Link>
 					<Link
+						href="/thinking"
+						className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
+					>
+						Thinking
+					</Link>
+					<Link
 						href="/book"
 						className="font-mono text-[10px] uppercase tracking-[0.18em]"
 						style={{

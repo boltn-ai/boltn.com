@@ -63,6 +63,13 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 					Services
 				</Link>
 				<Link
+					href="/thinking"
+					onClick={onClose}
+					className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
+				>
+					Thinking
+				</Link>
+				<Link
 					href="/contact"
 					onClick={onClose}
 					className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
