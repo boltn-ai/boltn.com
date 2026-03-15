@@ -40,7 +40,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 			ref={navRef}
 			aria-hidden={!open}
 			className={cn(
-				"overflow-hidden border-t border-[#3f3f46] bg-[#0a0a0a] transition-all duration-200 ease-in-out md:hidden",
+				"overflow-hidden border-t border-[--border] bg-[--bg] transition-all duration-200 ease-in-out md:hidden",
 				open ? "max-h-64 opacity-100" : "max-h-0 opacity-0",
 			)}
 		>
@@ -51,26 +51,26 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 				<Link
 					href="/about"
 					onClick={onClose}
-					className="text-base text-muted-foreground transition-colors hover:text-foreground"
+					className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
 				>
 					About
 				</Link>
 				<Link
 					href="/services"
 					onClick={onClose}
-					className="text-base text-muted-foreground transition-colors hover:text-foreground"
+					className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
 				>
 					Services
 				</Link>
 				<Link
 					href="/contact"
 					onClick={onClose}
-					className="text-base text-muted-foreground transition-colors hover:text-foreground"
+					className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
 				>
 					Contact
 				</Link>
 				<CtaButton href="/book" className="w-fit">
-					Book a discovery call
+					Book a call →
 				</CtaButton>
 			</nav>
 		</div>
