@@ -6,3 +6,5 @@ node_modules/
 *.tsbuildinfo
 next-env.d.ts
 .velite
+.vercel
+.env*.local
