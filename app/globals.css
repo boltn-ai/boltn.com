@@ -83,6 +83,14 @@
 		text-decoration: underline;
 		text-underline-offset: 2px;
 	}
+	/* rehype-autolink-headings (behavior: wrap) wraps heading text in an anchor.
+	   Without this it inherits the prose link styling above, rendering every
+	   heading amber + underlined -- breaking both the H2/H3 spec and the rule
+	   that amber appears in only four places. Headings are not links. */
+	.prose-boltn :is(h1, h2, h3, h4) a {
+		color: inherit;
+		text-decoration: none;
+	}
 	.prose-boltn ul,
 	.prose-boltn ol {
 		font-family: Georgia, "Times New Roman", serif;
