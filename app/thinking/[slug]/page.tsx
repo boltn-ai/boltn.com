@@ -21,11 +21,16 @@ export async function generateMetadata({
 	const post = posts.find((p) => p.slug === slug);
 	if (!post) return {};
 	return {
-		title: post.title,
+		// absolute: skip the "%s | boltn" template so post titles keep the full
+		// 60-char SERP budget for their own keywords
+		title: { absolute: post.title },
 		description: post.excerpt,
 		openGraph: {
 			title: post.title,
 			description: post.excerpt,
+			// siteName is re-declared because Next.js shallow-merges metadata —
+			// a child openGraph replaces the parent's rather than merging into it
+			siteName: "boltn",
 			type: "article",
 			publishedTime: post.date,
 		},
