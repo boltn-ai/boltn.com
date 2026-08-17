@@ -15,10 +15,10 @@ const mdxComponents = {
 		const rawCode = props["data-raw-code"] ?? "";
 
 		return (
-			<div className="group relative my-6 border border-[--border] bg-[--bg-raised]">
-				<div className="flex items-center justify-between border-b border-[--border] px-4 py-2">
+			<div className="group relative my-6 border border-(--border) bg-(--bg-raised)">
+				<div className="flex items-center justify-between border-b border-(--border) px-4 py-2">
 					{language ? (
-						<span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[--text-faint]">
+						<span className="font-mono text-[9px] uppercase tracking-[0.18em] text-(--text-faint)">
 							{language}
 						</span>
 					) : (

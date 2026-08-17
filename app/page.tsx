@@ -133,7 +133,7 @@ function AvailabilityIndicator() {
 					borderRadius: "50%",
 				}}
 			/>
-			<span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[--text-faint]">
+			<span className="font-mono text-[9px] uppercase tracking-[0.1em] text-(--text-faint)">
 				2 advisory engagements available — Q3 2026
 			</span>
 		</div>
@@ -150,7 +150,7 @@ export default function Home() {
 					<div>
 						{/* Section marker */}
 						<div className="mb-6">
-							<div className="mb-2 h-px w-5 bg-[--accent]" />
+							<div className="mb-2 h-px w-5 bg-(--accent)" />
 							<span
 								className="font-mono text-[9px] uppercase tracking-[0.25em]"
 								style={{ color: "rgba(200,132,42,0.75)" }}
@@ -161,7 +161,7 @@ export default function Home() {
 
 						{/* H1 */}
 						<h1
-							className="font-serif font-normal leading-[1.02] text-[--text-primary]"
+							className="font-serif font-normal leading-[1.02] text-(--text-primary)"
 							style={{
 								fontFamily: "var(--font-display)",
 								fontSize: "clamp(42px, 5.5vw, 64px)",
@@ -174,11 +174,11 @@ export default function Home() {
 						</h1>
 
 						{/* Ruled divider */}
-						<div className="my-6 border-t border-[--border]" />
+						<div className="my-6 border-t border-(--border)" />
 
 						{/* Lede paragraph */}
 						<p
-							className="text-[14px] leading-[1.75] text-[--text-muted]"
+							className="text-[14px] leading-[1.75] text-(--text-muted)"
 							style={{
 								fontFamily: "Georgia, 'Times New Roman', serif",
 								fontStyle: "italic",
@@ -192,10 +192,10 @@ export default function Home() {
 
 					{/* Right column */}
 					<div>
-						<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-[--text-faint]">
+						<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-(--text-faint)">
 							The adoption arc
 						</p>
-						<div className="border border-[--border] p-4">
+						<div className="border border-(--border) p-4">
 							<AdoptionArcChart />
 						</div>
 						<div className="mt-6">
@@ -209,11 +209,11 @@ export default function Home() {
 			{/* Section divider */}
 			<div className="mx-auto max-w-6xl px-6">
 				<div className="my-12 flex items-center gap-4">
-					<div className="flex-1 border-t border-[--border]" />
-					<span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[--text-faint]">
+					<div className="flex-1 border-t border-(--border)" />
+					<span className="font-mono text-[9px] uppercase tracking-[0.2em] text-(--text-faint)">
 						&sect; 01 — The pattern
 					</span>
-					<div className="flex-1 border-t border-[--border]" />
+					<div className="flex-1 border-t border-(--border)" />
 				</div>
 			</div>
 
@@ -221,7 +221,7 @@ export default function Home() {
 			<section className="mx-auto max-w-6xl px-6 pb-24">
 				{/* Section marker */}
 				<div className="mb-8">
-					<div className="mb-2 h-px w-5 bg-[--accent]" />
+					<div className="mb-2 h-px w-5 bg-(--accent)" />
 					<span
 						className="font-mono text-[9px] uppercase tracking-[0.25em]"
 						style={{ color: "rgba(200,132,42,0.75)" }}
@@ -260,20 +260,20 @@ export default function Home() {
 					].map((service) => (
 						<div
 							key={service.number}
-							className="group p-6 transition-colors duration-200 hover:bg-[--bg-subtle]"
+							className="group p-6 transition-colors duration-200 hover:bg-(--bg-subtle)"
 							style={{ background: "var(--bg)" }}
 						>
-							<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-[--accent]">
+							<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
 								{service.number} / {service.slug}
 							</p>
 							<h3
-								className="mb-3 text-[20px] font-normal leading-[1.2] text-[--text-primary]"
+								className="mb-3 text-[20px] font-normal leading-[1.2] text-(--text-primary)"
 								style={{ fontFamily: "var(--font-display)" }}
 							>
 								{service.name}
 							</h3>
 							<p
-								className="mb-4 text-[12px] leading-[1.6] text-[--text-muted]"
+								className="mb-4 text-[12px] leading-[1.6] text-(--text-muted)"
 								style={{
 									fontFamily: "Georgia, 'Times New Roman', serif",
 									fontStyle: "italic",
@@ -282,7 +282,7 @@ export default function Home() {
 								{service.description}
 							</p>
 							<span
-								className="font-mono text-[12px] transition-colors duration-200 group-hover:text-[--accent]"
+								className="font-mono text-[12px] transition-colors duration-200 group-hover:text-(--accent)"
 								style={{ color: "rgba(200,132,42,0)" }}
 								aria-hidden="true"
 							>

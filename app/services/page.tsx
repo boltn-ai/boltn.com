@@ -67,9 +67,9 @@ export default function ServicesPage() {
 					<div
 						key={engagement.title}
 						style={{ background: "var(--bg)" }}
-						className="group p-6 transition-colors duration-200 hover:bg-[--bg-subtle]"
+						className="group p-6 transition-colors duration-200 hover:bg-(--bg-subtle)"
 					>
-						<span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[--accent]">
+						<span className="font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
 							{engagement.number} / {engagement.title}
 						</span>
 						<h2
@@ -79,7 +79,7 @@ export default function ServicesPage() {
 							{engagement.tagline}
 						</h2>
 						<p
-							className="mt-3 text-[12px] text-[--text-muted]"
+							className="mt-3 text-[12px] text-(--text-muted)"
 							style={{
 								fontFamily: "Georgia, 'Times New Roman', serif",
 								fontStyle: "italic",
@@ -89,14 +89,14 @@ export default function ServicesPage() {
 						</p>
 
 						<div className="mt-6">
-							<h3 className="font-mono text-[9px] uppercase tracking-[0.22em] text-[--text-faint]">
+							<h3 className="font-mono text-[9px] uppercase tracking-[0.22em] text-(--text-faint)">
 								What&apos;s included
 							</h3>
 							<ul className="mt-3 space-y-2">
 								{engagement.includes.map((item) => (
-									<li key={item} className="flex items-start gap-2 text-[12px] text-[--text-muted]">
+									<li key={item} className="flex items-start gap-2 text-[12px] text-(--text-muted)">
 										<span
-											className="transition-colors duration-200 group-hover:text-[--accent]"
+											className="transition-colors duration-200 group-hover:text-(--accent)"
 											style={{ color: "rgba(200,132,42,0)" }}
 										>
 											→
@@ -114,7 +114,7 @@ export default function ServicesPage() {
 				))}
 			</div>
 
-			<Section className="border-t border-[--border] text-center">
+			<Section className="border-t border-(--border) text-center">
 				<p className="text-lg text-muted-foreground">
 					Every engagement starts with a conversation.
 				</p>

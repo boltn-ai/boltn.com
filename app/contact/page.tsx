@@ -20,7 +20,7 @@ export default function ContactPage() {
 
 			<Section className="pt-0">
 				{state.success ? (
-					<div role="alert" className="border border-[--border] bg-[--accent-faint] p-6">
+					<div role="alert" className="border border-(--border) bg-(--accent-faint) p-6">
 						<p className="text-lg font-medium text-foreground">Message sent.</p>
 						<p className="mt-2 text-muted-foreground">
 							Thanks for reaching out. You will hear back soon.
@@ -47,7 +47,7 @@ export default function ContactPage() {
 								name="name"
 								type="text"
 								required
-								className="mt-1 block w-full border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-[--accent] focus:outline-none"
+								className="mt-1 block w-full border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-(--accent) focus:outline-none"
 								placeholder="Your name"
 							/>
 						</div>
@@ -61,7 +61,7 @@ export default function ContactPage() {
 								name="email"
 								type="email"
 								required
-								className="mt-1 block w-full border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-[--accent] focus:outline-none"
+								className="mt-1 block w-full border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-(--accent) focus:outline-none"
 								placeholder="you@company.com"
 							/>
 						</div>
@@ -75,7 +75,7 @@ export default function ContactPage() {
 								name="message"
 								required
 								rows={5}
-								className="mt-1 block w-full resize-y border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-[--accent] focus:outline-none"
+								className="mt-1 block w-full resize-y border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-(--accent) focus:outline-none"
 								placeholder="What are you working on?"
 							/>
 						</div>
@@ -83,7 +83,7 @@ export default function ContactPage() {
 						<button
 							type="submit"
 							disabled={isPending}
-							className="w-full bg-[--accent] px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[--bg] transition-opacity duration-200 hover:opacity-[0.88] disabled:opacity-50"
+							className="w-full bg-(--accent) px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-(--bg) transition-opacity duration-200 hover:opacity-[0.88] disabled:opacity-50"
 						>
 							{isPending ? "Sending..." : "Send message"}
 						</button>
@@ -94,7 +94,7 @@ export default function ContactPage() {
 					Or{" "}
 					<Link
 						href="/book"
-						className="text-[--accent] underline underline-offset-4 hover:text-[--text-body]"
+						className="text-(--accent) underline underline-offset-4 hover:text-(--text-body)"
 					>
 						book a discovery call
 					</Link>{" "}

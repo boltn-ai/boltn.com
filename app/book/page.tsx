@@ -27,7 +27,7 @@ export default function BookPage() {
 						<iframe
 							src={calEmbedUrl}
 							title="Book a discovery call"
-							className="w-full border-0 bg-[--bg-raised]"
+							className="w-full border-0 bg-(--bg-raised)"
 							style={{ minHeight: "600px" }}
 						/>
 					) : (
@@ -38,7 +38,7 @@ export default function BookPage() {
 									href="https://cal.com"
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-[--accent] underline underline-offset-4 hover:text-[--text-body]"
+									className="text-(--accent) underline underline-offset-4 hover:text-(--text-body)"
 								>
 									visit Cal.com
 								</a>{" "}
@@ -52,7 +52,7 @@ export default function BookPage() {
 					Prefer email? Send a message on our{" "}
 					<Link
 						href="/contact"
-						className="text-[--accent] underline underline-offset-4 hover:text-[--text-body]"
+						className="text-(--accent) underline underline-offset-4 hover:text-(--text-body)"
 					>
 						contact page
 					</Link>

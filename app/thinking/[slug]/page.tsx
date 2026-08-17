@@ -47,10 +47,10 @@ export default async function PostPage({ params }: PostPageProps) {
 			{/* Post header */}
 			<header>
 				<div className="flex items-center gap-3">
-					<span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[--accent]">
+					<span className="font-mono text-[9px] uppercase tracking-[0.25em] text-(--accent)">
 						{post.category}
 					</span>
-					<span className="font-mono text-[10px] tracking-[0.18em] text-[--text-faint]">
+					<span className="font-mono text-[10px] tracking-[0.18em] text-(--text-faint)">
 						{new Date(post.date).toLocaleDateString("en-GB", {
 							day: "numeric",
 							month: "short",
@@ -58,13 +58,13 @@ export default async function PostPage({ params }: PostPageProps) {
 						})}
 					</span>
 				</div>
-				<h1 className="mt-4 font-display text-[36px] font-normal leading-[1.15] text-[--text-primary]">
+				<h1 className="mt-4 font-display text-[36px] font-normal leading-[1.15] text-(--text-primary)">
 					{post.title}
 				</h1>
-				<span className="mt-2 block font-mono text-[10px] tracking-[0.18em] text-[--text-faint]">
+				<span className="mt-2 block font-mono text-[10px] tracking-[0.18em] text-(--text-faint)">
 					{readingTime} min read
 				</span>
-				<hr className="mt-6 mb-8 border-t border-[--border]" />
+				<hr className="mt-6 mb-8 border-t border-(--border)" />
 			</header>
 
 			{/* Prose content — narrow column for readability */}

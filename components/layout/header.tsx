@@ -21,14 +21,14 @@ export function Header() {
 	return (
 		<header
 			className={cn(
-				"sticky top-0 z-50 w-full border-b border-[--border] transition-colors duration-200",
-				scrolled ? "bg-[--bg]/80 backdrop-blur-sm" : "bg-[--bg]",
+				"sticky top-0 z-50 w-full border-b border-(--border) transition-colors duration-200",
+				scrolled ? "bg-(color:--bg)/80 backdrop-blur-sm" : "bg-(--bg)",
 			)}
 		>
 			<div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
 				<Link
 					href="/"
-					className="font-mono text-[13px] uppercase tracking-[0.25em] text-[--text-primary]"
+					className="font-mono text-[13px] uppercase tracking-[0.25em] text-(--text-primary)"
 				>
 					boltn
 				</Link>
@@ -37,19 +37,19 @@ export function Header() {
 				<nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
 					<Link
 						href="/about"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
+						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 					>
 						About
 					</Link>
 					<Link
 						href="/services"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
+						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 					>
 						Services
 					</Link>
 					<Link
 						href="/thinking"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
+						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 					>
 						Thinking
 					</Link>
@@ -69,7 +69,7 @@ export function Header() {
 				{/* Mobile hamburger */}
 				<button
 					type="button"
-					className="inline-flex items-center justify-center text-[--text-primary] md:hidden"
+					className="inline-flex items-center justify-center text-(--text-primary) md:hidden"
 					onClick={() => setMobileOpen(!mobileOpen)}
 					aria-label={mobileOpen ? "Close menu" : "Open menu"}
 					aria-expanded={mobileOpen}

@@ -49,7 +49,7 @@ export default function About() {
 
 			{/* Divider */}
 			<Section className="py-0">
-				<div className="border-b border-[--border]" />
+				<div className="border-b border-(--border)" />
 			</Section>
 
 			{/* Section 2: The approach */}

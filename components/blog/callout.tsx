@@ -21,14 +21,14 @@ export function Callout({
 }) {
 	return (
 		<aside
-			className="my-6 border-l-2 border-[--accent-dim] bg-[--bg-raised] px-5 py-4"
+			className="my-6 border-l-2 border-(--accent-dim) bg-(--bg-raised) px-5 py-4"
 			role="note"
 		>
-			<div className="mb-2 font-mono text-[9px] uppercase tracking-[0.25em] text-[--accent]">
+			<div className="mb-2 font-mono text-[9px] uppercase tracking-[0.25em] text-(--accent)">
 				<span aria-hidden="true">{icons[type]}</span> {labels[type]}
 			</div>
 			<div
-				className="text-[14px] leading-[1.75] text-[--text-muted]"
+				className="text-[14px] leading-[1.75] text-(--text-muted)"
 				style={{
 					fontFamily: "Georgia, 'Times New Roman', serif",
 					fontStyle: "italic",

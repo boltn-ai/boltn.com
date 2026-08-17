@@ -7,15 +7,15 @@ export function ShareButtons({
 	const encodedUrl = encodeURIComponent(url);
 	const encodedTitle = encodeURIComponent(title);
 	return (
-		<div className="mt-12 flex items-center gap-4 border-t border-[--border] pt-6">
-			<span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[--text-faint]">
+		<div className="mt-12 flex items-center gap-4 border-t border-(--border) pt-6">
+			<span className="font-mono text-[9px] uppercase tracking-[0.2em] text-(--text-faint)">
 				Share
 			</span>
 			<a
 				href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
 				target="_blank"
 				rel="noopener noreferrer"
-				className="text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
+				className="text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 				aria-label="Share on LinkedIn"
 			>
 				<Linkedin size={16} />
@@ -24,7 +24,7 @@ export function ShareButtons({
 				href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
 				target="_blank"
 				rel="noopener noreferrer"
-				className="text-[--text-muted] transition-colors duration-150 hover:text-[--text-body]"
+				className="text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 				aria-label="Share on X"
 			>
 				<svg
