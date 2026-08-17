@@ -7,8 +7,9 @@ export const alt = "boltn / thinking";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage({ params }: { params: { slug: string } }) {
-	const post = posts.find((p) => p.slug === params.slug);
+export default async function OGImage({ params }: { params: Promise<{ slug: string }> }) {
+	const { slug } = await params;
+	const post = posts.find((p) => p.slug === slug);
 
 	if (!post) {
 		return new ImageResponse(
