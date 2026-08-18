@@ -25,7 +25,7 @@ export function Header() {
 				scrolled ? "bg-(color:--bg)/80 backdrop-blur-sm" : "bg-(--bg)",
 			)}
 		>
-			<div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+			<div className="mx-auto flex min-h-(--header-h) max-w-5xl items-center justify-between px-6 py-4">
 				<Link
 					href="/"
 					className="font-mono text-[13px] uppercase tracking-[0.25em] text-(--text-primary)"

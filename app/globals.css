@@ -17,6 +17,19 @@
 	--accent-dim: rgba(200, 132, 42, 0.35);
 	--accent-faint: rgba(200, 132, 42, 0.12);
 	--live: #4caf50;
+
+	/* Layout metric, not a colour. The header's height is genuinely
+	   breakpoint-dependent (a 24px hamburger on mobile vs a 13px/1.6 brand link on
+	   desktop, plus py-4 and the 1px bottom border), so a single hardcoded offset
+	   would be wrong at one breakpoint. The header's inner container carries
+	   a matching min-height utility, so the token and the real height cannot drift. */
+	--header-h: 57px;
+}
+
+@media (min-width: 768px) {
+	:root {
+		--header-h: 54px;
+	}
 }
 
 @theme inline {
