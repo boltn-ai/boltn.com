@@ -6,6 +6,8 @@ import { MODEL_VERSION } from "./questions.ts";
 const VALUES: Answer[] = [0, 1, 2, "unsure"];
 const LENGTH = 11;
 const TOTAL = 4 ** LENGTH; // 4,194,304
+const ANSWER_CHARS = "npyu";
+const CHECK_CHARS = "0123456789abcdefghjkmnpqrstvwxyz";
 
 /** The n-th of the 4,194,304 possible answer profiles, read as 11 base-4 digits. */
 function profile(n: number): Answer[] {
@@ -20,33 +22,38 @@ test("CURRENT_VERSION tracks MODEL_VERSION so the two cannot disagree", () => {
 	assert.equal(CURRENT_VERSION, MODEL_VERSION);
 });
 
-test("exhaustive round trip: decode(encode(a)) equals a for all 4,194,304 profiles", () => {
+test("exhaustive: round trip, shape and injectivity over all 4,194,304 profiles", () => {
+	// One pass, three properties. Split across three loops this took ~9s; the assertions
+	// below are done with plain comparisons and only escalate to `assert` on failure, which
+	// keeps the whole sweep inside the per-commit feedback budget.
+	//
+	// Structural check is equivalent to /^[1][npyu]{11}[0-9a-z]$/ — CHECK_CHARS is a subset
+	// of [0-9a-z]. That literal shape is asserted once, below, against a known code.
+	//
+	// Injectivity (no two profiles share a code) needs no separate pass: it follows from
+	// decode(encode(a)) === a holding for every a.
 	for (let n = 0; n < TOTAL; n++) {
 		const answers = profile(n);
 		const code = encode(answers);
-		const back = decode(code);
-		if (back === null) {
-			assert.fail(`decode returned null for a self-produced code: ${code}`);
+
+		if (code.length !== 13) assert.fail(`wrong length at n=${n}: ${code}`);
+		if (code[0] !== "1") assert.fail(`wrong version char at n=${n}: ${code}`);
+		for (let i = 1; i <= LENGTH; i++) {
+			if (!ANSWER_CHARS.includes(code[i])) assert.fail(`illegal answer char at n=${n}: ${code}`);
 		}
-		assert.deepEqual(back, answers, `round trip failed at n=${n} (${code})`);
+		if (!CHECK_CHARS.includes(code[12])) assert.fail(`illegal check char at n=${n}: ${code}`);
+
+		const back = decode(code);
+		if (back === null) assert.fail(`decode returned null for a self-produced code: ${code}`);
+		if (back.length !== LENGTH) assert.fail(`wrong answer count at n=${n}: ${code}`);
+		for (let i = 0; i < LENGTH; i++) {
+			if (back[i] !== answers[i]) assert.fail(`round trip failed at n=${n} (${code})`);
+		}
 	}
 });
 
-test("every produced code is 13 characters and structurally well-formed", () => {
-	const shape = /^[1][npyu]{11}[0-9a-z]$/;
-	for (let n = 0; n < TOTAL; n++) {
-		const code = encode(profile(n));
-		assert.equal(code.length, 13, `wrong length at n=${n}: ${code}`);
-		assert.match(code, shape, `bad shape at n=${n}: ${code}`);
-	}
-});
-
-test("codes are unique across the whole state space", () => {
-	const seen = new Set<string>();
-	for (let n = 0; n < TOTAL; n++) {
-		seen.add(encode(profile(n)));
-	}
-	assert.equal(seen.size, TOTAL);
+test("a produced code matches the documented shape", () => {
+	assert.match(encode([2, 2, 1, 0, 0, 1, 0, 1, 0, 1, "unsure"]), /^[1][npyu]{11}[0-9a-z]$/);
 });
 
 test("decode is total: returns null and never throws for malformed input", () => {
