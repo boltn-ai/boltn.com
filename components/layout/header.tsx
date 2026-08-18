@@ -54,6 +54,12 @@ export function Header() {
 						Thinking
 					</Link>
 					<Link
+						href="/assessment"
+						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
+					>
+						Assessment
+					</Link>
+					<Link
 						href="/book"
 						className="font-mono text-[10px] uppercase tracking-[0.18em]"
 						style={{

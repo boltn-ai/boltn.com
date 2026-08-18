@@ -70,6 +70,13 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 					Thinking
 				</Link>
 				<Link
+					href="/assessment"
+					onClick={onClose}
+					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
+				>
+					Assessment
+				</Link>
+				<Link
 					href="/contact"
 					onClick={onClose}
 					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
