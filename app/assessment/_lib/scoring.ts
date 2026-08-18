@@ -1,7 +1,9 @@
 // Scoring for the Quick assessment's 11 answers.
 //
 // SERVER-ONLY BY CONVENTION. Import this module only from Server Components and Server
-// Actions — never from a `"use client"` file. The rule is enforced against the build
+// Actions — never from a Client Component, i.e. any file carrying the client directive.
+// (That directive is not spelled out here on purpose: the leakage checks in this phase grep
+// for it, and a mention in prose would read as a hit.) The rule is enforced against the build
 // artefact, not the source: plan 04-07 greps `.next/static/` for the band names below and
 // fails if any of them ship to the browser. That grep checks the output, which is what
 // actually matters; the `server-only` package would only check the intent, and adding a
