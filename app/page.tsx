@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CtaButton } from "@/components/ui/cta-button";
 
 export const metadata: Metadata = {
@@ -140,6 +141,40 @@ function AvailabilityIndicator() {
 	);
 }
 
+type Service = {
+	number: string;
+	slug: string;
+	name: string;
+	description: string;
+	/** When set, the whole card is a link to this route. */
+	href?: string;
+};
+
+const services: Service[] = [
+	{
+		number: "01",
+		href: "/assessment",
+		slug: "Assessment",
+		name: "AI Maturity Assessment",
+		description:
+			"A structured diagnostic of where you actually stand — architecture, organisation, and team readiness. Not a survey. A scored instrument that surfaces the specific gaps.",
+	},
+	{
+		number: "02",
+		slug: "Advisory",
+		name: "Architecture Advisory",
+		description:
+			"Ongoing architectural guidance through the adoption curve. Weekly sessions, async review, decision support when the pressure is on.",
+	},
+	{
+		number: "03",
+		slug: "Build",
+		name: "Accelerated Build",
+		description:
+			"Hands-on delivery for teams that need an architect embedded in the work. Scoped engagements with clear boundaries and measurable outcomes.",
+	},
+];
+
 export default function Home() {
 	return (
 		<main>
@@ -235,61 +270,54 @@ export default function Home() {
 					className="grid grid-cols-1 md:grid-cols-3"
 					style={{ gap: "1px", background: "var(--border)" }}
 				>
-					{[
-						{
-							number: "01",
-							slug: "Assessment",
-							name: "AI Maturity Assessment",
-							description:
-								"A structured diagnostic of where you actually stand — architecture, organisation, and team readiness. Not a survey. A scored instrument that surfaces the specific gaps.",
-						},
-						{
-							number: "02",
-							slug: "Advisory",
-							name: "Architecture Advisory",
-							description:
-								"Ongoing architectural guidance through the adoption curve. Weekly sessions, async review, decision support when the pressure is on.",
-						},
-						{
-							number: "03",
-							slug: "Build",
-							name: "Accelerated Build",
-							description:
-								"Hands-on delivery for teams that need an architect embedded in the work. Scoped engagements with clear boundaries and measurable outcomes.",
-						},
-					].map((service) => (
-						<div
-							key={service.number}
-							className="group p-6 transition-colors duration-200 hover:bg-(--bg-subtle)"
-							style={{ background: "var(--bg)" }}
-						>
-							<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
-								{service.number} / {service.slug}
-							</p>
-							<h3
-								className="mb-3 text-[20px] font-normal leading-[1.2] text-(--text-primary)"
-								style={{ fontFamily: "var(--font-display)" }}
+					{services.map((service) => {
+						const cardClassName = "group p-6 transition-colors duration-200 hover:bg-(--bg-subtle)";
+						const cardStyle = { background: "var(--bg)" };
+						const cardBody = (
+							<>
+								<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
+									{service.number} / {service.slug}
+								</p>
+								<h3
+									className="mb-3 text-[20px] font-normal leading-[1.2] text-(--text-primary)"
+									style={{ fontFamily: "var(--font-display)" }}
+								>
+									{service.name}
+								</h3>
+								<p
+									className="mb-4 text-[12px] leading-[1.6] text-(--text-muted)"
+									style={{
+										fontFamily: "Georgia, 'Times New Roman', serif",
+										fontStyle: "italic",
+									}}
+								>
+									{service.description}
+								</p>
+								<span
+									className="font-mono text-[12px] transition-colors duration-200 group-hover:text-(--accent)"
+									style={{ color: "rgba(200,132,42,0)" }}
+									aria-hidden="true"
+								>
+									&rarr;
+								</span>
+							</>
+						);
+
+						return service.href ? (
+							<Link
+								key={service.number}
+								href={service.href}
+								className={cardClassName}
+								style={cardStyle}
 							>
-								{service.name}
-							</h3>
-							<p
-								className="mb-4 text-[12px] leading-[1.6] text-(--text-muted)"
-								style={{
-									fontFamily: "Georgia, 'Times New Roman', serif",
-									fontStyle: "italic",
-								}}
-							>
-								{service.description}
-							</p>
-							<span
-								className="font-mono text-[12px] transition-colors duration-200 group-hover:text-(--accent)"
-								style={{ color: "rgba(200,132,42,0)" }}
-								aria-hidden="true"
-							>
-								&rarr;
-							</span>
-						</div>
-					))}
+								{cardBody}
+							</Link>
+						) : (
+							<div key={service.number} className={cardClassName} style={cardStyle}>
+								{cardBody}
+							</div>
+						);
+					})}
 				</div>
 			</section>
 		</main>
