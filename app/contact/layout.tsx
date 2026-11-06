@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
 	title: "Contact",
 	description:
-		"Drop a message or book a discovery call. No forms committee, no 3-day SLA. Just a reply from a real person.",
+		"Get in touch with Steve Bolton about platform engineering and AI enablement roles, or to compare notes.",
 };
 
 export default function ContactLayout({
