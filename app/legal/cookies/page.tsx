@@ -5,7 +5,7 @@ import { Section } from "@/components/ui/section";
 
 export const metadata: Metadata = {
 	title: "Cookie Policy",
-	description: "What cookies boltn.com uses and why.",
+	description: "What cookies this site uses and why.",
 };
 
 export default function CookiePolicy() {
@@ -16,10 +16,10 @@ export default function CookiePolicy() {
 			{/* Section: Intro and last updated */}
 			<Section className="pt-0">
 				<div className="max-w-3xl">
-					<p className="text-sm text-muted-foreground">Last updated: 15 March 2026</p>
+					<p className="text-sm text-muted-foreground">Last updated: 6 November 2026</p>
 					<p className="mt-4 text-base text-muted-foreground md:text-lg">
-						This policy explains what cookies boltn.com uses, why we use them, and how you can
-						manage them. We keep it specific — not a generic template.
+						This policy explains what cookies this site uses, why it uses them, and how you can
+						manage them. I keep it specific — not a generic template.
 					</p>
 				</div>
 			</Section>
@@ -55,47 +55,9 @@ export default function CookiePolicy() {
 						Cookies this site uses
 					</h2>
 					<p className="mt-4 text-base text-muted-foreground md:text-lg">
-						This site uses a minimal set of cookies. The table below covers each one.
+						This site sets no cookies, its own or a third party's. The one service you might expect
+						to set them is covered below.
 					</p>
-
-					{/* Cal.com */}
-					<h3 className="mt-8 text-lg font-medium text-foreground">Cal.com booking widget</h3>
-					<div className="mt-4 space-y-3 text-base text-muted-foreground md:text-lg">
-						<div>
-							<span className="font-medium text-foreground">What: </span>
-							Session and preference cookies set by the Cal.com scheduling widget when you use the
-							booking form.
-						</div>
-						<div>
-							<span className="font-medium text-foreground">Why: </span>
-							These cookies enable the booking flow — slot reservation and session continuity
-							between steps. Without them, the booking form cannot function.
-						</div>
-						<div>
-							<span className="font-medium text-foreground">Duration: </span>
-							Session cookies expire when you close your browser. Any persistent preference cookies
-							are set according to{" "}
-							<a
-								href="https://cal.com/privacy"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="underline underline-offset-4 hover:text-foreground"
-							>
-								Cal.com&apos;s own documentation
-							</a>
-							.
-						</div>
-						<div>
-							<span className="font-medium text-foreground">Third party: </span>
-							Cal.com. These cookies are set by Cal.com, not by boltn.com directly.
-						</div>
-						<div>
-							<span className="font-medium text-foreground">Consent: </span>
-							These cookies require consent under the Privacy and Electronic Communications
-							Regulations (PECR). By using the booking form, you are accepting the use of these
-							functional cookies.
-						</div>
-					</div>
 
 					{/* Vercel Analytics */}
 					<h3 className="mt-8 text-lg font-medium text-foreground">Vercel Analytics</h3>
@@ -134,10 +96,6 @@ export default function CookiePolicy() {
 						browser — search &quot;[your browser] manage cookies&quot; for instructions specific to
 						what you are using.
 					</p>
-					<p className="mt-4 text-base text-muted-foreground md:text-lg">
-						Note that disabling Cal.com cookies will prevent the booking form from functioning. If
-						you disable those cookies and still want to get in touch, use the contact form instead.
-					</p>
 				</div>
 			</Section>
 
@@ -153,7 +111,7 @@ export default function CookiePolicy() {
 						Changes to this policy
 					</h2>
 					<p className="mt-4 text-base text-muted-foreground md:text-lg">
-						We may update this policy as the site evolves or if third-party services we use change
+						I may update this policy as the site evolves or if third-party services I use change
 						their cookie behaviour. The &quot;Last updated&quot; date at the top of this page will
 						reflect the current version.
 					</p>
@@ -172,7 +130,7 @@ export default function CookiePolicy() {
 						More information
 					</h2>
 					<p className="mt-4 text-base text-muted-foreground md:text-lg">
-						For information on how we handle personal data more broadly, see our{" "}
+						For information on how I handle personal data more broadly, see the{" "}
 						<Link
 							href="/legal/privacy"
 							className="underline underline-offset-4 hover:text-foreground"
