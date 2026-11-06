@@ -1,7 +1,9 @@
 # CLAUDE.md — boltn.com Application Conventions
 
-The website for boltn. Public repo. Brand, voice and operations documents live in the private
-`boltn` repo and are consumed here, not owned here.
+Steve Bolton's personal site, served at boltn.com: writing, evidence of work, and the AI maturity
+assessment. Public repo. It was the boltn consultancy site until 2026-10-16; the retired consulting
+pages are in `archive/consulting/` (not routed). Brand, voice and operations documents live in the
+private `boltn` repo and are consumed here, not owned here.
 
 ## Stack
 
@@ -24,7 +26,8 @@ app/                      # Routes, layouts, route handlers
   <route>/actions.ts      # Server Actions, colocated with the route that uses them
   <route>/_lib/           # Private, non-routable logic for one route
   <route>/_components/    # Private components for one route
-components/layout/        # Header, mobile nav, footer, cookie banner
+components/layout/        # Header, mobile nav, footer
+archive/                  # Retired pages, not routed; each folder has a README
 components/ui/            # Shared presentational primitives
 lib/                      # Shared utilities (cn)
 content/blog/             # MDX posts, compiled by velite

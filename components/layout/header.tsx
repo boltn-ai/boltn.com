@@ -30,7 +30,7 @@ export function Header() {
 					href="/"
 					className="font-mono text-[13px] uppercase tracking-[0.25em] text-(--text-primary)"
 				>
-					boltn
+					Steve Bolton
 				</Link>
 
 				{/* Desktop nav */}

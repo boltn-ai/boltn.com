@@ -67,7 +67,7 @@ function genericCard() {
 					fontFamily: FONT,
 				}}
 			>
-				boltn
+				Steve Bolton
 			</div>
 			<div
 				style={{
@@ -80,7 +80,7 @@ function genericCard() {
 					lineHeight: 1.4,
 				}}
 			>
-				Architecture-first AI adoption for engineering leaders
+				Engineering maturity and AI-assisted development
 			</div>
 		</div>,
 		{ ...SIZE },
@@ -137,7 +137,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ban
 					fontFamily: FONT,
 				}}
 			>
-				boltn
+				Steve Bolton
 			</div>
 		</div>,
 		{ ...SIZE },

@@ -4,17 +4,14 @@ import { posts } from "#content";
 export function GET() {
 	const published = posts
 		.filter((p) => p.published)
-		.sort(
-			(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-		);
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 	const feed = new Feed({
-		title: "boltn -- Thinking",
-		description:
-			"Architecture-first AI adoption for engineering leaders",
+		title: "Steve Bolton — Thinking",
+		description: "Engineering maturity and AI-assisted development",
 		id: "https://boltn.com/thinking",
 		link: "https://boltn.com/thinking",
-		copyright: `${new Date().getFullYear()} boltn`,
+		copyright: `${new Date().getFullYear()} Steve Bolton`,
 		feedLinks: { rss2: "https://boltn.com/rss.xml" },
 	});
 

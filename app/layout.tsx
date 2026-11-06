@@ -1,9 +1,10 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Playfair_Display } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import "./globals.css";
+import { FOCUS, HEADLINE, LINKEDIN_URL, ROLE } from "@/lib/profile";
 
 const playfair = Playfair_Display({
 	variable: "--font-display",
@@ -21,15 +22,14 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
 	metadataBase: new URL("https://boltn.com"),
 	title: {
-		default: "boltn",
-		template: "%s | boltn",
+		default: "Steve Bolton",
+		template: "%s | Steve Bolton",
 	},
-	description:
-		"The quick wins are real. The trajectory is not. boltn helps engineering leaders see the complexity wall before they hit it.",
+	description: `Steve Bolton is a ${ROLE} working on ${FOCUS}, and writing on engineering maturity and AI-assisted development.`,
 	openGraph: {
 		type: "website",
-		locale: "en_US",
-		siteName: "boltn",
+		locale: "en_GB",
+		siteName: "Steve Bolton",
 	},
 	twitter: {
 		card: "summary_large_image",
@@ -40,21 +40,19 @@ const jsonLd = {
 	"@context": "https://schema.org",
 	"@graph": [
 		{
-			"@type": "Organization",
-			"@id": "https://boltn.com/#organization",
-			name: "boltn",
+			"@type": "WebSite",
+			"@id": "https://boltn.com/#website",
+			name: "Steve Bolton",
 			url: "https://boltn.com",
-			description:
-				"AI-first software development and consulting agency helping engineering leaders navigate AI adoption with architectural integrity.",
-			founder: { "@id": "https://boltn.com/#person" },
+			author: { "@id": "https://boltn.com/#person" },
 		},
 		{
 			"@type": "Person",
 			"@id": "https://boltn.com/#person",
 			name: "Steve Bolton",
-			jobTitle: "Founder",
-			worksFor: { "@id": "https://boltn.com/#organization" },
+			description: `${HEADLINE} Writes on engineering maturity and AI-assisted development.`,
 			url: "https://boltn.com/about",
+			sameAs: [LINKEDIN_URL],
 		},
 	],
 };
