@@ -1,9 +1,9 @@
-import { posts } from "#content";
 import { ImageResponse } from "next/og";
+import { posts } from "#content";
 
 export const runtime = "edge";
 
-export const alt = "boltn / thinking";
+export const alt = "Steve Bolton / thinking";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -34,7 +34,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 						fontFamily: "system-ui, sans-serif",
 					}}
 				>
-					boltn
+					Steve Bolton
 				</div>
 				<div
 					style={{
@@ -47,7 +47,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 						lineHeight: 1.4,
 					}}
 				>
-					Architecture-first AI adoption for engineering leaders
+					Engineering maturity and AI-assisted development
 				</div>
 			</div>,
 			{ ...size },
@@ -81,7 +81,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 					fontFamily: "system-ui, sans-serif",
 				}}
 			>
-				boltn / thinking
+				Steve Bolton / thinking
 			</div>
 
 			<div

@@ -25,12 +25,12 @@ export function Header() {
 				scrolled ? "bg-(color:--bg)/80 backdrop-blur-sm" : "bg-(--bg)",
 			)}
 		>
-			<div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+			<div className="mx-auto flex min-h-(--header-h) max-w-5xl items-center justify-between px-6 py-4">
 				<Link
 					href="/"
 					className="font-mono text-[13px] uppercase tracking-[0.25em] text-(--text-primary)"
 				>
-					boltn
+					Steve Bolton
 				</Link>
 
 				{/* Desktop nav */}
@@ -42,19 +42,19 @@ export function Header() {
 						About
 					</Link>
 					<Link
-						href="/services"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-					>
-						Services
-					</Link>
-					<Link
 						href="/thinking"
 						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 					>
 						Thinking
 					</Link>
 					<Link
-						href="/book"
+						href="/assessment"
+						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
+					>
+						Assessment
+					</Link>
+					<Link
+						href="/contact"
 						className="font-mono text-[10px] uppercase tracking-[0.18em]"
 						style={{
 							color: "var(--accent)",
@@ -62,7 +62,7 @@ export function Header() {
 							paddingBottom: "1px",
 						}}
 					>
-						Book a call →
+						Get in touch →
 					</Link>
 				</nav>
 

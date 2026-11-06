@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState } from "react";
 import { PageHeader } from "@/components/ui/page-header";
 import { Section } from "@/components/ui/section";
+import { OPEN_TO } from "@/lib/profile";
 import { submitContact } from "./actions";
 
 const initialState = { success: false, error: null };
@@ -15,7 +15,7 @@ export default function ContactPage() {
 		<>
 			<PageHeader
 				headline="Get in touch"
-				subtitle="Not ready to book? Drop a message. No forms committee, no 3-day SLA. Just a reply."
+				subtitle="Hiring for platform or AI enablement leadership, or working on the same problems? Send a message and I will reply."
 			/>
 
 			<Section className="pt-0">
@@ -90,16 +90,7 @@ export default function ContactPage() {
 					</form>
 				)}
 
-				<p className="mt-10 text-muted-foreground">
-					Or{" "}
-					<Link
-						href="/book"
-						className="text-(--accent) underline underline-offset-4 hover:text-(--text-body)"
-					>
-						book a discovery call
-					</Link>{" "}
-					directly.
-				</p>
+				<p className="mt-10 max-w-xl text-muted-foreground">{OPEN_TO}</p>
 			</Section>
 		</>
 	);

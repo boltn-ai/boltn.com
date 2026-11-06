@@ -1,27 +1,25 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { posts } from "#content";
 import { MDXContent } from "@/components/blog/mdx-components";
 import { ShareButtons } from "@/components/blog/share-buttons";
-import { posts } from "#content";
+import { LATEST_ROLE, ROLE } from "@/lib/profile";
 
 interface PostPageProps {
 	params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
-	return posts
-		.filter((post) => post.published)
-		.map((post) => ({ slug: post.slug }));
+	return posts.filter((post) => post.published).map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({
-	params,
-}: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
 	const { slug } = await params;
 	const post = posts.find((p) => p.slug === slug);
 	if (!post) return {};
 	return {
-		// absolute: skip the "%s | boltn" template so post titles keep the full
+		// absolute: skip the "%s | Steve Bolton" template so post titles keep the full
 		// 60-char SERP budget for their own keywords
 		title: { absolute: post.title },
 		description: post.excerpt,
@@ -30,7 +28,8 @@ export async function generateMetadata({
 			description: post.excerpt,
 			// siteName is re-declared because Next.js shallow-merges metadata —
 			// a child openGraph replaces the parent's rather than merging into it
-			siteName: "boltn",
+			siteName: "Steve Bolton",
+			authors: ["Steve Bolton"],
 			type: "article",
 			publishedTime: post.date,
 		},
@@ -42,10 +41,7 @@ export default async function PostPage({ params }: PostPageProps) {
 	const post = posts.find((p) => p.slug === slug && p.published);
 	if (!post) notFound();
 
-	const readingTime = Math.max(
-		1,
-		Math.round(post.metadata.wordCount / 200),
-	);
+	const readingTime = Math.max(1, Math.round(post.metadata.wordCount / 200));
 
 	return (
 		<article className="mx-auto max-w-3xl px-6 py-16">
@@ -77,12 +73,26 @@ export default async function PostPage({ params }: PostPageProps) {
 				<MDXContent code={post.content} />
 			</div>
 
+			{/* Author */}
+			<div className="mx-auto mt-12 max-w-[65ch] border-t border-(--border) pt-6">
+				<p
+					className="text-[14px] leading-[1.6] text-(--text-muted)"
+					style={{
+						fontFamily: "Georgia, 'Times New Roman', serif",
+						fontStyle: "italic",
+					}}
+				>
+					Steve Bolton is a {ROLE}, most recently {LATEST_ROLE}.{" "}
+					<Link href="/about" className="text-(--accent) underline underline-offset-4">
+						More about me
+					</Link>
+					.
+				</p>
+			</div>
+
 			{/* Share buttons */}
 			<div className="mx-auto max-w-[65ch]">
-				<ShareButtons
-					title={post.title}
-					url={`https://boltn.com/thinking/${post.slug}`}
-				/>
+				<ShareButtons title={post.title} url={`https://boltn.com/thinking/${post.slug}`} />
 			</div>
 		</article>
 	);

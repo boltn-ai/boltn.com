@@ -56,13 +56,6 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 					About
 				</Link>
 				<Link
-					href="/services"
-					onClick={onClose}
-					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-				>
-					Services
-				</Link>
-				<Link
 					href="/thinking"
 					onClick={onClose}
 					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
@@ -70,14 +63,14 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 					Thinking
 				</Link>
 				<Link
-					href="/contact"
+					href="/assessment"
 					onClick={onClose}
 					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 				>
-					Contact
+					Assessment
 				</Link>
-				<CtaButton href="/book" className="w-fit">
-					Book a call →
+				<CtaButton href="/contact" className="w-fit">
+					Get in touch →
 				</CtaButton>
 			</nav>
 		</div>

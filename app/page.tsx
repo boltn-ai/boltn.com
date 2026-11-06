@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { posts } from "#content";
 import { CtaButton } from "@/components/ui/cta-button";
+import { FOCUS, ROLE } from "@/lib/profile";
 
 export const metadata: Metadata = {
-	title: "boltn — Architecture-first AI adoption",
-	description:
-		"The complexity did not disappear when you moved it into agents. boltn helps engineering leaders see the wall before they hit it.",
+	title: { absolute: "Steve Bolton — Engineering maturity and AI-assisted development" },
+	description: `Steve Bolton is a ${ROLE} working on ${FOCUS}. Writing on engineering maturity, and what AI agents do to the systems and teams they land in.`,
 };
 
 function AdoptionArcChart() {
@@ -119,28 +121,46 @@ function AdoptionArcChart() {
 	);
 }
 
-function AvailabilityIndicator() {
-	return (
-		<div className="mt-4 flex items-center gap-2">
-			<span
-				aria-hidden="true"
-				style={{
-					display: "block",
-					flexShrink: 0,
-					width: 5,
-					height: 5,
-					background: "var(--live)",
-					borderRadius: "50%",
-				}}
-			/>
-			<span className="font-mono text-[9px] uppercase tracking-[0.1em] text-(--text-faint)">
-				2 advisory engagements available — Q3 2026
-			</span>
-		</div>
-	);
-}
+type Work = {
+	number: string;
+	slug: string;
+	name: string;
+	description: string;
+	/** When set, the whole card is a link to this route. */
+	href?: string;
+};
+
+const work: Work[] = [
+	{
+		number: "01",
+		slug: "CI",
+		name: "A build signal people trust again",
+		description:
+			"Integration tests on a multi-million-line open-source monorepo were failing constantly and being ignored. A merge queue, the flaky tests driven out, builds gated and green. The full CI cycle went from three hours to under one.",
+	},
+	{
+		number: "02",
+		slug: "Agents",
+		name: "Agent tooling engineers actually used",
+		description:
+			"Claude skills for CI failure triage and issue workflow, adopted by the dotCMS team — each one reporting where it failed and where it spent more tokens than it needed. Plus the context architecture that let agents navigate the monorepo.",
+	},
+	{
+		number: "03",
+		href: "/assessment",
+		slug: "Assessment",
+		name: "AI Maturity Assessment",
+		description:
+			"Eleven questions on how an engineering organisation actually works with AI, built from my maturity framework. Free, no sign-up, and the result lives in the link.",
+	},
+];
 
 export default function Home() {
+	const latest = posts
+		.filter((post) => post.published)
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+		.slice(0, 3);
+
 	return (
 		<main>
 			{/* Two-column hero */}
@@ -155,7 +175,7 @@ export default function Home() {
 								className="font-mono text-[9px] uppercase tracking-[0.25em]"
 								style={{ color: "rgba(200,132,42,0.75)" }}
 							>
-								The pattern
+								Steve Bolton
 							</span>
 						</div>
 
@@ -184,9 +204,10 @@ export default function Home() {
 								fontStyle: "italic",
 							}}
 						>
-							<span style={{ color: "var(--accent)" }}>&sect;</span> The teams that will outpace
-							everyone else are the ones who know how their systems actually work — and can direct
-							AI precisely at the hard parts. boltn helps you get there.
+							<span style={{ color: "var(--accent)" }}>&sect;</span> I&rsquo;m a {ROLE} working on{" "}
+							{FOCUS}. I write about engineering maturity and what AI-assisted development does to
+							it. The teams that pull ahead are the ones that know how their systems actually work,
+							and can point AI precisely at the hard parts.
 						</p>
 					</div>
 
@@ -199,8 +220,13 @@ export default function Home() {
 							<AdoptionArcChart />
 						</div>
 						<div className="mt-6">
-							<CtaButton href="/book">Book a discovery call</CtaButton>
-							<AvailabilityIndicator />
+							<CtaButton href="/thinking">Read the thinking</CtaButton>
+							<Link
+								href="/about"
+								className="mt-4 block font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
+							>
+								About me &rarr;
+							</Link>
 						</div>
 					</div>
 				</div>
@@ -211,13 +237,13 @@ export default function Home() {
 				<div className="my-12 flex items-center gap-4">
 					<div className="flex-1 border-t border-(--border)" />
 					<span className="font-mono text-[9px] uppercase tracking-[0.2em] text-(--text-faint)">
-						&sect; 01 — The pattern
+						&sect; 01 — Selected work
 					</span>
 					<div className="flex-1 border-t border-(--border)" />
 				</div>
 			</div>
 
-			{/* Services section */}
+			{/* Selected work */}
 			<section className="mx-auto max-w-6xl px-6 pb-24">
 				{/* Section marker */}
 				<div className="mb-8">
@@ -226,7 +252,7 @@ export default function Home() {
 						className="font-mono text-[9px] uppercase tracking-[0.25em]"
 						style={{ color: "rgba(200,132,42,0.75)" }}
 					>
-						Services
+						Selected work
 					</span>
 				</div>
 
@@ -235,62 +261,84 @@ export default function Home() {
 					className="grid grid-cols-1 md:grid-cols-3"
 					style={{ gap: "1px", background: "var(--border)" }}
 				>
-					{[
-						{
-							number: "01",
-							slug: "Assessment",
-							name: "AI Maturity Assessment",
-							description:
-								"A structured diagnostic of where you actually stand — architecture, organisation, and team readiness. Not a survey. A scored instrument that surfaces the specific gaps.",
-						},
-						{
-							number: "02",
-							slug: "Advisory",
-							name: "Architecture Advisory",
-							description:
-								"Ongoing architectural guidance through the adoption curve. Weekly sessions, async review, decision support when the pressure is on.",
-						},
-						{
-							number: "03",
-							slug: "Build",
-							name: "Accelerated Build",
-							description:
-								"Hands-on delivery for teams that need an architect embedded in the work. Scoped engagements with clear boundaries and measurable outcomes.",
-						},
-					].map((service) => (
-						<div
-							key={service.number}
-							className="group p-6 transition-colors duration-200 hover:bg-(--bg-subtle)"
-							style={{ background: "var(--bg)" }}
-						>
-							<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
-								{service.number} / {service.slug}
-							</p>
-							<h3
-								className="mb-3 text-[20px] font-normal leading-[1.2] text-(--text-primary)"
-								style={{ fontFamily: "var(--font-display)" }}
+					{work.map((item) => {
+						const cardClassName = "group p-6 transition-colors duration-200 hover:bg-(--bg-subtle)";
+						const cardStyle = { background: "var(--bg)" };
+						const cardBody = (
+							<>
+								<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
+									{item.number} / {item.slug}
+								</p>
+								<h3
+									className="mb-3 text-[20px] font-normal leading-[1.2] text-(--text-primary)"
+									style={{ fontFamily: "var(--font-display)" }}
+								>
+									{item.name}
+								</h3>
+								<p
+									className="mb-4 text-[12px] leading-[1.6] text-(--text-muted)"
+									style={{
+										fontFamily: "Georgia, 'Times New Roman', serif",
+										fontStyle: "italic",
+									}}
+								>
+									{item.description}
+								</p>
+								<span
+									className="font-mono text-[12px] transition-colors duration-200 group-hover:text-(--accent)"
+									style={{ color: "rgba(200,132,42,0)" }}
+									aria-hidden="true"
+								>
+									&rarr;
+								</span>
+							</>
+						);
+
+						return item.href ? (
+							<Link key={item.number} href={item.href} className={cardClassName} style={cardStyle}>
+								{cardBody}
+							</Link>
+						) : (
+							<div key={item.number} className={cardClassName} style={cardStyle}>
+								{cardBody}
+							</div>
+						);
+					})}
+				</div>
+			</section>
+
+			{/* Latest writing */}
+			<section className="mx-auto max-w-6xl px-6 pb-24">
+				<div className="mb-8">
+					<div className="mb-2 h-px w-5 bg-(--accent)" />
+					<span
+						className="font-mono text-[9px] uppercase tracking-[0.25em]"
+						style={{ color: "rgba(200,132,42,0.75)" }}
+					>
+						Latest writing
+					</span>
+				</div>
+				<ul className="flex max-w-3xl flex-col">
+					{latest.map((post) => (
+						<li key={post.slug} className="border-b border-(--border) py-6 first:pt-0">
+							<Link
+								href={`/thinking/${post.slug}`}
+								className="block font-display text-[20px] font-normal leading-[1.3] text-(--text-primary) transition-colors duration-150 hover:text-(--accent)"
 							>
-								{service.name}
-							</h3>
+								{post.title}
+							</Link>
 							<p
-								className="mb-4 text-[12px] leading-[1.6] text-(--text-muted)"
+								className="mt-1 text-[14px] leading-[1.6] text-(--text-muted)"
 								style={{
 									fontFamily: "Georgia, 'Times New Roman', serif",
 									fontStyle: "italic",
 								}}
 							>
-								{service.description}
+								{post.excerpt}
 							</p>
-							<span
-								className="font-mono text-[12px] transition-colors duration-200 group-hover:text-(--accent)"
-								style={{ color: "rgba(200,132,42,0)" }}
-								aria-hidden="true"
-							>
-								&rarr;
-							</span>
-						</div>
+						</li>
 					))}
-				</div>
+				</ul>
 			</section>
 		</main>
 	);

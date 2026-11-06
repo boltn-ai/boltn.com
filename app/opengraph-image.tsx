@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "boltn — Architecture-first AI adoption";
+export const alt = "Steve Bolton — Engineering maturity and AI-assisted development";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -29,7 +29,7 @@ export default function OGImage() {
 					fontFamily: "system-ui, sans-serif",
 				}}
 			>
-				boltn
+				Steve Bolton
 			</div>
 			<div
 				style={{
@@ -42,7 +42,7 @@ export default function OGImage() {
 					lineHeight: 1.4,
 				}}
 			>
-				Architecture-first AI adoption for engineering leaders
+				Engineering maturity and AI-assisted development
 			</div>
 		</div>,
 		{ ...size },
