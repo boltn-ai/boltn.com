@@ -42,12 +42,6 @@ export function Header() {
 						About
 					</Link>
 					<Link
-						href="/services"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-					>
-						Services
-					</Link>
-					<Link
 						href="/thinking"
 						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
 					>
@@ -60,7 +54,7 @@ export function Header() {
 						Assessment
 					</Link>
 					<Link
-						href="/book"
+						href="/contact"
 						className="font-mono text-[10px] uppercase tracking-[0.18em]"
 						style={{
 							color: "var(--accent)",
@@ -68,7 +62,7 @@ export function Header() {
 							paddingBottom: "1px",
 						}}
 					>
-						Book a call →
+						Get in touch →
 					</Link>
 				</nav>
 

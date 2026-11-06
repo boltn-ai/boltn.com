@@ -16,7 +16,7 @@ export function CtaButton({ href, className, children }: CtaButtonProps) {
 				className,
 			)}
 		>
-			{children ?? "Book a discovery call"}
+			{children ?? "Get in touch"}
 		</Link>
 	);
 }
