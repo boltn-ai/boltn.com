@@ -7,9 +7,9 @@
 //
 // D-19 governs everything above the form. The whole framework is published, including the
 // trade-off insight, because it is the most differentiated idea in the instrument and hiding
-// an argument to protect it contradicts VOICE.md’s “specificity is the proof”. The paid
-// engagement’s value is the 106-question instrument, the facilitation and the per-dimension
-// interpretation — none of which is here, and none of which a list of eleven names gives away.
+// an argument to protect it contradicts VOICE.md’s “specificity is the proof”. The 106-question
+// instrument and the per-dimension interpretation stay private — neither is here, and a list of
+// eleven names gives neither away.
 //
 // The capability / calibration / enablement split below is DERIVED from each dimension’s
 // `kind`, never from a parallel list of names kept in this file. A hardcoded list would drift
@@ -154,8 +154,8 @@ export default function AssessmentPage() {
 					<p className={PROSE_CLASS} style={PROSE_STYLE}>
 						Eleven questions, one per dimension. About three minutes. It is free, there is no email
 						address to hand over and no name to give. The result is a link — keep it, send it to
-						whoever needs to see it, or bring it to a call. Your answers travel in the link itself,
-						so there is nothing stored on our side to leak or to lose.
+						whoever needs to see it. Your answers travel in the link itself, so there is nothing
+						stored on my side to leak or to lose.
 					</p>
 
 					<p className={`${PROSE_CLASS} mt-6`} style={PROSE_STYLE}>

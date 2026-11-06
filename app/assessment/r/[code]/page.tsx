@@ -16,7 +16,7 @@
 // D-12 fixes the contents: band name, indicative score, named blind spots. The confidence
 // indicator comes with them because D-04 requires one. Nothing else — no chart, no
 // per-dimension reading, no capture field, no offer. D-14 keeps the per-dimension
-// interpretation, which is the paid engagement's value, out of this repo entirely.
+// interpretation out of this public repo entirely.
 //
 // Register per D-15 and VOICE.md: this reads as recognition, not as a grade and not as a
 // congratulation. `Not ready` in particular has to land as a normal starting point, which is
@@ -90,7 +90,7 @@ export async function generateMetadata({
 	const title = `${result.band} — AI Maturity Assessment`;
 
 	return {
-		// absolute: skip the root layout's "%s | boltn" template, because the band name is
+		// absolute: skip the root layout's "%s | Steve Bolton" template, because the band name is
 		// the whole point of the title and it needs the full SERP budget in a share preview.
 		title: { absolute: title },
 		description: `An indicative ${result.indicative} out of 140 across eleven dimensions of AI maturity in the engineering workflow. The band is the finding; the scale moves in ten-point steps.`,
@@ -107,7 +107,7 @@ export async function generateMetadata({
 			description: `AI Maturity Assessment — ${result.band}`,
 			// Re-declared because Next.js shallow-merges metadata: a child openGraph replaces
 			// the parent's outright rather than merging into it. This repo has a scar for it.
-			siteName: "boltn",
+			siteName: "Steve Bolton",
 			images: [
 				{
 					url: `/assessment/og/${bandSlug(result.band)}`,
@@ -165,7 +165,7 @@ export default async function ResultPage({ params }: { params: Promise<{ code: s
 					Read that as a position, not a measurement. One question per dimension means the scale
 					moves in ten-point steps, so a single answer moving from Partly to Yes can carry you
 					across a band boundary. The band above is what carries the meaning. A precise figure out
-					of 140 belongs to the facilitated assessment, which asks 106 questions rather than eleven.
+					of 140 needs the full framework, which asks 106 questions rather than eleven.
 				</p>
 			</div>
 
@@ -218,16 +218,16 @@ export default async function ResultPage({ params }: { params: Promise<{ code: s
 			<div className={BLOCK_CLASS}>
 				<p className={PROSE_CLASS} style={PROSE_STYLE}>
 					This page is rebuilt from the link every time it is opened. Your answers are in the URL
-					and nowhere else, so there is nothing on our side to leak or to lose — and nothing to come
-					back for. Keep the link, send it to whoever needs to see it, or bring it to a call.
+					and nowhere else, so there is nothing on my side to leak or to lose — and nothing to come
+					back for. Keep the link and send it to whoever needs to see it.
 				</p>
 				<p className={`${PROSE_CLASS} mt-6`} style={PROSE_STYLE}>
-					The useful next step is not more of this. It is a conversation about which of the above to
-					fix first, given the architecture and the team you actually have rather than the ones a
-					framework assumes.
+					The useful next step is not more of this. It is deciding which of the above to fix first,
+					given the architecture and the team you actually have rather than the ones a framework
+					assumes.
 				</p>
 				<div className="mt-8 max-w-sm">
-					<CtaButton href="/book" />
+					<CtaButton href="/thinking">Read the thinking behind it</CtaButton>
 				</div>
 			</div>
 		</Section>
