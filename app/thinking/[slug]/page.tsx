@@ -44,56 +44,71 @@ export default async function PostPage({ params }: PostPageProps) {
 	const readingTime = Math.max(1, Math.round(post.metadata.wordCount / 200));
 
 	return (
-		<article className="mx-auto max-w-3xl px-6 py-16">
+		<article className="container pt-20 md:pt-28">
 			{/* Post header */}
-			<header>
-				<div className="flex items-center gap-3">
-					<span className="font-mono text-[9px] uppercase tracking-[0.25em] text-(--accent)">
-						{post.category}
-					</span>
-					<span className="font-mono text-[10px] tracking-[0.18em] text-(--text-faint)">
-						{new Date(post.date).toLocaleDateString("en-GB", {
-							day: "numeric",
-							month: "short",
-							year: "numeric",
-						})}
-					</span>
-				</div>
-				<h1 className="mt-4 font-display text-[36px] font-normal leading-[1.15] text-(--text-primary)">
-					{post.title}
-				</h1>
-				<span className="mt-2 block font-mono text-[10px] tracking-[0.18em] text-(--text-faint)">
-					{readingTime} min read
-				</span>
-				<hr className="mt-6 mb-8 border-t border-(--border)" />
-			</header>
-
-			{/* Prose content — narrow column for readability */}
-			<div className="prose-boltn mx-auto max-w-[65ch]">
-				<MDXContent code={post.content} />
-			</div>
-
-			{/* Author */}
-			<div className="mx-auto mt-12 max-w-[65ch] border-t border-(--border) pt-6">
-				<p
-					className="text-[14px] leading-[1.6] text-(--text-muted)"
-					style={{
-						fontFamily: "Georgia, 'Times New Roman', serif",
-						fontStyle: "italic",
-					}}
-				>
-					Steve Bolton is a {ROLE}, most recently {LATEST_ROLE}.{" "}
-					<Link href="/about" className="text-(--accent) underline underline-offset-4">
-						More about me
-					</Link>
-					.
+			<header className="max-w-[56rem]">
+				<p className="byline">
+					{post.category}, <time dateTime={post.date}>{formatDate(post.date)}</time>
 				</p>
-			</div>
+				<h1 className="mt-6 max-w-[24ch] text-display-s leading-[1.05] text-ink">{post.title}</h1>
+				<p className="lead mt-6 text-ink-2">{post.excerpt}</p>
+				<p className="byline mt-6">
+					By Steve Bolton. <span className="agate">{readingTime}</span> min read
+				</p>
+			</header>
+			<hr className="rule--double mt-12 mb-12 md:mb-16" />
 
-			{/* Share buttons */}
-			<div className="mx-auto max-w-[65ch]">
-				<ShareButtons title={post.title} url={`https://boltn.com/thinking/${post.slug}`} />
+			<div className="xl:grid xl:grid-cols-12 xl:gap-x-8">
+				{/* The running index: the essay's sections, held in the left margin on wide screens */}
+				{post.toc.length > 2 && (
+					<aside aria-label="In this essay" className="hidden xl:col-span-3 xl:block">
+						<div className="essay-index sticky top-24 pr-4">
+							<p className="byline pb-2">In this essay</p>
+							<ol className="border-t border-rule text-sm leading-snug">
+								{post.toc.map((entry) => (
+									<li key={entry.url} className="border-b border-rule">
+										<a href={entry.url}>{entry.title}</a>
+									</li>
+								))}
+							</ol>
+						</div>
+					</aside>
+				)}
+
+				<div className="min-w-0 xl:col-span-8 xl:col-start-4">
+					{/* Prose: one column at a reading measure */}
+					<div className="prose">
+						<MDXContent code={post.content} />
+					</div>
+
+					{/* Author */}
+					<aside
+						className="mt-16 max-w-[65ch] border-t border-rule pt-6"
+						aria-label="About the author"
+					>
+						<p className="text-ink-2">
+							Steve Bolton is a {ROLE}, most recently {LATEST_ROLE}.{" "}
+							<Link href="/about" className="link">
+								More about me
+							</Link>
+							.
+						</p>
+					</aside>
+
+					{/* Share buttons */}
+					<div className="max-w-[65ch]">
+						<ShareButtons title={post.title} url={`https://boltn.com/thinking/${post.slug}`} />
+					</div>
+				</div>
 			</div>
 		</article>
 	);
+}
+
+function formatDate(date: string) {
+	return new Date(date).toLocaleDateString("en-GB", {
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+	});
 }

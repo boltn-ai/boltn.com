@@ -5,155 +5,201 @@ import { CtaButton } from "@/components/ui/cta-button";
 import { FOCUS, ROLE } from "@/lib/profile";
 
 export const metadata: Metadata = {
-	title: { absolute: "Steve Bolton — Engineering maturity and AI-assisted development" },
+	title: { absolute: "Steve Bolton: engineering maturity and AI-assisted development" },
 	description: `Steve Bolton is a ${ROLE} working on ${FOCUS}. Writing on engineering maturity, and what AI agents do to the systems and teams they land in.`,
 };
 
-function AdoptionArcChart() {
+// The hero diagram: problems spread around the typical one. The peak is the typical problem,
+// where the model's average answer is excellent; the brick tail is the unusual problem that is
+// yours. A concept diagram, not data: no axis values are claimed. Two drawings of the same
+// curve, one for a wide screen and one for a phone, each in units close to screen pixels so
+// the notes stay legible.
+type Frame = {
+	w: number;
+	h: number;
+	base: number;
+	peakX: number;
+	sigma: number;
+	peakH: number;
+	tailX: number;
+	note: number;
+	strong: number;
+	line: number;
+	/** Wide screens hang notes beside the peak and above the tail; phones stack them. */
+	layout: "wide" | "narrow";
+};
+
+const wide: Frame = {
+	w: 1312,
+	h: 600,
+	base: 540,
+	peakX: 820,
+	sigma: 150,
+	peakH: 440,
+	tailX: 1060,
+	note: 15,
+	strong: 20,
+	line: 24,
+	layout: "wide",
+};
+
+const narrow: Frame = {
+	w: 360,
+	h: 330,
+	base: 250,
+	peakX: 170,
+	sigma: 50,
+	peakH: 170,
+	tailX: 250,
+	note: 15,
+	strong: 19,
+	line: 22,
+	layout: "narrow",
+};
+
+function Distribution({ f, className }: { f: Frame; className?: string }) {
+	const y = (x: number) => {
+		const z = (x - f.peakX) / f.sigma;
+		return f.base - f.peakH * Math.exp(-0.5 * z * z);
+	};
+	const points = (from: number, to: number) => {
+		const out: string[] = [];
+		for (let x = from; x < to; x += 4) out.push(`${x},${y(x).toFixed(1)}`);
+		out.push(`${to},${y(to).toFixed(1)}`);
+		return out.join(" L ");
+	};
+	const top = f.base - f.peakH;
+	const isWide = f.layout === "wide";
+	const peakNoteX = isWide ? f.peakX + 14 : f.peakX;
+	const peakAnchor = isWide ? "start" : "middle";
+	const below = (row: number) => f.base + f.line * (row + 0.3);
 	return (
 		<svg
-			viewBox="0 0 320 200"
-			width="100%"
+			viewBox={`0 0 ${f.w} ${f.h}`}
+			className={`distribution ${className ?? ""}`}
 			role="img"
-			aria-label="AI adoption arc showing false confidence phase before the complexity wall"
+			aria-label="Diagram: problems spread around the typical one. At the peak, the typical problem, the average answer is excellent, cheap and the same for everyone. Out in the unusual tail, marked in brick, is your problem, where the answer needs checking."
 		>
-			{/* X axis */}
-			<line
-				x1="40"
-				y1="170"
-				x2="300"
-				y2="170"
-				style={{ stroke: "var(--border-mid)", strokeWidth: 1 }}
-			/>
-			{/* Y axis */}
-			<line
-				x1="40"
-				y1="10"
-				x2="40"
-				y2="170"
-				style={{ stroke: "var(--border-mid)", strokeWidth: 1 }}
-			/>
-			{/* Rising amber curve */}
+			<path className="mass" d={`M 0,${f.base} L ${points(0, f.w)} L ${f.w},${f.base} Z`} />
 			<path
-				d="M 40,160 C 100,140 160,80 220,40"
-				fill="none"
-				style={{ stroke: "var(--accent)", strokeWidth: 1.5, opacity: 0.9 }}
+				className="tail"
+				d={`M ${f.tailX},${f.base} L ${points(f.tailX, f.w)} L ${f.w},${f.base} Z`}
 			/>
-			{/* Vertical dashed wall */}
+			<path className="curve" d={`M ${points(0, f.w)}`} />
+			<line className="base" x1="0" y1={f.base} x2={f.w} y2={f.base} />
 			<line
-				x1="220"
-				y1="10"
-				x2="220"
-				y2="170"
-				style={{
-					stroke: "var(--accent)",
-					strokeWidth: 1,
-					strokeDasharray: "3,3",
-					opacity: 0.35,
-				}}
+				className="guide"
+				x1={f.peakX}
+				y1={f.base + 6}
+				x2={f.peakX}
+				y2={isWide ? top - f.line * 2.6 : top}
 			/>
-			{/* Declining dotted path */}
-			<path
-				d="M 220,40 C 250,60 270,100 290,150"
-				fill="none"
-				style={{
-					stroke: "var(--text-body)",
-					strokeWidth: 1,
-					strokeDasharray: "4,3",
-					opacity: 0.2,
-				}}
-			/>
-			{/* Labels */}
+
 			<text
-				x="42"
-				y="185"
-				fontSize="8"
-				textAnchor="start"
-				letterSpacing="0.05em"
-				style={{ fill: "var(--text-faint)", textTransform: "uppercase" }}
+				className="note note--strong"
+				fontSize={f.strong}
+				x={peakNoteX}
+				y={top - f.line * 1.6}
+				textAnchor={peakAnchor}
 			>
-				First agents
+				The average answer
 			</text>
 			<text
-				x="165"
-				y="185"
-				fontSize="8"
-				textAnchor="middle"
-				letterSpacing="0.05em"
-				style={{ fill: "var(--text-faint)", textTransform: "uppercase" }}
+				className="note"
+				fontSize={f.note}
+				x={peakNoteX}
+				y={top - f.line * 0.6}
+				textAnchor={peakAnchor}
 			>
-				Scale
+				Excellent, cheap, the same for everyone
 			</text>
-			<text
-				x="290"
-				y="185"
-				fontSize="8"
-				textAnchor="end"
-				letterSpacing="0.05em"
-				style={{ fill: "var(--text-faint)", textTransform: "uppercase" }}
-			>
-				Complexity
+
+			<text className="note" fontSize={f.note} x={f.peakX} y={below(1)} textAnchor="middle">
+				The typical problem
 			</text>
-			<text
-				x="224"
-				y="22"
-				fontSize="8"
-				textAnchor="start"
-				letterSpacing="0.05em"
-				style={{ fill: "var(--accent)", textTransform: "uppercase" }}
-			>
-				The wall
-			</text>
-			<text
-				x="170"
-				y="110"
-				fontSize="9"
-				textAnchor="middle"
-				style={{
-					fill: "var(--text-faint)",
-					fontStyle: "italic",
-					fontFamily: "Georgia, serif",
-				}}
-			>
-				false confidence phase
-			</text>
+
+			{isWide ? (
+				<>
+					<text
+						className="note note--strong note--tail"
+						fontSize={f.strong}
+						x={f.w}
+						y={y(f.tailX) - f.line * 2.4}
+						textAnchor="end"
+					>
+						Your problem
+					</text>
+					<text
+						className="note"
+						fontSize={f.note}
+						x={f.w}
+						y={y(f.tailX) - f.line * 1.4}
+						textAnchor="end"
+					>
+						Out here, the answer needs checking
+					</text>
+					<text className="note" fontSize={f.note} x="0" y={below(1)}>
+						Unusual
+					</text>
+					<text className="note" fontSize={f.note} x={f.w} y={below(1)} textAnchor="end">
+						Unusual
+					</text>
+				</>
+			) : (
+				<>
+					<text
+						className="note note--strong note--tail"
+						fontSize={f.strong}
+						x={f.w}
+						y={below(2.2)}
+						textAnchor="end"
+					>
+						Your problem
+					</text>
+					<text className="note" fontSize={f.note} x={f.w} y={below(3.2)} textAnchor="end">
+						Out here, the answer needs checking
+					</text>
+				</>
+			)}
 		</svg>
 	);
 }
 
 type Work = {
-	number: string;
-	slug: string;
 	name: string;
 	description: string;
-	/** When set, the whole card is a link to this route. */
+	/** When set, the title links to this route. */
 	href?: string;
+	action?: string;
 };
 
 const work: Work[] = [
 	{
-		number: "01",
-		slug: "CI",
 		name: "A build signal people trust again",
 		description:
 			"Integration tests on a multi-million-line open-source monorepo were failing constantly and being ignored. A merge queue, the flaky tests driven out, builds gated and green. The full CI cycle went from three hours to under one.",
 	},
 	{
-		number: "02",
-		slug: "Agents",
 		name: "Agent tooling engineers actually used",
 		description:
-			"Claude skills for CI failure triage and issue workflow, adopted by the dotCMS team — each one reporting where it failed and where it spent more tokens than it needed. Plus the context architecture that let agents navigate the monorepo.",
+			"Claude skills for CI failure triage and issue workflow, adopted by the dotCMS team, each one reporting where it failed and where it spent more tokens than it needed. Plus the context architecture that let agents navigate the monorepo.",
 	},
 	{
-		number: "03",
 		href: "/assessment",
-		slug: "Assessment",
+		action: "Take the assessment",
 		name: "AI Maturity Assessment",
 		description:
 			"Eleven questions on how an engineering organisation actually works with AI, built from my maturity framework. Free, no sign-up, and the result lives in the link.",
 	},
 ];
+
+function formatDate(date: string) {
+	return new Date(date).toLocaleDateString("en-GB", {
+		day: "numeric",
+		month: "short",
+		year: "numeric",
+	});
+}
 
 export default function Home() {
 	const latest = posts
@@ -162,184 +208,106 @@ export default function Home() {
 		.slice(0, 3);
 
 	return (
-		<main>
-			{/* Two-column hero */}
-			<section className="mx-auto max-w-6xl px-6 py-16 lg:py-24">
-				<div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16">
-					{/* Left column */}
-					<div>
-						{/* Section marker */}
-						<div className="mb-6">
-							<div className="mb-2 h-px w-5 bg-(--accent)" />
-							<span
-								className="font-mono text-[9px] uppercase tracking-[0.25em]"
-								style={{ color: "rgba(200,132,42,0.75)" }}
-							>
-								Steve Bolton
-							</span>
-						</div>
-
-						{/* H1 */}
-						<h1
-							className="font-serif font-normal leading-[1.02] text-(--text-primary)"
-							style={{
-								fontFamily: "var(--font-display)",
-								fontSize: "clamp(42px, 5.5vw, 64px)",
-							}}
-						>
-							The complexity didn&rsquo;t disappear when you moved it into agents.{" "}
-							<em style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
-								You just can&rsquo;t see it yet.
-							</em>
-						</h1>
-
-						{/* Ruled divider */}
-						<div className="my-6 border-t border-(--border)" />
-
-						{/* Lede paragraph */}
-						<p
-							className="text-[14px] leading-[1.75] text-(--text-muted)"
-							style={{
-								fontFamily: "Georgia, 'Times New Roman', serif",
-								fontStyle: "italic",
-							}}
-						>
-							<span style={{ color: "var(--accent)" }}>&sect;</span> I&rsquo;m a {ROLE} working on{" "}
-							{FOCUS}. I write about engineering maturity and what AI-assisted development does to
-							it. The teams that pull ahead are the ones that know how their systems actually work,
-							and can point AI precisely at the hard parts.
-						</p>
+		<>
+			{/* Hero: the thesis, drawn. The text sits above the diagram's empty left tail. */}
+			<section className="container grid grid-cols-1 content-between gap-10 pt-12 pb-4 lg:min-h-[calc(100dvh-4rem)] lg:grid-rows-1 lg:gap-12 lg:py-12">
+				<div className="lg:col-start-1 lg:row-start-1 relative z-[10] lg:max-w-[48rem] lg:self-start lg:pt-8">
+					<h1 className="text-ink">AI answers the average problem.</h1>
+					<hr className="rule mt-8 max-w-[36rem]" />
+					<p className="lead mt-6 text-ink-2">
+						The work now is knowing how yours differs, and checking the answer.
+					</p>
+					<div className="mt-10 flex flex-wrap items-center gap-4">
+						<CtaButton href="/thinking">Read the writing</CtaButton>
+						<CtaButton href="/about" variant="secondary">
+							About me
+						</CtaButton>
 					</div>
-
-					{/* Right column */}
-					<div>
-						<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-(--text-faint)">
-							The adoption arc
-						</p>
-						<div className="border border-(--border) p-4">
-							<AdoptionArcChart />
-						</div>
-						<div className="mt-6">
-							<CtaButton href="/thinking">Read the thinking</CtaButton>
-							<Link
-								href="/about"
-								className="mt-4 block font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-							>
-								About me &rarr;
-							</Link>
-						</div>
-					</div>
+				</div>
+				<div className="min-w-0 lg:col-start-1 lg:row-start-1 lg:self-end">
+					<Distribution f={wide} className="hidden md:block" />
+					<Distribution f={narrow} className="md:hidden" />
 				</div>
 			</section>
 
-			{/* Section divider */}
-			<div className="mx-auto max-w-6xl px-6">
-				<div className="my-12 flex items-center gap-4">
-					<div className="flex-1 border-t border-(--border)" />
-					<span className="font-mono text-[9px] uppercase tracking-[0.2em] text-(--text-faint)">
-						&sect; 01 — Selected work
-					</span>
-					<div className="flex-1 border-t border-(--border)" />
-				</div>
-			</div>
-
-			{/* Selected work */}
-			<section className="mx-auto max-w-6xl px-6 pb-24">
-				{/* Section marker */}
-				<div className="mb-8">
-					<div className="mb-2 h-px w-5 bg-(--accent)" />
-					<span
-						className="font-mono text-[9px] uppercase tracking-[0.25em]"
-						style={{ color: "rgba(200,132,42,0.75)" }}
-					>
-						Selected work
-					</span>
-				</div>
-
-				{/* Gap-grid */}
-				<div
-					className="grid grid-cols-1 md:grid-cols-3"
-					style={{ gap: "1px", background: "var(--border)" }}
-				>
-					{work.map((item) => {
-						const cardClassName = "group p-6 transition-colors duration-200 hover:bg-(--bg-subtle)";
-						const cardStyle = { background: "var(--bg)" };
-						const cardBody = (
-							<>
-								<p className="mb-3 font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
-									{item.number} / {item.slug}
-								</p>
-								<h3
-									className="mb-3 text-[20px] font-normal leading-[1.2] text-(--text-primary)"
-									style={{ fontFamily: "var(--font-display)" }}
-								>
-									{item.name}
-								</h3>
-								<p
-									className="mb-4 text-[12px] leading-[1.6] text-(--text-muted)"
-									style={{
-										fontFamily: "Georgia, 'Times New Roman', serif",
-										fontStyle: "italic",
-									}}
-								>
-									{item.description}
-								</p>
-								<span
-									className="font-mono text-[12px] transition-colors duration-200 group-hover:text-(--accent)"
-									style={{ color: "rgba(200,132,42,0)" }}
-									aria-hidden="true"
-								>
-									&rarr;
-								</span>
-							</>
-						);
-
-						return item.href ? (
-							<Link key={item.number} href={item.href} className={cardClassName} style={cardStyle}>
-								{cardBody}
+			{/* Latest writing: an index */}
+			<section className="container pt-(--section-gap-s)">
+				<hr className="rule--double" />
+				<div className="grid grid-cols-1 gap-10 pt-12 md:grid-cols-12 md:gap-8">
+					<div className="md:col-span-4">
+						<h2 className="text-ink">Latest writing</h2>
+						<p className="mt-6">
+							<Link href="/thinking" className="link">
+								All the writing
 							</Link>
-						) : (
-							<div key={item.number} className={cardClassName} style={cardStyle}>
-								{cardBody}
+						</p>
+					</div>
+					<ol className="md:col-span-8">
+						{latest.map((post, i) => (
+							<li
+								key={post.slug}
+								className="grid grid-cols-1 gap-3 border-t border-rule py-8 first:border-t-0 first:pt-0 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-8"
+							>
+								<div className="min-w-0">
+									<h3 className={i === 0 ? "text-2xl" : undefined}>
+										<Link href={`/thinking/${post.slug}`} className="title-link">
+											{post.title}
+										</Link>
+									</h3>
+									<p className="mt-3 max-w-[60ch] text-ink-2">{post.excerpt}</p>
+								</div>
+								<p className="agate text-sm text-muted sm:pt-1 sm:text-right">
+									<time dateTime={post.date}>{formatDate(post.date)}</time>
+									<br />
+									{Math.max(1, Math.round(post.metadata.wordCount / 200))} min read
+								</p>
+							</li>
+						))}
+					</ol>
+				</div>
+			</section>
+
+			{/* Who is writing: a statement */}
+			<section className="container pt-(--section-gap)">
+				<p className="max-w-[40ch] font-display text-section leading-[1.12] tracking-[-0.02em] text-ink">
+					I&rsquo;m a {ROLE} working on {FOCUS}. I write about engineering maturity and what
+					AI-assisted development does to it. The teams that pull ahead are the ones that know how
+					their systems actually work, and can point AI precisely at the hard parts.
+				</p>
+			</section>
+
+			{/* Selected work: rows */}
+			<section className="container pt-(--section-gap)">
+				<h2 className="text-ink">Selected work</h2>
+				<ul className="mt-12 border-t border-rule-2">
+					{work.map((item) => (
+						<li
+							key={item.name}
+							className="grid grid-cols-1 gap-4 border-b border-rule py-10 md:grid-cols-12 md:gap-8"
+						>
+							<h3 className="text-ink md:col-span-5">
+								{item.href ? (
+									<Link href={item.href} className="title-link">
+										{item.name}
+									</Link>
+								) : (
+									item.name
+								)}
+							</h3>
+							<div className="md:col-span-7">
+								<p className="max-w-[65ch] text-ink-2">{item.description}</p>
+								{item.href && item.action && (
+									<p className="mt-4">
+										<Link href={item.href} className="link">
+											{item.action}
+										</Link>
+									</p>
+								)}
 							</div>
-						);
-					})}
-				</div>
-			</section>
-
-			{/* Latest writing */}
-			<section className="mx-auto max-w-6xl px-6 pb-24">
-				<div className="mb-8">
-					<div className="mb-2 h-px w-5 bg-(--accent)" />
-					<span
-						className="font-mono text-[9px] uppercase tracking-[0.25em]"
-						style={{ color: "rgba(200,132,42,0.75)" }}
-					>
-						Latest writing
-					</span>
-				</div>
-				<ul className="flex max-w-3xl flex-col">
-					{latest.map((post) => (
-						<li key={post.slug} className="border-b border-(--border) py-6 first:pt-0">
-							<Link
-								href={`/thinking/${post.slug}`}
-								className="block font-display text-[20px] font-normal leading-[1.3] text-(--text-primary) transition-colors duration-150 hover:text-(--accent)"
-							>
-								{post.title}
-							</Link>
-							<p
-								className="mt-1 text-[14px] leading-[1.6] text-(--text-muted)"
-								style={{
-									fontFamily: "Georgia, 'Times New Roman', serif",
-									fontStyle: "italic",
-								}}
-							>
-								{post.excerpt}
-							</p>
 						</li>
 					))}
 				</ul>
 			</section>
-		</main>
+		</>
 	);
 }

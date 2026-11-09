@@ -19,78 +19,77 @@ export default function ContactPage() {
 			/>
 
 			<Section className="pt-0">
-				{state.success ? (
-					<div role="alert" className="border border-(--border) bg-(--accent-faint) p-6">
-						<p className="text-lg font-medium text-foreground">Message sent.</p>
-						<p className="mt-2 text-muted-foreground">
-							Thanks for reaching out. You will hear back soon.
-						</p>
-					</div>
-				) : (
-					<form action={formAction} className="max-w-xl space-y-6">
-						{state.error && (
-							<div
-								role="alert"
-								aria-live="assertive"
-								className="border border-red-500/30 bg-red-500/10 p-4"
-							>
-								<p className="text-sm text-red-400">{state.error}</p>
+				<div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
+					<div className="md:col-span-7">
+						{state.success ? (
+							<div role="alert" className="well px-6 py-8">
+								<p className="font-display text-2xl text-ink">Message sent.</p>
+								<p className="mt-3 text-ink-2">Thanks for reaching out. You will hear back soon.</p>
 							</div>
+						) : (
+							<form action={formAction} className="space-y-8">
+								{state.error && (
+									<div role="alert" aria-live="assertive" className="well border-error px-6 py-4">
+										<p className="text-error">{state.error}</p>
+									</div>
+								)}
+
+								<div>
+									<label htmlFor="name" className="block font-medium text-ink">
+										Name
+									</label>
+									<input
+										id="name"
+										name="name"
+										type="text"
+										autoComplete="name"
+										required
+										className="field"
+										placeholder="Your name"
+									/>
+								</div>
+
+								<div>
+									<label htmlFor="email" className="block font-medium text-ink">
+										Email
+									</label>
+									<input
+										id="email"
+										name="email"
+										type="email"
+										autoComplete="email"
+										inputMode="email"
+										required
+										className="field"
+										placeholder="you@company.com"
+									/>
+								</div>
+
+								<div>
+									<label htmlFor="message" className="block font-medium text-ink">
+										Message
+									</label>
+									<textarea
+										id="message"
+										name="message"
+										required
+										rows={6}
+										className="field resize-y"
+										placeholder="What are you working on?"
+									/>
+								</div>
+
+								<button type="submit" disabled={isPending} className="btn btn--primary">
+									{isPending ? "Sending…" : "Send message"}
+								</button>
+							</form>
 						)}
+					</div>
 
-						<div>
-							<label htmlFor="name" className="block text-sm font-medium text-foreground">
-								Name
-							</label>
-							<input
-								id="name"
-								name="name"
-								type="text"
-								required
-								className="mt-1 block w-full border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-(--accent) focus:outline-none"
-								placeholder="Your name"
-							/>
-						</div>
-
-						<div>
-							<label htmlFor="email" className="block text-sm font-medium text-foreground">
-								Email
-							</label>
-							<input
-								id="email"
-								name="email"
-								type="email"
-								required
-								className="mt-1 block w-full border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-(--accent) focus:outline-none"
-								placeholder="you@company.com"
-							/>
-						</div>
-
-						<div>
-							<label htmlFor="message" className="block text-sm font-medium text-foreground">
-								Message
-							</label>
-							<textarea
-								id="message"
-								name="message"
-								required
-								rows={5}
-								className="mt-1 block w-full resize-y border border-border bg-card px-3 py-2 text-foreground placeholder-muted-foreground focus:border-(--accent) focus:outline-none"
-								placeholder="What are you working on?"
-							/>
-						</div>
-
-						<button
-							type="submit"
-							disabled={isPending}
-							className="w-full bg-(--accent) px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-(--bg) transition-opacity duration-200 hover:opacity-[0.88] disabled:opacity-50"
-						>
-							{isPending ? "Sending..." : "Send message"}
-						</button>
-					</form>
-				)}
-
-				<p className="mt-10 max-w-xl text-muted-foreground">{OPEN_TO}</p>
+					<div className="md:col-span-4 md:col-start-9">
+						<p className="border-t border-rule-2 pt-6 text-lg text-ink">{OPEN_TO}</p>
+					</div>
+				</div>
 			</Section>
 		</>
 	);
