@@ -20,7 +20,7 @@ I have been thinking about that while working with coding agents, though the par
 
 I ran two experiments with AI agents to see this for myself.
 
-I asked six fresh agents to answer the standard senior system design questions as a candidate would. Three got the prompts as they are usually posed, with no scale stated: design Ticketmaster, a URL shortener, a news feed. All three assumed web scale (hundreds of millions of users, billions of requests) and produced around 15 components: caches, queues, a CDN, distributed locks. The other three got the same three problems at a stated small scale: a regional ticketing site at 50 purchases a second, an internal shortener for 2,000 staff, a community feed with 20,000 daily users. Their designs dropped to about 9 components. Every ticketing design said a single Postgres database could handle it, holding seats with a simple conditional update instead of a distributed lock.
+I asked six fresh agents to answer the standard senior system design questions as a candidate would. Three got the prompts as they are usually posed, with no scale stated: design Ticketmaster, a URL shortener, a news feed. All three assumed web scale (hundreds of millions of users) and produced around 15 components: caches, queues, a CDN, distributed locks. The other three got the same three problems at a stated small scale: a regional ticketing site at 50 purchases a second, an internal shortener for 2,000 staff, a community feed with 20,000 daily users. Their designs dropped to about 9 components. Every ticketing design held seats with a simple conditional update in Postgres and said no distributed lock was needed.
 
 What none of them did was treat the scale as an open question. Given the number they used it well, so the capability was never in doubt; what was missing was the move of asking. My old lecturer never made it either. The canonical Ticketmaster answer is easy to practise and easy to repeat; the part worth anything is knowing why you wouldn't reach for Redis by reflex, and how far the data model will carry the load before extra components earn their place.
 
@@ -38,7 +38,7 @@ The idea isn't new. Donald Campbell described creativity as [blind variation and
 
 One experiment made this concrete for me. I set up a small pricing module (invented, so no model could have seen it before) and planted six bugs: a loyalty discount starting at 6 months instead of 12, two discounts adding together instead of the larger one applying, free shipping from £40 instead of £50, and so on. Then I asked AI agents to write tests for it, the way you'd ask any assistant to add tests to existing code.
 
-I ran it twice. With the code alone, both runs locked in four of the six bugs: they wrote tests asserting the wrong behaviour was correct. Then I added one line per rule to the code, such as "Loyalty discount: none below 12 months, 5% from 12 months, 10% from 36 months". With that one line, both runs caught all six bugs and flagged them.
+I ran it twice. With the code alone, both runs locked in four of the six bugs: they wrote tests asserting the wrong behaviour was correct. Then I added one line per rule to the code, stating what each rule should be, such as when the loyalty discount starts. With that one line, both runs caught all six bugs and flagged them.
 
 <Bars
   title="Planted bugs the agents' tests locked in as correct"
