@@ -50,6 +50,19 @@ Company B's problems also compound -- but in the wrong direction. Each failed AI
 
 Within 18 months, Company A is running 30 agents across multiple domains. Company B is still running the same 3 pilots they started with, plus a growing pile of abandoned experiments that nobody had time to decommission properly.
 
+<Trajectory
+  title="Same budget, different architecture"
+  note="Illustrative: the two companies in this essay, both assumed to start with the same three pilots. The essay gives the 18-month counts; the curve between shows compounding, not measured data."
+  months={18}
+  unit="agents"
+  max={30}
+  ticks={[0, 10, 20, 30]}
+  series={[
+    { name: "Company A", from: 3, to: 30, shape: "compound", emphasis: true, label: "30 agents" },
+    { name: "Company B", from: 3, to: 3, shape: "flat", label: "The same 3 pilots" },
+  ]}
+/>
+
 ## What to look for
 
 If you are an engineering leader reading this and wondering which company you are, here are the signals:
@@ -67,6 +80,8 @@ If you are an engineering leader reading this and wondering which company you ar
 - The engineers who understand the system best are the least enthusiastic about AI adoption
 
 That last signal is the one most leaders miss. When your most experienced architects are sceptical about AI, it is not because they fear change. It is because they can see the complexity that the quick wins are hiding. They have been managing that complexity manually for years. They know what happens when you hand it to an agent that does not have their context.
+
+<PullQuote>The wall is never the technology failing. It is complexity being moved without being resolved.</PullQuote>
 
 ## The investment that matters
 
