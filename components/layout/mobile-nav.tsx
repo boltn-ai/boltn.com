@@ -2,15 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { CtaButton } from "@/components/ui/cta-button";
-import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
 	open: boolean;
 	onClose: () => void;
+	links: { href: string; label: string }[];
 }
 
-export function MobileNav({ open, onClose }: MobileNavProps) {
+export function MobileNav({ open, onClose, links }: MobileNavProps) {
 	const navRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -35,43 +34,21 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 	}, [open, onClose]);
 
 	return (
-		<div
-			id="mobile-nav"
-			ref={navRef}
-			aria-hidden={!open}
-			className={cn(
-				"overflow-hidden border-t border-(--border) bg-(--bg) transition-all duration-200 ease-in-out md:hidden",
-				open ? "max-h-64 opacity-100" : "max-h-0 opacity-0",
-			)}
-		>
-			<nav
-				aria-label="Mobile navigation"
-				className="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-6"
-			>
-				<Link
-					href="/about"
-					onClick={onClose}
-					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-				>
-					About
+		<div id="mobile-nav" ref={navRef} hidden={!open} className="border-t border-rule-2 md:hidden">
+			<nav aria-label="Mobile navigation" className="container flex flex-col gap-2 py-6">
+				{links.map((link) => (
+					<Link
+						key={link.href}
+						href={link.href}
+						onClick={onClose}
+						className="nav-link py-2 font-display text-xl"
+					>
+						{link.label}
+					</Link>
+				))}
+				<Link href="/contact" onClick={onClose} className="btn btn--on-ink mt-4 w-fit">
+					Get in touch
 				</Link>
-				<Link
-					href="/thinking"
-					onClick={onClose}
-					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-				>
-					Thinking
-				</Link>
-				<Link
-					href="/assessment"
-					onClick={onClose}
-					className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-				>
-					Assessment
-				</Link>
-				<CtaButton href="/contact" className="w-fit">
-					Get in touch →
-				</CtaButton>
 			</nav>
 		</div>
 	);

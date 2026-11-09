@@ -4,7 +4,12 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import { cn } from "@/lib/utils";
+
+const links = [
+	{ href: "/thinking", label: "Thinking" },
+	{ href: "/about", label: "About" },
+	{ href: "/assessment", label: "Assessment" },
+];
 
 export function Header() {
 	const [scrolled, setScrolled] = useState(false);
@@ -19,67 +24,42 @@ export function Header() {
 	}, []);
 
 	return (
-		<header
-			className={cn(
-				"sticky top-0 z-50 w-full border-b border-(--border) transition-colors duration-200",
-				scrolled ? "bg-(color:--bg)/80 backdrop-blur-sm" : "bg-(--bg)",
-			)}
-		>
-			<div className="mx-auto flex min-h-(--header-h) max-w-5xl items-center justify-between px-6 py-4">
+		<header className="slab sticky top-0 z-[300] w-full" data-scrolled={scrolled || undefined}>
+			<div className="container flex min-h-16 items-center justify-between gap-8">
 				<Link
 					href="/"
-					className="font-mono text-[13px] uppercase tracking-[0.25em] text-(--text-primary)"
+					className="font-display text-2xl leading-none tracking-[-0.02em] text-paper"
+					aria-label="Steve Bolton, home"
 				>
 					Steve Bolton
 				</Link>
 
 				{/* Desktop nav */}
-				<nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
-					<Link
-						href="/about"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-					>
-						About
-					</Link>
-					<Link
-						href="/thinking"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-					>
-						Thinking
-					</Link>
-					<Link
-						href="/assessment"
-						className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body)"
-					>
-						Assessment
-					</Link>
-					<Link
-						href="/contact"
-						className="font-mono text-[10px] uppercase tracking-[0.18em]"
-						style={{
-							color: "var(--accent)",
-							borderBottom: "1px solid rgba(200,132,42,0.4)",
-							paddingBottom: "1px",
-						}}
-					>
-						Get in touch →
+				<nav aria-label="Main navigation" className="hidden items-center gap-8 md:flex">
+					{links.map((link) => (
+						<Link key={link.href} href={link.href} className="nav-link text-base">
+							{link.label}
+						</Link>
+					))}
+					<Link href="/contact" className="btn btn--on-ink min-h-11">
+						Get in touch
 					</Link>
 				</nav>
 
-				{/* Mobile hamburger */}
+				{/* Mobile menu button */}
 				<button
 					type="button"
-					className="inline-flex items-center justify-center text-(--text-primary) md:hidden"
+					className="inline-flex size-11 items-center justify-center text-paper md:hidden"
 					onClick={() => setMobileOpen(!mobileOpen)}
 					aria-label={mobileOpen ? "Close menu" : "Open menu"}
 					aria-expanded={mobileOpen}
 					aria-controls="mobile-nav"
 				>
-					{mobileOpen ? <X size={24} /> : <Menu size={24} />}
+					{mobileOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
 				</button>
 			</div>
 
-			<MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
+			<MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} links={links} />
 		</header>
 	);
 }

@@ -1,21 +1,30 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Playfair_Display } from "next/font/google";
+import { Libre_Franklin, Spectral, Zilla_Slab } from "next/font/google";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import "./globals.css";
 import { FOCUS, HEADLINE, LINKEDIN_URL, ROLE } from "@/lib/profile";
 
-const playfair = Playfair_Display({
-	variable: "--font-display",
+const zilla = Zilla_Slab({
+	variable: "--font-zilla",
 	subsets: ["latin"],
+	weight: ["700"],
 	display: "swap",
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
-	variable: "--font-mono",
+const spectral = Spectral({
+	variable: "--font-spectral",
 	subsets: ["latin"],
 	weight: ["400", "500"],
+	style: ["normal", "italic"],
+	display: "swap",
+});
+
+const franklin = Libre_Franklin({
+	variable: "--font-franklin",
+	subsets: ["latin"],
+	weight: ["500"],
 	display: "swap",
 });
 
@@ -63,10 +72,8 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body
-				className={`${playfair.variable} ${ibmPlexMono.variable} flex min-h-screen flex-col antialiased`}
-			>
+		<html lang="en-GB" className={`${zilla.variable} ${spectral.variable} ${franklin.variable}`}>
+			<body className="flex flex-col">
 				<script
 					type="application/ld+json"
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: controlled static JSON-LD
@@ -74,7 +81,7 @@ export default function RootLayout({
 				/>
 				<a
 					href="#main-content"
-					className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-(--accent) focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-(--bg)"
+					className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[600] focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper"
 				>
 					Skip to main content
 				</a>

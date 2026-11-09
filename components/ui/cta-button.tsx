@@ -4,18 +4,14 @@ import { cn } from "@/lib/utils";
 interface CtaButtonProps {
 	href: string;
 	className?: string;
+	/** "primary" is ink-filled, "secondary" ruled top and bottom, "paper" the primary on an ink band. */
+	variant?: "primary" | "secondary" | "paper";
 	children?: React.ReactNode;
 }
 
-export function CtaButton({ href, className, children }: CtaButtonProps) {
+export function CtaButton({ href, className, variant = "primary", children }: CtaButtonProps) {
 	return (
-		<Link
-			href={href}
-			className={cn(
-				"flex w-full items-center justify-center bg-(--accent) px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-(--bg) transition-opacity duration-200 hover:opacity-[0.88]",
-				className,
-			)}
-		>
+		<Link href={href} className={cn("btn", `btn--${variant}`, className)}>
 			{children ?? "Get in touch"}
 		</Link>
 	);
