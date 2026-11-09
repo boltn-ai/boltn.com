@@ -16,7 +16,7 @@ export function Figure({ title, note, children }: FigureProps) {
 		<figure className="figure">
 			{children}
 			<figcaption className="mt-4">
-				<span className="font-display text-base text-ink">{title}</span>
+				<span className="block font-display text-base leading-snug text-ink">{title}</span>
 				{note && <span className="byline mt-1 block">{note}</span>}
 			</figcaption>
 		</figure>
@@ -146,13 +146,16 @@ export function Bars({
 	note,
 	bars,
 	unit,
+	max: scale,
 }: {
 	title: string;
 	note: string;
 	bars: Bar[];
 	unit: string;
+	/** The full scale, when the bars are parts of a known total (4 of 6). Defaults to the largest bar. */
+	max?: number;
 }) {
-	const max = Math.max(...bars.map((b) => b.value));
+	const max = scale ?? Math.max(...bars.map((b) => b.value));
 	return (
 		<Figure title={title} note={note}>
 			<ul className="bars" aria-label={`${title}, in ${unit}`}>
@@ -160,11 +163,13 @@ export function Bars({
 					<li key={b.label} className={b.emphasis ? "bars__row bars__row--emph" : "bars__row"}>
 						<span className="bars__label">{b.label}</span>
 						<span className="bars__track">
-							<span
-								className="bars__bar"
-								style={{ width: `${Math.max(2, (b.value / max) * 100)}%` }}
-								title={`${b.label}: ${b.display} (${b.value} ${unit})`}
-							/>
+							{b.value > 0 && (
+								<span
+									className="bars__bar"
+									style={{ width: `${Math.max(2, (b.value / max) * 100)}%` }}
+									title={`${b.label}: ${b.display} (${b.value} ${unit})`}
+								/>
+							)}
 							<span className="bars__value">{b.display}</span>
 						</span>
 					</li>
