@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og";
+import { OG } from "@/lib/og-theme";
 
 export const runtime = "edge";
 
-export const alt = "Steve Bolton — Engineering maturity and AI-assisted development";
+export const alt = "Steve Bolton: AI answers the average problem";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -12,38 +13,46 @@ export default function OGImage() {
 			style={{
 				display: "flex",
 				flexDirection: "column",
-				alignItems: "center",
-				justifyContent: "center",
+				justifyContent: "space-between",
 				width: "100%",
 				height: "100%",
-				backgroundColor: "#0B0B09",
-				padding: "60px",
+				backgroundColor: OG.paper,
+				padding: "64px",
+				fontFamily: OG.font,
 			}}
 		>
-			<div
-				style={{
-					fontSize: 96,
-					fontWeight: 700,
-					color: "#fafafa",
-					letterSpacing: "-0.02em",
-					fontFamily: "system-ui, sans-serif",
-				}}
-			>
-				Steve Bolton
+			<div style={{ display: "flex", flexDirection: "column" }}>
+				<div style={{ display: "flex", fontSize: 28, fontWeight: 700, color: OG.ink }}>
+					Steve Bolton
+				</div>
+				<div
+					style={{
+						display: "flex",
+						marginTop: 20,
+						height: 5,
+						borderTop: `1px solid ${OG.rule}`,
+						borderBottom: `1px solid ${OG.rule}`,
+					}}
+				/>
 			</div>
-			<div
-				style={{
-					fontSize: 28,
-					color: "#C8842A",
-					marginTop: 24,
-					textAlign: "center",
-					fontFamily: "system-ui, sans-serif",
-					maxWidth: 800,
-					lineHeight: 1.4,
-				}}
-			>
-				Engineering maturity and AI-assisted development
+			<div style={{ display: "flex", flexDirection: "column" }}>
+				<div
+					style={{
+						fontSize: 88,
+						fontWeight: 700,
+						color: OG.ink,
+						letterSpacing: "-0.02em",
+						lineHeight: 1.05,
+						maxWidth: 900,
+					}}
+				>
+					AI answers the average problem.
+				</div>
+				<div style={{ fontSize: 32, color: OG.ink2, marginTop: 28, maxWidth: 900 }}>
+					The work now is knowing how yours differs, and checking the answer.
+				</div>
 			</div>
+			<div style={{ display: "flex", height: 10, width: 220, backgroundColor: OG.accent }} />
 		</div>,
 		{ ...size },
 	);

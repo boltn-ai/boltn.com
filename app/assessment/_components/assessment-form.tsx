@@ -68,13 +68,9 @@ export function AssessmentForm({ children }: { children: React.ReactNode }) {
 				// it is the scripting-disabled one: the browser's own required-field check blocks an
 				// incomplete submit when scripting is on, so this panel is what a full page reload
 				// lands on, at the top of the document.
-				<div className="mx-auto mb-10 max-w-5xl px-6">
-					<div
-						role="alert"
-						aria-live="assertive"
-						className="border border-red-500/30 bg-red-500/10 p-4"
-					>
-						<p className="text-sm text-red-400">{state.error}</p>
+				<div className="container mb-10">
+					<div role="alert" aria-live="assertive" className="well border-error px-6 py-4">
+						<p className="text-error">{state.error}</p>
 					</div>
 				</div>
 			)}
@@ -92,17 +88,13 @@ export function AssessmentForm({ children }: { children: React.ReactNode }) {
 			>
 				<ProgressCounter answered={answered} total={TOTAL} />
 
-				<div className="mx-auto max-w-5xl space-y-16 px-6 pt-12 pb-24">
+				<div className="container space-y-16 pt-12 pb-24 [&>button]:mt-20">
 					{children}
 
 					{/* The pending state is a label swap plus reduced opacity, and nothing else.
-					    STYLE_GUIDE §6 bans animated loading indicators outright, so there is no
-					    rotating glyph, no pulsing bar and no skeleton here. */}
-					<button
-						type="submit"
-						disabled={isPending}
-						className="w-full bg-(--accent) px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-(--bg) transition-opacity duration-200 hover:opacity-[0.88] disabled:opacity-50"
-					>
+					    The theme keeps still, so there is no rotating glyph, no pulsing bar and no
+					    skeleton here. */}
+					<button type="submit" disabled={isPending} className="btn btn--primary w-full sm:w-auto">
 						{isPending ? "Scoring…" : "See the result"}
 					</button>
 				</div>

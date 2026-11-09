@@ -27,18 +27,13 @@ export function ProgressCounter({ answered, total }: { answered: number; total: 
 		// The status role below carries an implicit polite live region, so progress is
 		// announced without interrupting. An assertive region would fire on all eleven
 		// changes, which would be hostile.
-		<div
-			role="status"
-			className="sticky top-(--header-h) z-40 border-b border-(--border) bg-(--bg) px-6 py-3"
-		>
-			<div className="mx-auto max-w-5xl">
-				{/* Amber on the numerals is STYLE_GUIDE §1 context 2, numbered metadata —
-				    the same treatment as "01 / Assessment" on the home page. */}
-				<p aria-hidden="true" className="font-mono text-[9px] uppercase tracking-[0.22em]">
-					<span className="text-(--accent)">
-						{String(answered).padStart(2, "0")} / {total}
+		<div role="status" className="sticky top-16 z-[200] border-b border-rule bg-paper py-3">
+			<div className="container">
+				<p aria-hidden="true" className="byline">
+					<span className="agate text-ink">
+						{String(answered).padStart(2, "0")} of {total}
 					</span>{" "}
-					<span className="text-(--text-faint)">answered</span>
+					answered
 				</p>
 				{/* The natural-language form, so a screen reader does not read the visual
 				    form as "zero three slash eleven". */}

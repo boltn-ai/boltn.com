@@ -1,17 +1,15 @@
-import { Section } from "@/components/ui/section";
-
 interface PageHeaderProps {
 	headline: string;
 	subtitle?: string;
 }
 
+/** The Banner hero every inner page opens with: the head, one line, a double rule. */
 export function PageHeader({ headline, subtitle }: PageHeaderProps) {
 	return (
-		<Section className="py-12 md:py-16">
-			<h1 className="text-4xl font-medium tracking-tight text-foreground md:text-5xl">
-				{headline}
-			</h1>
-			{subtitle && <p className="mt-4 text-lg text-muted-foreground">{subtitle}</p>}
-		</Section>
+		<header className="container pt-20 pb-12 md:pt-24 md:pb-16">
+			<h1 className="text-ink">{headline}</h1>
+			{subtitle && <p className="lead mt-6 text-ink-2">{subtitle}</p>}
+			<hr className="rule--double mt-12 md:mt-16" />
+		</header>
 	);
 }

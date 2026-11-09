@@ -29,35 +29,14 @@ import { Section } from "@/components/ui/section";
 import { decode } from "../../_lib/codec.ts";
 import { bandSlug, score } from "../../_lib/scoring.ts";
 
-// Georgia italic, matching /assessment's framing prose so the two pages read as one voice.
-const PROSE_CLASS = "max-w-2xl text-[14px] leading-[1.75] text-(--text-muted)";
-const PROSE_STYLE = {
-	fontFamily: "Georgia, 'Times New Roman', serif",
-	fontStyle: "italic",
-} as const;
+// One voice with /assessment: Spectral at body size in ink-2.
+const PROSE_CLASS = "max-w-[65ch] text-ink-2";
 
-// A mono 9px uppercase label. Deliberately the faintest thing on the page: these are
-// signposts, and none of them may compete with the band name for attention (D-03).
-const LABEL_CLASS = "block font-mono text-[9px] uppercase tracking-[0.25em] text-(--text-faint)";
+// Each block opens on its own heading at title size, parted by a hairline. None of them may
+// outweigh the band name (D-03), which is the h1 at display size.
+const HEADING_CLASS = "text-ink";
 
-const BLOCK_CLASS = "mt-14 border-t border-(--border) pt-6";
-
-// The site's section-marker idiom: a 20px amber rule above a mono eyebrow. Amber here is
-// STYLE_GUIDE §1 permitted context 1. Duplicated from /assessment rather than extracted,
-// because extracting it would mean editing a file this plan does not own.
-function SectionMarker({ label }: { label: string }) {
-	return (
-		<div className="mb-6">
-			<div className="mb-2 h-px w-5 bg-(--accent)" />
-			<span
-				className="font-mono text-[9px] uppercase tracking-[0.25em]"
-				style={{ color: "rgba(200,132,42,0.75)" }}
-			>
-				{label}
-			</span>
-		</div>
-	);
-}
+const BLOCK_CLASS = "doc-block mt-16 border-t border-rule pt-10";
 
 /**
  * Present, and empty on purpose.
@@ -87,7 +66,7 @@ export async function generateMetadata({
 	if (!answers) return { title: "Result not found" };
 
 	const result = score(answers);
-	const title = `${result.band} — AI Maturity Assessment`;
+	const title = `${result.band}: AI Maturity Assessment`;
 
 	return {
 		// absolute: skip the root layout's "%s | Steve Bolton" template, because the band name is
@@ -104,7 +83,7 @@ export async function generateMetadata({
 		robots: { index: false, follow: true },
 		openGraph: {
 			title,
-			description: `AI Maturity Assessment — ${result.band}`,
+			description: `AI Maturity Assessment: ${result.band}`,
 			// Re-declared because Next.js shallow-merges metadata: a child openGraph replaces
 			// the parent's outright rather than merging into it. This repo has a scar for it.
 			siteName: "Steve Bolton",
@@ -138,98 +117,103 @@ export default async function ResultPage({ params }: { params: Promise<{ code: s
 	const result = score(answers);
 
 	return (
-		<Section className="max-w-3xl">
-			<SectionMarker label="Your result" />
+		<>
+			<header className="container pt-20 md:pt-24">
+				{/* The band is the page's subject, so it is the h1 and it is the largest thing here.
+			    D-03 requires it to outweigh the number, and prominence comes from type scale,
+			    never from the accent. */}
+				<h1 className="text-ink">{result.band}</h1>
 
-			{/* The band is the page's subject, so it is the h1 and it is the largest thing here.
-			    D-03 requires it to outweigh the number, and prominence comes from type scale —
-			    amber on the band name would be an unsanctioned fifth amber context. */}
-			<h1 className="font-display text-[40px] font-normal leading-[1.1] text-(--text-primary) md:text-[56px]">
-				{result.band}
-			</h1>
+				{/* MODEL.md §7, Quick leadership register, transcribed verbatim in scoring.ts. */}
+				<p className="lead mt-6 max-w-[60ch] text-ink-2">{result.narrative}</p>
+				<hr className="rule--double mt-12" />
+			</header>
 
-			{/* MODEL.md §7, Quick leadership register, transcribed verbatim in scoring.ts. */}
-			<p className={`${PROSE_CLASS} mt-6`} style={PROSE_STYLE}>
-				{result.narrative}
-			</p>
-
-			<div className={BLOCK_CLASS}>
-				<span className={LABEL_CLASS}>Indicative score</span>
-				<p className="mt-3 font-mono text-[24px] tracking-[0.06em] text-(--text-body)">
-					{result.indicative}
-					<span className="text-(--text-faint)"> / 140</span>
-				</p>
-				{/* MODEL.md §4 instructs that the limitation be stated in the UI rather than
-				    implied, so it is said in words and not left to the word "indicative". */}
-				<p className={`${PROSE_CLASS} mt-4`} style={PROSE_STYLE}>
-					Read that as a position, not a measurement. One question per dimension means the scale
-					moves in ten-point steps, so a single answer moving from Partly to Yes can carry you
-					across a band boundary. The band above is what carries the meaning. A precise figure out
-					of 140 needs the full framework, which asks 106 questions rather than eleven.
-				</p>
-			</div>
-
-			<div className={BLOCK_CLASS}>
-				<span className={LABEL_CLASS}>Blind spots</span>
-				{result.blindSpots.length > 0 ? (
-					<>
-						<ul className="mt-4 space-y-1">
-							{result.blindSpots.map((name) => (
-								<li key={name} className="text-[16px] leading-[1.6] text-(--text-primary)">
-									{name}
-								</li>
-							))}
-						</ul>
-						<p className={`${PROSE_CLASS} mt-4`} style={PROSE_STYLE}>
-							{result.blindSpots.length === 1
-								? "That is the dimension where"
-								: "Those are the dimensions where"}{" "}
-							the honest answer was “Not sure”. It is not a low score. It is a gap in what the
-							organisation can see about itself, which is a different problem and usually a more
-							useful one. Some of these sit outside the score entirely, so they do not move the
-							number at all — that does not make them smaller.
-						</p>
-					</>
-				) : (
-					<p className={`${PROSE_CLASS} mt-4`} style={PROSE_STYLE}>
-						None named — you had a real answer for all eleven dimensions, which is less common than
-						it sounds. One sanity check is worth the minute it costs: the dimensions leaders are
-						surest about are often the ones measured least.
+			<Section className="pt-0 md:pt-0">
+				{/* The box score: the figure between two double rules. */}
+				<div className="doc-block py-10">
+					<h2 className={`${HEADING_CLASS} text-title`}>Indicative score</h2>
+					<p className="font-display text-display-s leading-none tracking-[-0.02em] text-ink">
+						<span className="num">{result.indicative}</span>
+						<span className="text-muted"> / 140</span>
 					</p>
-				)}
-			</div>
-
-			<div className={BLOCK_CLASS}>
-				<span className={LABEL_CLASS}>Confidence</span>
-				<p className="mt-3 font-mono text-[14px] uppercase tracking-[0.18em] text-(--text-body)">
-					{result.confidence}
-				</p>
-				<p className={`${PROSE_CLASS} mt-4`} style={PROSE_STYLE}>
-					{result.unsureCount === 0
-						? "Every dimension got a definite answer, so this reading rests on what you know rather than on what you assume."
-						: `${result.unsureCount} of the eleven answers ${
-								result.unsureCount === 1 ? "was" : "were"
-							} “Not sure”, so the number is carrying less weight and the list above is carrying more.`}{" "}
-					That is a finding rather than a penalty. Being able to name what you cannot see is the
-					part of this that survives contact with a real conversation.
-				</p>
-			</div>
-
-			<div className={BLOCK_CLASS}>
-				<p className={PROSE_CLASS} style={PROSE_STYLE}>
-					This page is rebuilt from the link every time it is opened. Your answers are in the URL
-					and nowhere else, so there is nothing on my side to leak or to lose — and nothing to come
-					back for. Keep the link and send it to whoever needs to see it.
-				</p>
-				<p className={`${PROSE_CLASS} mt-6`} style={PROSE_STYLE}>
-					The useful next step is not more of this. It is deciding which of the above to fix first,
-					given the architecture and the team you actually have rather than the ones a framework
-					assumes.
-				</p>
-				<div className="mt-8 max-w-sm">
-					<CtaButton href="/thinking">Read the thinking behind it</CtaButton>
+					{/* MODEL.md §4 instructs that the limitation be stated in the UI rather than
+				    implied, so it is said in words and not left to the word "indicative". */}
+					<p className={`${PROSE_CLASS} mt-6`}>
+						Read that as a position, not a measurement. One question per dimension means the scale
+						moves in ten-point steps, so a single answer moving from Partly to Yes can carry you
+						across a band boundary. The band above is what carries the meaning. A precise figure out
+						of 140 needs the full framework, which asks 106 questions rather than eleven.
+					</p>
 				</div>
-			</div>
-		</Section>
+
+				<hr className="rule--double" />
+
+				<div className="doc-block pt-10">
+					<h2 className={`${HEADING_CLASS} text-title`}>Blind spots</h2>
+					{result.blindSpots.length > 0 ? (
+						<>
+							<ul className="border-t border-rule">
+								{result.blindSpots.map((name) => (
+									<li
+										key={name}
+										className="border-b border-rule py-3 font-display text-lg text-ink"
+									>
+										{name}
+									</li>
+								))}
+							</ul>
+							<p className={`${PROSE_CLASS} mt-6`}>
+								{result.blindSpots.length === 1
+									? "That is the dimension where"
+									: "Those are the dimensions where"}{" "}
+								the honest answer was “Not sure”. It is not a low score. It is a gap in what the
+								organisation can see about itself, which is a different problem and usually a more
+								useful one. Some of these sit outside the score entirely, so they do not move the
+								number at all; that does not make them smaller.
+							</p>
+						</>
+					) : (
+						<p className={`${PROSE_CLASS} mt-6`}>
+							None named: you had a real answer for all eleven dimensions, which is less common than
+							it sounds. One sanity check is worth the minute it costs: the dimensions leaders are
+							surest about are often the ones measured least.
+						</p>
+					)}
+				</div>
+
+				<div className={BLOCK_CLASS}>
+					<h2 className={`${HEADING_CLASS} text-title`}>Confidence</h2>
+					<p className="font-display text-2xl text-ink">{result.confidence}</p>
+					<p className={`${PROSE_CLASS} mt-6`}>
+						{result.unsureCount === 0
+							? "Every dimension got a definite answer, so this reading rests on what you know rather than on what you assume."
+							: `${result.unsureCount} of the eleven answers ${
+									result.unsureCount === 1 ? "was" : "were"
+								} “Not sure”, so the number is carrying less weight and the list above is carrying more.`}{" "}
+						That is a finding rather than a penalty. Being able to name what you cannot see is the
+						part of this that survives contact with a real conversation.
+					</p>
+				</div>
+
+				<div className={BLOCK_CLASS}>
+					<p className={PROSE_CLASS}>
+						This page is rebuilt from the link every time it is opened. Your answers are in the URL
+						and nowhere else, so there is nothing on my side to leak or to lose, and nothing to come
+						back for. Keep the link and send it to whoever needs to see it.
+					</p>
+					<p className={`${PROSE_CLASS} mt-6`}>
+						The useful next step is not more of this. It is deciding which of the above to fix
+						first, given the architecture and the team you actually have rather than the ones a
+						framework assumes.
+					</p>
+					<div className="mt-10">
+						<CtaButton href="/thinking" variant="secondary">
+							Read the thinking behind it
+						</CtaButton>
+					</div>
+				</div>
+			</Section>
+		</>
 	);
 }

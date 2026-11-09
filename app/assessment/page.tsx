@@ -34,47 +34,28 @@ export const metadata: Metadata = {
 
 // Georgia italic, reserved by plan 04-03 for exactly this page’s framing prose so that the
 // questions themselves (Playfair) stay typographically distinct from the argument around them.
-const PROSE_CLASS = "max-w-2xl text-[14px] leading-[1.75] text-(--text-muted)";
-const PROSE_STYLE = {
-	fontFamily: "Georgia, 'Times New Roman', serif",
-	fontStyle: "italic",
-} as const;
+const PROSE = "max-w-[65ch] text-ink-2";
 
-// The home page’s section-marker idiom: a 20px amber rule above a mono eyebrow. Amber here is
-// STYLE_GUIDE §1 permitted context 1.
-function SectionMarker({ label }: { label: string }) {
-	return (
-		<div className="mb-6">
-			<div className="mb-2 h-px w-5 bg-(--accent)" />
-			<span
-				className="font-mono text-[9px] uppercase tracking-[0.25em]"
-				style={{ color: "rgba(200,132,42,0.75)" }}
-			>
-				{label}
-			</span>
-		</div>
-	);
+function Heading({ children }: { children: React.ReactNode }) {
+	return <h2 className="text-3xl text-ink">{children}</h2>;
 }
 
-// Kind → the copy that explains what that kind means. Ordered as the reader should meet them:
-// the seven that produce the score, the three that do not because they are trade-offs, then
-// the one that is neither.
 const KIND_COPY = [
 	{
 		kind: "capability" as const,
-		label: "Capability — more is better",
+		label: "Capability: more is better",
 		summary:
 			"Seven dimensions where a higher answer is straightforwardly better. These are the only ones that count towards the score.",
 	},
 	{
 		kind: "calibration" as const,
-		label: "Calibration — trade-offs, not maxima",
+		label: "Calibration: trade-offs, not maxima",
 		summary:
-			"Three dimensions to read against the friction they create rather than as things to maximise. Lock an agent down far enough and it is safe and useless; leave it open and it is fast and exposed. Where the right point sits depends on what you are building and who for — which is why these sit outside the score.",
+			"Three dimensions to read against the friction they create rather than as things to maximise. Lock an agent down far enough and it is safe and useless; leave it open and it is fast and exposed. Where the right point sits depends on what you are building and who for, which is why these sit outside the score.",
 	},
 	{
 		kind: "enablement" as const,
-		label: "Enablement — banded on its own",
+		label: "Enablement: banded on its own",
 		summary:
 			"More is better here too. It is not a trade-off. It moves on a slower timescale than the rest, so it is banded separately instead of being folded into the score.",
 	},
@@ -89,55 +70,50 @@ export default function AssessmentPage() {
 			/>
 
 			<Section className="pt-0">
-				<SectionMarker label="What this measures" />
+				<div className="doc-block">
+					<Heading>What this measures</Heading>
 
-				{/* D-20, stated as prose rather than buried in a note. It is the single most common
+					{/* D-20, stated as prose rather than buried in a note. It is the single most common
 				    misreading of the phrase “AI maturity”, and a reader who answers the wrong
 				    question gets a result that describes an organisation they do not work for. */}
-				<p className={PROSE_CLASS} style={PROSE_STYLE}>
-					<span style={{ color: "var(--accent)" }}>&sect;</span> This assesses AI in your
-					engineering workflow — how your teams design, build and ship software with AI in the loop.
-					It does not assess AI in your product. Whether you put a model in front of your customers
-					is a different question with different answers, and nothing below is about it.
-				</p>
+					<p className={PROSE}>
+						This assesses AI in your engineering workflow: how your teams design, build and ship
+						software with AI in the loop. It does not assess AI in your product. Whether you put a
+						model in front of your customers is a different question with different answers, and
+						nothing below is about it.
+					</p>
 
-				{/* The bridge back to /thinking/ai-maturity-signals, which opens “These six signals are
+					{/* The bridge back to /thinking/ai-maturity-signals, which opens “These six signals are
 				    not a maturity score. They are a diagnostic.” This page shows a number, so the copy
 				    has to reconcile with that rather than quietly contradict it. */}
-				<p className={`${PROSE_CLASS} mt-6`} style={PROSE_STYLE}>
-					You will get a number, and you should hold it loosely. It is a diagnostic, not a grade.
-					Eleven questions across eleven dimensions means the score moves in ten-point steps, so a
-					single answer can carry you across a boundary — which is why the band is what carries the
-					meaning and the number is labelled indicative. The part worth your attention is the one
-					you cannot see from inside: the dimensions where the honest answer was “Not sure”.
-				</p>
+					<p className={`${PROSE} mt-6`}>
+						You will get a number, and you should hold it loosely. It is a diagnostic, not a grade.
+						Eleven questions across eleven dimensions means the score moves in ten-point steps, so a
+						single answer can carry you across a boundary, which is why the band is what carries the
+						meaning and the number is labelled indicative. The part worth your attention is the one
+						you cannot see from inside: the dimensions where the honest answer was “Not sure”.
+					</p>
+				</div>
 
-				<div className="mt-16">
-					<SectionMarker label="The eleven dimensions" />
+				<div className="mt-24 border-t border-rule pt-12">
+					<Heading>The eleven dimensions</Heading>
 
-					<p className={PROSE_CLASS} style={PROSE_STYLE}>
-						Nothing is withheld here. The whole framework is below — one question per dimension —
+					<p className={`${PROSE} mt-6`}>
+						Nothing is withheld here. The whole framework is below, one question per dimension,
 						because the framework is the argument, and an argument you cannot read is not one you
 						can disagree with.
 					</p>
 
-					<div className="mt-8 space-y-8">
+					<div className="mt-12 grid gap-10 lg:grid-cols-3 lg:gap-8">
 						{KIND_COPY.map((group) => {
 							const members = DIMENSIONS.filter((dimension) => dimension.kind === group.kind);
 							return (
-								<div key={group.kind} className="border-t border-(--border) pt-6">
-									<p className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-primary)">
-										{group.label}
-									</p>
-									<p className={`${PROSE_CLASS} mt-3`} style={PROSE_STYLE}>
-										{group.summary}
-									</p>
-									<ul className="mt-4 space-y-1">
+								<div key={group.kind} className="border-t border-rule-2 pt-6">
+									<h3 className="text-ink">{group.label}</h3>
+									<p className={`${PROSE} mt-3`}>{group.summary}</p>
+									<ul className="mt-6 border-t border-rule">
 										{members.map((dimension) => (
-											<li
-												key={dimension.key}
-												className="text-[14px] leading-[1.6] text-(--text-body)"
-											>
+											<li key={dimension.key} className="border-b border-rule py-2 text-ink">
 												{dimension.name}
 											</li>
 										))}
@@ -148,28 +124,25 @@ export default function AssessmentPage() {
 					</div>
 				</div>
 
-				<div className="mt-16">
-					<SectionMarker label="What it costs you" />
+				<div className="doc-block mt-24 border-t border-rule pt-12">
+					<Heading>What it costs you</Heading>
 
-					<p className={PROSE_CLASS} style={PROSE_STYLE}>
+					<p className={PROSE}>
 						Eleven questions, one per dimension. About three minutes. It is free, there is no email
-						address to hand over and no name to give. The result is a link — keep it, send it to
+						address to hand over and no name to give. The result is a link: keep it, send it to
 						whoever needs to see it. Your answers travel in the link itself, so there is nothing
 						stored on my side to leak or to lose.
 					</p>
 
-					<p className={`${PROSE_CLASS} mt-6`} style={PROSE_STYLE}>
+					<p className={`${PROSE} mt-6`}>
 						“Not sure” is a real answer and not a way of skipping. It is what produces the named
 						blind spots on the result, which for most teams is the useful part. Use it where it is
 						true.
 					</p>
 
-					<p className={`${PROSE_CLASS} mt-6`} style={PROSE_STYLE}>
+					<p className={`${PROSE} mt-6`}>
 						Rather see one before you answer?{" "}
-						<Link
-							href="/assessment/r/1yypnnpnpnpu7"
-							className="text-(--text-primary) underline underline-offset-4"
-						>
+						<Link href="/assessment/r/1yypnnpnpnpu7" className="link">
 							Here is a worked example for Northwind
 						</Link>
 						, a synthetic organisation invented for this page. It is not a client and the profile is

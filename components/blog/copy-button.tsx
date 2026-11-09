@@ -8,14 +8,14 @@ export function CopyButton({ text }: { text: string }) {
 	return (
 		<button
 			type="button"
-			className="font-mono text-[9px] uppercase tracking-[0.18em] text-(--text-faint) transition-colors duration-150 hover:text-(--text-body)"
+			className="btn btn--secondary min-h-11 px-4"
 			onClick={async () => {
 				await navigator.clipboard.writeText(text);
 				setCopied(true);
 				setTimeout(() => setCopied(false), 2000);
 			}}
 		>
-			{copied ? "Copied" : "Copy"}
+			<span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
 		</button>
 	);
 }

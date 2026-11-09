@@ -4,6 +4,21 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { defineCollection, defineConfig, s } from "velite";
 
+type HastNode = { type: string; tagName?: string; value?: string; children?: HastNode[] };
+
+// The essays were written with "--" for a dash. Markdown leaves it as two hyphens, which a browser
+// may break across lines. Set it as an em dash held to the word before it, outside code.
+function rehypeTypographicDashes() {
+	const walk = (node: HastNode) => {
+		if (node.type === "element" && (node.tagName === "code" || node.tagName === "pre")) return;
+		if (node.type === "text" && node.value) {
+			node.value = node.value.replace(/\s+--\s+/g, "\u00a0\u2014 ");
+		}
+		for (const child of node.children ?? []) walk(child);
+	};
+	return (tree: HastNode) => walk(tree);
+}
+
 const posts = defineCollection({
 	name: "Post",
 	pattern: "blog/**/*.mdx",
@@ -16,6 +31,7 @@ const posts = defineCollection({
 			published: s.boolean().default(false),
 			slug: s.path(),
 			metadata: s.metadata(),
+			toc: s.toc(),
 			content: s.mdx(),
 			html: s.markdown(),
 		})
@@ -38,6 +54,7 @@ export default defineConfig({
 	mdx: {
 		remarkPlugins: [remarkGfm],
 		rehypePlugins: [
+			rehypeTypographicDashes,
 			rehypeSlug,
 			[
 				rehypePrettyCode,

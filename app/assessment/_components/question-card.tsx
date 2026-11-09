@@ -33,46 +33,30 @@ const OPTIONS = [
 // four contexts and "selected answer segment" is not one of them. --bg-subtle is the
 // sanctioned selected/hover surface.
 const OPTION_CLASS =
-	"flex cursor-pointer items-center gap-3 p-4 font-mono text-[10px] uppercase tracking-[0.18em] text-(--text-muted) transition-colors duration-150 hover:text-(--text-body) has-[:checked]:bg-(--bg-subtle) has-[:checked]:text-(--text-primary)";
+	"relative flex min-h-12 cursor-pointer items-center justify-center bg-paper px-4 py-3 font-display text-ink-2 transition-colors duration-[120ms] hover:bg-paper-2 has-[:checked]:bg-ink has-[:checked]:text-paper has-[:focus-visible]:outline-2 has-[:focus-visible]:-outline-offset-4 has-[:focus-visible]:outline-focus has-[:checked:focus-visible]:outline-paper";
 
 export function QuestionCard({ dimension, number }: { dimension: Dimension; number: string }) {
 	return (
 		// Legends break out of the fieldset border box by default. With no border this is
 		// cosmetic, but the reset stays explicit.
-		<fieldset className="border-0 p-0 m-0">
-			<legend className="mb-4 block">
-				{/* Amber is permitted here: STYLE_GUIDE §1 context 2, numbered metadata —
-				    identical in form to "01 / Assessment" on the home page. */}
-				<span className="block font-mono text-[9px] uppercase tracking-[0.22em] text-(--accent)">
-					{number} / {dimension.name}
+		<fieldset className="mx-0 min-w-0 border-0 p-0">
+			<legend className="mb-4 block w-full border-t border-rule pt-10">
+				<span className="byline block">
+					<span className="agate">{number}</span> {dimension.name}
 				</span>
-				{/* The question is the card's heading, so it takes Playfair Display.
-				    Georgia italic stays reserved for the page's framing prose (plan 04-04).
-				    A discretion call — reviewed at the 04-07 checkpoint. */}
-				<span
-					className="mt-2 block text-[20px] font-normal leading-[1.2] text-(--text-primary)"
-					style={{ fontFamily: "var(--font-display)" }}
-				>
+				<span className="mt-2 block max-w-[40ch] font-display text-title leading-[1.2] tracking-[-0.02em] text-ink">
 					{dimension.question}
 				</span>
 			</legend>
 
-			{/* The site's hairline card idiom, verbatim: a 1px grid gap painted with --border,
-			    each cell repainting --bg. STYLE_GUIDE §7 sanctions the inline style prop for
-			    this technique and for CSS-variable colours; the no-inline-styles rule is about
-			    layout. */}
-			<div
-				className="grid grid-cols-2 sm:grid-cols-4"
-				style={{ gap: "1px", background: "var(--border)" }}
-			>
+			{/* Hairline-ruled cells: a 1px grid gap painted with the rule colour, each cell paper. */}
+			<div className="grid grid-cols-2 gap-px border border-rule bg-rule sm:grid-cols-4">
 				{OPTIONS.map((option) => (
 					// The label wraps its input (implicit association), so the whole segment is
 					// the hit target.
-					<label key={option.value} className={OPTION_CLASS} style={{ background: "var(--bg)" }}>
-						{/* The input stays visible and square. `appearance-none` plus the global
-						    border-radius reset yields a square indicator, which is on-brand — and
-						    a visible input means the global :focus-visible amber outline applies
-						    for free. That focus ring is not a fifth amber context.
+					<label key={option.value} className={OPTION_CLASS}>
+						{/* The radio is visually hidden but stays in the tab order; the chosen cell fills
+						    with ink and the focus ring is drawn on the cell.
 						    Every radio in a card shares the dimension key as its group name;
 						    `required` lets the browser block an incomplete native submit. */}
 						<input
@@ -80,7 +64,7 @@ export function QuestionCard({ dimension, number }: { dimension: Dimension; numb
 							name={dimension.key}
 							value={option.value}
 							required
-							className="h-3 w-3 shrink-0 appearance-none border border-(--border-hi) checked:bg-(--text-primary)"
+							className="sr-only"
 						/>
 						{option.label}
 					</label>

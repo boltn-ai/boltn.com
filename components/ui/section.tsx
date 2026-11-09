@@ -6,9 +6,10 @@ interface SectionProps {
 	children: React.ReactNode;
 }
 
+/** A page section: the outer element owns the block padding, the container the width. */
 export function Section({ id, className, children }: SectionProps) {
 	return (
-		<section id={id} className={cn("mx-auto max-w-5xl px-6 py-16 md:py-24", className)}>
+		<section id={id} className={cn("container py-16 md:py-24", className)}>
 			{children}
 		</section>
 	);

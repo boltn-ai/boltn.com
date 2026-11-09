@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { posts } from "#content";
+import { PageHeader } from "@/components/ui/page-header";
 
 export const metadata: Metadata = {
 	title: "Thinking",
@@ -14,53 +15,45 @@ export default function ThinkingPage() {
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 	return (
-		<main className="mx-auto max-w-3xl px-6 py-16">
-			<div className="mb-12">
-				<span className="font-mono text-[9px] uppercase tracking-[0.25em] text-(--text-faint)">
-					Steve Bolton
-				</span>
-				<h1 className="mt-2 font-display text-[36px] font-normal leading-[1.15] text-(--text-primary)">
-					Thinking
-				</h1>
-			</div>
+		<>
+			<PageHeader
+				headline="Thinking"
+				subtitle="Essays on engineering maturity, software architecture and AI-assisted development."
+			/>
 
-			{published.length === 0 ? (
-				<p
-					className="text-[14px] text-(--text-faint)"
-					style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic" }}
-				>
-					No posts yet.
-				</p>
-			) : (
-				<ul className="flex flex-col">
-					{published.map((post) => (
-						<li key={post.slug} className="border-b border-(--border) py-6 first:pt-0">
-							<span className="block font-mono text-[10px] tracking-[0.18em] text-(--text-faint)">
-								{new Date(post.date).toLocaleDateString("en-GB", {
-									day: "numeric",
-									month: "short",
-									year: "numeric",
-								})}
-							</span>
-							<Link
-								href={`/thinking/${post.slug}`}
-								className="mt-1 block font-display text-[20px] font-normal leading-[1.3] text-(--text-primary) transition-colors duration-150 hover:text-(--accent)"
+			<section className="container">
+				{published.length === 0 ? (
+					<p className="text-ink-2">No posts yet.</p>
+				) : (
+					<ol>
+						{published.map((post, i) => (
+							<li
+								key={post.slug}
+								className="grid grid-cols-1 gap-3 border-b border-rule py-10 first:pt-0 md:grid-cols-12 md:gap-8"
 							>
-								{post.title}
-							</Link>
-							<p
-								className="mt-1 text-[14px] leading-[1.6] text-(--text-muted)"
-								style={{
-									fontFamily: "Georgia, 'Times New Roman', serif",
-									fontStyle: "italic",
-								}}
-							>
-								{post.excerpt}
-							</p>
-						</li>
-					))}
-				</ul>
-			)}
-		</main>
+								<p className="agate text-sm text-muted md:col-span-2 md:pt-2">
+									<time dateTime={post.date}>
+										{new Date(post.date).toLocaleDateString("en-GB", {
+											day: "numeric",
+											month: "short",
+											year: "numeric",
+										})}
+									</time>
+								</p>
+								<div className="min-w-0 md:col-span-8">
+									<h2 className={i === 0 ? "text-section text-ink" : "text-2xl text-ink"}>
+										<Link href={`/thinking/${post.slug}`} className="title-link">
+											{post.title}
+										</Link>
+									</h2>
+									<p className="mt-4 max-w-[60ch] text-ink-2">{post.excerpt}</p>
+								</div>
+								<p className="byline md:col-span-2 md:pt-2 md:text-right">{post.category}</p>
+							</li>
+						))}
+					</ol>
+				)}
+			</section>
+		</>
 	);
 }

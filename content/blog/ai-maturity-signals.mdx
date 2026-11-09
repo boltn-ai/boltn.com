@@ -12,6 +12,18 @@ The difference matters. An organisation with 50 agents and no architectural cohe
 
 Here are six signals that actually indicate AI maturity in an engineering organisation. Not tool counts. Not vendor satisfaction scores. Signals that reveal whether your adoption trajectory is sustainable or heading toward a complexity wall.
 
+<SignalIndex
+  title="The six signals at a glance"
+  rows={[
+    { id: "signal-1-are-ai-outputs-reviewed-architecturally-or-just-functionally", title: "Are AI outputs reviewed architecturally?", mature: "Review checks boundaries, dependency direction and patterns, not just correctness" },
+    { id: "signal-2-do-you-have-ai-specific-testing-patterns", title: "Do you have AI-specific testing patterns?", mature: "Testing targets plausible but incorrect output" },
+    { id: "signal-3-is-ai-adoption-measured-by-tool-count-or-workflow-improvement", title: "Is adoption measured by workflow improvement?", mature: "Investment is tied to workflow metrics, not deployment coverage" },
+    { id: "signal-4-can-your-agents-be-onboarded-like-a-team-member", title: "Can your agents be onboarded like a team member?", mature: "Every production agent has documented responsibilities, contracts and failure modes" },
+    { id: "signal-5-do-your-experienced-architects-engage-with-ai-tooling-or-avoid-it", title: "Do your experienced architects engage?", mature: "Senior architects help decide where AI should and should not operate" },
+    { id: "signal-6-is-your-ai-strategy-independent-of-any-single-vendor", title: "Is your strategy independent of any one vendor?", mature: "Switching the model is a configuration change, not a redesign" },
+  ]}
+/>
+
 ## Signal 1: Are AI outputs reviewed architecturally or just functionally?
 
 The most common review pattern for AI-generated code: does it work? Does it pass tests? Does it produce the right output?
@@ -85,6 +97,8 @@ If your AI adoption strategy is built on a single model provider, a single agent
 Mature AI adoption separates the workflow design from the model selection. The workflow defines what needs to happen. The model is a pluggable component that handles the AI-specific parts. This is standard software architecture applied to AI integration -- and most organisations skip it because the vendor's SDK makes tight coupling easy.
 
 **Mature signal:** AI workflows are designed around business logic, not provider APIs. Switching the underlying model requires configuration changes, not architectural redesign.
+
+<PullQuote>An organisation with 50 agents and no architectural coherence is not more mature than one with 5 agents and clean service boundaries. It is more exposed.</PullQuote>
 
 ## Using these signals
 
