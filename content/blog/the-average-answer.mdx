@@ -18,15 +18,13 @@ I have been thinking about that while working with coding agents, though the par
 
 ## What the default looks like
 
-I ran three experiments with AI agents to see this for myself.
+I ran two experiments with AI agents to see this for myself.
 
-I asked six fresh agents to answer the standard senior system design questions as a candidate would. Three got the prompts as they are usually posed, with no scale stated: design Ticketmaster, a URL shortener, a news feed. All three assumed web scale (hundreds of millions of users, billions of requests) and produced around 15 components: caches, queues, a CDN, distributed locks. The other three got the same three problems at a stated small scale: a regional ticketing site at 50 purchases a second, an internal shortener for 2,000 staff, a community feed with 20,000 daily users. Their designs dropped to about 9 components. Every ticketing design said a single Postgres database could handle it, holding seats with a simple conditional update instead of a distributed lock.
+I asked twelve fresh agents, across three models, to answer the standard senior system design questions as a candidate would. Half got the prompts as they are usually posed, with no scale stated: design Ticketmaster, a URL shortener, a news feed. Every one of those designs assumed web scale (hundreds of millions of users) and averaged around 14 components: caches, queues, a CDN, distributed locks. The other half got the same three problems at a stated small scale: a regional ticketing site at 50 purchases a second, an internal shortener for 2,000 staff, a community feed with 20,000 daily users. Their designs dropped to about 10 components. Every ticketing design held seats with a simple conditional update in Postgres, and most said outright that no distributed lock was needed.
 
 What none of them did was treat the scale as an open question. Given the number they used it well, so the capability was never in doubt; what was missing was the move of asking. My old lecturer never made it either. The canonical Ticketmaster answer is easy to practise and easy to repeat; the part worth anything is knowing why you wouldn't reach for Redis by reflex, and how far the data model will carry the load before extra components earn their place.
 
 That gap is fixable, and the fix is instructive. Tell an agent in its instructions file to establish scale before it designs anything, and it will. But look at what just happened: I supplied the constraint, and to supply it I had to already know that scale is the variable deciding this class of design. The fix moved my judgement up a layer.
-
-The same happens with tools. When I asked six fresh AI agents to start a new Java project, all six chose Gradle, even though Maven is still the most used Java build tool (67% in [JetBrains' 2025 State of Java report](https://lp.jetbrains.com/the-state-of-java-2025)). None asked what the team already knew. The models share the human consensus here, and go further than practice does.
 
 None of this is a complaint about capability. I have never been attached to the lines themselves. Formatting, linting and static analysis have always done as much of that as I could hand them, and agents are the next step in the same direction: they get ideas out of my head faster, so more of my time goes on the design, the decisions and the abstractions that get value to the product without adding debt. Given a problem it has seen a thousand variants of, a model produces a clean implementation faster than I will, and follows the practices I would otherwise have had to remind someone about.
 
@@ -40,22 +38,22 @@ The idea isn't new. Donald Campbell described creativity as [blind variation and
 
 One experiment made this concrete for me. I set up a small pricing module (invented, so no model could have seen it before) and planted six bugs: a loyalty discount starting at 6 months instead of 12, two discounts adding together instead of the larger one applying, free shipping from £40 instead of £50, and so on. Then I asked AI agents to write tests for it, the way you'd ask any assistant to add tests to existing code.
 
-I ran it twice. With the code alone, both runs locked in four of the six bugs: they wrote tests asserting the wrong behaviour was correct. Then I added one line per rule to the code, such as "Loyalty discount: none below 12 months, 5% from 12 months, 10% from 36 months". With that one line, both runs caught all six bugs and flagged them.
+I ran it twelve times, across three models. With the code alone, five of the six runs locked in four of the six bugs (the sixth, three): they wrote tests asserting the wrong behaviour was correct. Then I added one line per rule to the code, stating what each rule should be, such as when the loyalty discount starts. With that one line, all four Sonnet and Opus runs caught all six bugs and flagged them. Haiku, the smallest model, listed every mismatch in its reply but left most of the calls to me, and one run pinned the code's behaviour anyway.
 
 <Bars
   title="Planted bugs the agents' tests locked in as correct"
-  note="Six bugs planted in an invented pricing module. Two runs per condition gave the same result. A pilot, not a benchmark."
+  note="Six bugs planted in an invented pricing module; the typical run shown. Code alone: five of six runs locked in four bugs, one locked in three. With one line per rule, the four Sonnet and Opus runs locked in none; one Haiku run locked in four. Claude Haiku, Sonnet and Opus, two runs each. A pilot, not a benchmark."
   unit="bugs"
   max={6}
   bars={[
     { label: "Code alone", value: 4, display: "4 of 6", emphasis: true },
-    { label: "Code plus one line per rule", value: 0, display: "0 of 6" },
+    { label: "Code plus one line per rule (Sonnet, Opus)", value: 0, display: "0 of 6" },
   ]}
 />
 
 The AI wasn't the weak link. It had nothing outside the code to check against. The one line told it the answer, and that is the point: the reference has to come from somewhere other than the thing being checked. Published research finds the same pattern at much larger scale. Tests written by language models tend to assert what the code does rather than what it should do ([Konstantinou and colleagues, 2024](https://arxiv.org/abs/2410.21136)).
 
-There is a loop here, and the near end of it needs no theory. Had those tests gone green and had I trusted them, six wrong behaviours would have been locked in as correct, with a passing suite to prove it. The more we trust the output, the less selection pressure we apply, and the less there is to catch the next thing.
+There is a loop here, and the near end of it needs no theory. Had those tests gone green and had I trusted them, four wrong behaviours would have been locked in as correct and two more left untested, with a passing suite to prove it. The more we trust the output, the less selection pressure we apply, and the less there is to catch the next thing.
 
 The level you have to direct at keeps rising. Two years ago I was reviewing lines; now I review designs and the model fills in what I would have written. I expect that to continue, and at each step more of the work is genuinely done without me. What does not change is that the ceiling sits at the top of whatever you can specify. Nor do the layers underneath stop mattering. Most Java developers never think about garbage collection, and a low-latency trading team lives inside it. The skill is knowing which kind of problem you have, and keeping enough understanding of the layer below to question what comes up from it.
 
@@ -77,7 +75,7 @@ Best practice, textbooks and published research always pulled us towards the con
 
 Human consensus does the same thing, and the skill is noticing which axis it is using. A few years ago I moved a build off Gradle onto Maven. Gradle is the more functionally capable tool and the consensus is right about that. It was simply not what bound us. The build was legible to about three people, more of the team already knew Maven, and Maven's constraints forced a decomposition that permissiveness had not. The capability ranking was answering a question we did not have.
 
-What it bought us was consistency: modules built to one convention instead of each one configured its own way, and best-practice plugins applied the same way everywhere. Nor was it meant to be permanent. The tool was never the problem; the logic that had accumulated inside the build was. Once Maven's conventions had forced that logic out into a standard structure, moving back to Gradle later would be easier than it had ever been. It is exactly what the six agents never asked about: what the team already knew.
+What it bought us was consistency: modules built to one convention instead of each one configured its own way, and best-practice plugins applied the same way everywhere. Nor was it meant to be permanent. The tool was never the problem; the logic that had accumulated inside the build was. Once Maven's conventions had forced that logic out into a standard structure, moving back to Gradle later would be easier than it had ever been.
 
 The far end of the loop is slower, and I can cite it rather than test it. As more of what models train on is itself model output, the worry is that the distribution narrows. The evidence is more careful than the headlines: [Shumailov and colleagues](https://www.nature.com/articles/s41586-024-07566-y) showed in Nature in 2024 that models trained recursively on their own output degrade, with the damage falling hardest on the tails. But [Gerstgrasser and colleagues](https://arxiv.org/abs/2404.01413) showed the same year that this depends on synthetic data replacing real data; where it accumulates alongside, the degradation stays bounded. So the catastrophic version looks unlikely. What holds is the part that matters here, and it is not a race to the bottom. It is a race to the average: the middle gets reinforced and better served while the tails get thinner. There is a human version of the same finding. In a 2024 study, stories written with AI-suggested ideas were judged more creative one by one, but were more similar to each other ([Doshi and Hauser](https://pmc.ncbi.nlm.nih.gov/articles/PMC11244532/)). And because the middle keeps getting better, there is less and less reason to notice what the tails have lost. Creativity is still possible, but now it has to be deliberate.
 
