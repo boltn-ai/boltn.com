@@ -8,3 +8,6 @@ next-env.d.ts
 .velite
 .vercel
 .env*.local
+
+# Hallmark design-run working files (screenshots, logs)
+.hallmark/
