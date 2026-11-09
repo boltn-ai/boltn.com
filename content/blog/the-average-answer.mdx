@@ -20,7 +20,7 @@ I have been thinking about that while working with coding agents, though the par
 
 I ran two experiments with AI agents to see this for myself.
 
-I asked six fresh agents to answer the standard senior system design questions as a candidate would. Three got the prompts as they are usually posed, with no scale stated: design Ticketmaster, a URL shortener, a news feed. All three assumed web scale (hundreds of millions of users) and produced around 15 components: caches, queues, a CDN, distributed locks. The other three got the same three problems at a stated small scale: a regional ticketing site at 50 purchases a second, an internal shortener for 2,000 staff, a community feed with 20,000 daily users. Their designs dropped to about 9 components. Every ticketing design held seats with a simple conditional update in Postgres and said no distributed lock was needed.
+I asked twelve fresh agents, across three models, to answer the standard senior system design questions as a candidate would. Half got the prompts as they are usually posed, with no scale stated: design Ticketmaster, a URL shortener, a news feed. Every one of those designs assumed web scale (hundreds of millions of users) and averaged around 14 components: caches, queues, a CDN, distributed locks. The other half got the same three problems at a stated small scale: a regional ticketing site at 50 purchases a second, an internal shortener for 2,000 staff, a community feed with 20,000 daily users. Their designs dropped to about 10 components. Every ticketing design held seats with a simple conditional update in Postgres, and most said outright that no distributed lock was needed.
 
 What none of them did was treat the scale as an open question. Given the number they used it well, so the capability was never in doubt; what was missing was the move of asking. My old lecturer never made it either. The canonical Ticketmaster answer is easy to practise and easy to repeat; the part worth anything is knowing why you wouldn't reach for Redis by reflex, and how far the data model will carry the load before extra components earn their place.
 
@@ -38,22 +38,22 @@ The idea isn't new. Donald Campbell described creativity as [blind variation and
 
 One experiment made this concrete for me. I set up a small pricing module (invented, so no model could have seen it before) and planted six bugs: a loyalty discount starting at 6 months instead of 12, two discounts adding together instead of the larger one applying, free shipping from £40 instead of £50, and so on. Then I asked AI agents to write tests for it, the way you'd ask any assistant to add tests to existing code.
 
-I ran it twice. With the code alone, both runs locked in four of the six bugs: they wrote tests asserting the wrong behaviour was correct. Then I added one line per rule to the code, stating what each rule should be, such as when the loyalty discount starts. With that one line, both runs caught all six bugs and flagged them.
+I ran it twelve times, across three models. With the code alone, five of the six runs locked in four of the six bugs (the sixth, three): they wrote tests asserting the wrong behaviour was correct. Then I added one line per rule to the code, stating what each rule should be, such as when the loyalty discount starts. With that one line, all four Sonnet and Opus runs caught all six bugs and flagged them. Haiku, the smallest model, listed every mismatch in its reply but left most of the calls to me, and one run pinned the code's behaviour anyway.
 
 <Bars
   title="Planted bugs the agents' tests locked in as correct"
-  note="Six bugs planted in an invented pricing module. Two runs per condition gave the same result. A pilot, not a benchmark."
+  note="Six bugs planted in an invented pricing module; the typical run shown. Code alone: five of six runs locked in four bugs, one locked in three. With one line per rule, the four Sonnet and Opus runs locked in none; one Haiku run locked in four. Claude Haiku, Sonnet and Opus, two runs each. A pilot, not a benchmark."
   unit="bugs"
   max={6}
   bars={[
     { label: "Code alone", value: 4, display: "4 of 6", emphasis: true },
-    { label: "Code plus one line per rule", value: 0, display: "0 of 6" },
+    { label: "Code plus one line per rule (Sonnet, Opus)", value: 0, display: "0 of 6" },
   ]}
 />
 
 The AI wasn't the weak link. It had nothing outside the code to check against. The one line told it the answer, and that is the point: the reference has to come from somewhere other than the thing being checked. Published research finds the same pattern at much larger scale. Tests written by language models tend to assert what the code does rather than what it should do ([Konstantinou and colleagues, 2024](https://arxiv.org/abs/2410.21136)).
 
-There is a loop here, and the near end of it needs no theory. Had those tests gone green and had I trusted them, six wrong behaviours would have been locked in as correct, with a passing suite to prove it. The more we trust the output, the less selection pressure we apply, and the less there is to catch the next thing.
+There is a loop here, and the near end of it needs no theory. Had those tests gone green and had I trusted them, four wrong behaviours would have been locked in as correct and two more left untested, with a passing suite to prove it. The more we trust the output, the less selection pressure we apply, and the less there is to catch the next thing.
 
 The level you have to direct at keeps rising. Two years ago I was reviewing lines; now I review designs and the model fills in what I would have written. I expect that to continue, and at each step more of the work is genuinely done without me. What does not change is that the ceiling sits at the top of whatever you can specify. Nor do the layers underneath stop mattering. Most Java developers never think about garbage collection, and a low-latency trading team lives inside it. The skill is knowing which kind of problem you have, and keeping enough understanding of the layer below to question what comes up from it.
 
