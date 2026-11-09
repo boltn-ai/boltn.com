@@ -1,11 +1,45 @@
 import { ImageResponse } from "next/og";
 import { posts } from "#content";
+import { OG } from "@/lib/og-theme";
 
 export const runtime = "edge";
 
-export const alt = "Steve Bolton / thinking";
+export const alt = "Steve Bolton, thinking";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+function Frame({ children }: { children: React.ReactNode }) {
+	return (
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				justifyContent: "space-between",
+				width: "100%",
+				height: "100%",
+				backgroundColor: OG.paper,
+				padding: "64px",
+				fontFamily: OG.font,
+			}}
+		>
+			<div style={{ display: "flex", flexDirection: "column" }}>
+				<div style={{ display: "flex", fontSize: 28, fontWeight: 700, color: OG.ink }}>
+					Steve Bolton
+				</div>
+				<div
+					style={{
+						display: "flex",
+						marginTop: 20,
+						height: 5,
+						borderTop: `1px solid ${OG.rule}`,
+						borderBottom: `1px solid ${OG.rule}`,
+					}}
+				/>
+			</div>
+			{children}
+		</div>
+	);
+}
 
 export default async function OGImage({ params }: { params: Promise<{ slug: string }> }) {
 	const { slug } = await params;
@@ -13,43 +47,12 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 
 	if (!post) {
 		return new ImageResponse(
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					justifyContent: "center",
-					width: "100%",
-					height: "100%",
-					backgroundColor: "#0B0B09",
-					padding: "60px",
-				}}
-			>
-				<div
-					style={{
-						fontSize: 96,
-						fontWeight: 700,
-						color: "#fafafa",
-						letterSpacing: "-0.02em",
-						fontFamily: "system-ui, sans-serif",
-					}}
-				>
-					Steve Bolton
-				</div>
-				<div
-					style={{
-						fontSize: 28,
-						color: "#C8842A",
-						marginTop: 24,
-						textAlign: "center",
-						fontFamily: "system-ui, sans-serif",
-						maxWidth: 800,
-						lineHeight: 1.4,
-					}}
-				>
+			<Frame>
+				<div style={{ display: "flex", fontSize: 72, fontWeight: 700, color: OG.ink }}>
 					Engineering maturity and AI-assisted development
 				</div>
-			</div>,
+				<div style={{ display: "flex" }} />
+			</Frame>,
 			{ ...size },
 		);
 	}
@@ -61,71 +64,30 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 	});
 
 	return new ImageResponse(
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				justifyContent: "space-between",
-				width: "100%",
-				height: "100%",
-				backgroundColor: "#0B0B09",
-				padding: "60px",
-			}}
-		>
-			<div
-				style={{
-					fontSize: 20,
-					color: "#C8842A",
-					textTransform: "uppercase",
-					letterSpacing: "0.15em",
-					fontFamily: "system-ui, sans-serif",
-				}}
-			>
-				Steve Bolton / thinking
-			</div>
-
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					gap: "20px",
-				}}
-			>
+		<Frame>
+			<div style={{ display: "flex", flexDirection: "column" }}>
 				<div
 					style={{
-						fontSize: 52,
+						fontSize: 64,
 						fontWeight: 700,
-						color: "#F2F0EA",
-						maxWidth: 900,
-						lineHeight: 1.15,
-						fontFamily: "system-ui, sans-serif",
+						color: OG.ink,
+						letterSpacing: "-0.02em",
+						lineHeight: 1.08,
+						maxWidth: 1000,
 					}}
 				>
 					{post.title}
 				</div>
 				<div
-					style={{
-						fontSize: 22,
-						color: "rgba(233,230,222,0.55)",
-						maxWidth: 800,
-						lineHeight: 1.4,
-						fontFamily: "system-ui, sans-serif",
-					}}
+					style={{ fontSize: 28, color: OG.ink2, marginTop: 24, maxWidth: 950, lineHeight: 1.35 }}
 				>
 					{post.excerpt}
 				</div>
 			</div>
-
-			<div
-				style={{
-					fontSize: 18,
-					color: "rgba(233,230,222,0.35)",
-					fontFamily: "system-ui, sans-serif",
-				}}
-			>
-				{formattedDate}
+			<div style={{ display: "flex", fontSize: 24, color: OG.muted }}>
+				{post.category}, {formattedDate}
 			</div>
-		</div>,
+		</Frame>,
 		{ ...size },
 	);
 }

@@ -1,4 +1,4 @@
-// Five band cards for social unfurls — one per MODEL.md §4 core band, rendered at build time.
+// Five band cards for social unfurls, one per MODEL.md §4 core band, rendered at build time.
 //
 // Deliberately NOT a per-result image. A per-code opengraph-image convention file would run a
 // satori render, roughly 200–500ms of CPU, for every distinct code fetched across a
@@ -18,22 +18,19 @@
 // deprecated one; removing it there is a separate follow-up and out of scope for this plan.
 
 import { ImageResponse } from "next/og";
+import { OG } from "@/lib/og-theme";
 import { BAND_SLUGS } from "../../_lib/scoring.ts";
 
 const SIZE = { width: 1200, height: 630 };
 
-// Satori cannot resolve CSS custom properties, so the palette is hardcoded hex — the same
-// four values the blog generator uses, and the same reason. These must be kept in step with
-// globals.css by hand; there is no way to reference the tokens from inside the image runtime.
-const BG = "#0B0B09";
-const ACCENT = "#C8842A";
-const TEXT_PRIMARY = "#F2F0EA";
-const TEXT_MUTED = "rgba(233,230,222,0.55)";
-
-// Playfair and IBM Plex are not available in the image runtime without explicit font loading,
-// which the existing generator does not do and which this file must not add — fetching a font
-// per render would reintroduce exactly the per-request cost the five-card design removes.
-const FONT = "system-ui, sans-serif";
+// Satori cannot resolve CSS custom properties, so the palette comes from lib/og-theme, the
+// hex equivalents of the Newsprint tokens. No web font is fetched per render: a system serif
+// stands in, which keeps the five-card design at constant cost.
+const BG = OG.paper;
+const ACCENT = OG.accent;
+const TEXT_PRIMARY = OG.ink;
+const TEXT_MUTED = OG.muted;
+const FONT = OG.font;
 
 // Slug back to band name. Derived from the scoring module's own table, so the two cannot drift.
 const BAND_BY_SLUG: Record<string, string> = Object.fromEntries(
@@ -108,8 +105,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ban
 				style={{
 					fontSize: 20,
 					color: ACCENT,
-					textTransform: "uppercase",
-					letterSpacing: "0.15em",
 					fontFamily: FONT,
 				}}
 			>
