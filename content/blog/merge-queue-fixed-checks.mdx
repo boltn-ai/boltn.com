@@ -1,0 +1,136 @@
+---
+title: "A merge queue needs a fixed set of checks. Change detection won't give you one."
+date: 2026-11-10
+excerpt: "Required status checks are fixed. Change-impact test selection is not. The deadlock that follows, and why the fix is to stop making the tests themselves the contract."
+category: practice
+published: true
+---
+
+A merge queue works by asking a simple question before it lands your change: did the required checks pass? The set of required checks is configured once, in branch protection, and it does not vary by pull request.
+
+Change-impact test selection works by asking a different question: which parts of this monorepo did you actually touch? It then runs only the suites that matter, which is how you take a three-hour critical path down to one.
+
+One caveat before the argument, because it matters later: the merge queue did not start out conditional. It ran everything, deliberately, and stayed that way for a while. An unconditional gate is slow, but it is also the instrument that finds your flaky tests, and making it selective before that work is done removes the instrument. Conditionality there came later and had a precondition. That is a separate argument from this one.
+
+Both of those are correct, and together they deadlock. If a required check belongs to a suite that this particular change did not need, that check never reports, and the queue waits for a result that is never coming. The obvious workarounds are all bad. Make nothing required and the queue stops gating. Make everything required and you have thrown away the selectivity you built. Mark skipped jobs as passing and you are now asserting a green result for work that did not happen.
+
+The way out is to notice that the required-checks contract is **fixed-arity** and change detection is **variable-arity**, and you cannot satisfy a fixed interface with a variable one directly. You need something that collapses the variable set into a single value. So stop trying to make the test jobs the contract, and put the contract at the edges instead.
+
+## Two fixed checks, an arbitrary middle
+
+In the dotCMS monorepo this ended up as two reusable workflows that always run, with everything selective in between.
+
+The first is an initialize phase. Its outermost job does essentially nothing, and that is the point -- it exists so the queue has a check that reliably reports "this workflow started". The comment in the file is blunt about it:
+
+```yaml
+# This job is used as a required check to indicate that the workflow has started and is running
+initialize:
+  name: Initialize
+  if: always()
+```
+
+The same workflow does the actual change detection and publishes the result as a single JSON output rather than a dozen booleans:
+
+```yaml
+outputs:
+  filters:
+    value: ${{ jobs.changes.outputs.filters }}
+    # Example: fromJSON(needs.initialize.outputs.filters).backend == 'true'
+```
+
+Downstream phases gate themselves on that. One output, read by many consumers, instead of a widening signature every time you add a component.
+
+The second fixed check is a finalize phase, and it is where the arity problem is actually solved. It receives the entire `needs` context, serialised:
+
+```yaml
+with:
+  needsData: ${{ toJson(needs) }}
+```
+
+Then it collapses every dependency's result into one aggregate status:
+
+```bash
+if echo "$NEEDS_DATA" | jq -e 'any(.[]; .result == "cancelled")' >/dev/null; then
+  cancelled=true
+elif echo "$NEEDS_DATA" | jq -e 'any(.[]; .result == "failure")' >/dev/null; then
+  failure=true
+fi
+```
+
+That single aggregate becomes the required check. The queue sees a stable contract of two checks. The pipeline underneath is free to run three jobs or thirty. Nothing is marked green that did not run, because the aggregate reasons over results including `skipped` rather than pretending skipped means passed.
+
+## Two details that only come from being burned
+
+`needs` sees direct dependencies only. A job reached transitively can fail without appearing in that context at all, so the finalize phase also queries the run's full job list through the API rather than trusting `needs` as complete. That extra lookup looks redundant until the first time a failure slips past the aggregate.
+
+And change detection has an off switch, with a deliberate default direction:
+
+```yaml
+change-detection:
+  description: |
+    - 'enabled': Run paths-filter to detect changes, run only affected components
+    - 'disabled': Skip detection, default all build/test components to run
+```
+
+When you cannot work out what changed, run everything. Selectivity is an optimisation, and an optimisation that fails closed is a correctness bug. Most of the cost of a wrong answer here is paid at three in the morning during a release, not on a Tuesday pull request.
+
+## The same bug, one layer down
+
+Before the refactor, every workflow installed its own Java, managed its own cache, and pushed and pulled its own artifacts. The cost was not only the duplicated minutes. Duplicated setup drifts, and drifted setup produces the failures that are hardest to reason about -- two jobs in the same run compiling against different toolchains, and nothing in the logs saying so.
+
+The fix was the same move as the aggregator, pointed the other way. One declaration, many consumers. `.sdkmanrc` holds a single line:
+
+```
+# this is the version of java that will be used as the base image for the docker build
+java=21.0.8-ms
+```
+
+Developers already had that file, because SDKMAN reads it when they enter the directory. So the CI action reads the same file rather than restating the version in YAML:
+
+```bash
+if [ -z "${{ inputs.java-version }}" ] && [ -f .sdkmanrc ]; then
+  REQUESTED_VERSION=$(awk -F "=" '/^java=/ {print $2}' .sdkmanrc)
+fi
+```
+
+One line governs the developer shell, the CI toolchain and the Docker base image. There is no second place to forget to update, because there is no second place. The same pattern went in for Node through `.nvmrc`, and the direction of travel was `mise` -- introduced for developers first, so that the build could be moved onto it afterwards rather than before.
+
+There is a second payoff, and it is the one actually worth arguing for. Centralising the setup into a single composite action does not just delete duplicated minutes -- it creates the seam. Every workflow calls one action, so swapping SDKMAN for mise becomes a change to one file that every workflow picks up without being touched. Before the refactor, that same migration meant editing every workflow that installed a toolchain: the kind of change that gets proposed, costed, and quietly dropped.
+
+So the option to move existed because the seam had been built, and the seam had been built for an unrelated reason. That is the usual way round. Deduplication pays twice, once in minutes and once in the choices it leaves open, and the second payment is much larger and arrives much later -- which is precisely why it rarely survives a business case.
+
+That ordering is the part I would defend hardest. The declaration landed six months before the pipeline that consumed it. Developers were already living with it, which meant the refactor was adopting a convention rather than imposing one.
+
+This is also where reproducibility stops being a slogan. If you cannot name what compiled an artifact, you cannot attest to it, and every provenance claim above that is decoration.
+
+## The agent reads the same documentation
+
+None of this was designed for coding agents, and all of it turned out to matter to them.
+
+Sixteen thousand lines of duplicated workflow YAML cannot be held in a context window. Twenty-five named reusable workflows with declared inputs and outputs can be read selectively: an agent fetches the one it needs and ignores the rest. The header documentation is the same contract a new developer reads:
+
+```
+# Outputs:
+# - filters: JSON object with all filter results
+#   Usage: fromJSON(needs.initialize.outputs.filters).backend == 'true'
+```
+
+An agent uses it for exactly the same reason: nothing else in the file tells you the shape of that value.
+
+The seam matters more for an agent than for a person. Duplication is where agents do real damage: seven call sites, four of them updated, the build still green, and the failure surfacing three weeks later in the one path nobody exercised. One call site cannot be partially updated.
+
+And the aggregate status is a bounded answer. An agent asking "did CI pass" gets a verdict and a reason, rather than needing to read every job log to find out -- which is the difference between a question it can act on and one that consumes its context before it starts. That is the practical half of an argument I made elsewhere about [default answers and where judgement now sits](/thinking/the-average-answer): agents need structure supplied from outside themselves, and in a build this is what supplying it looks like.
+
+## The general shape
+
+Both fixes are the same move in opposite directions. The finalize aggregator is a single authoritative statement placed **downstream** of work that varies in shape. The toolchain declaration is a single authoritative statement placed **upstream** of consumers that vary. In both cases the duplication was the bug, not the symptom.
+
+So the question worth arguing about is not how to make the variable thing fit a fixed contract. It is where the one authoritative point belongs, and -- for anything placed downstream -- what it is allowed to claim when its information is incomplete.
+
+The centralised version is almost never the cheaper one on the day you build it. It is the only version that can be changed afterwards.
+
+---
+
+The files are public, pinned to the state they were in when I left: [the workflow directory](https://github.com/dotCMS/core/tree/321450dae67c/.github/workflows), [initialize phase](https://github.com/dotCMS/core/blob/321450dae67c/.github/workflows/cicd_comp_initialize-phase.yml), [finalize phase](https://github.com/dotCMS/core/blob/321450dae67c/.github/workflows/cicd_comp_finalize-phase.yml).
+
+I designed this architecture, authored those files, and wrote the documentation that went in with them. The refactor landed as [one commit](https://github.com/dotCMS/core/commit/d9fcd27591) across 109 files: 1,113 lines added, 15,882 removed. Most of what a pipeline like this needs is not more YAML. It is the same YAML, written once, with the duplication deleted and the contract written down. It is a team repository, and plenty of people have worked in it before and since.
