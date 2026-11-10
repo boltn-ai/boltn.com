@@ -10,6 +10,8 @@ A merge queue works by asking a simple question before it lands your change: did
 
 Change-impact test selection works by asking a different question: which parts of this monorepo did you actually touch? It then runs only the suites that matter, which is how you take a three-hour critical path down to one.
 
+One caveat before the argument, because it matters later: the merge queue did not start out conditional. It ran everything, deliberately, and stayed that way for a while. An unconditional gate is slow, but it is also the instrument that finds your flaky tests, and making it selective before that work is done removes the instrument. Conditionality there came later and had a precondition. That is a separate argument from this one.
+
 Both of those are correct, and together they deadlock. If a required check belongs to a suite that this particular change did not need, that check never reports, and the queue waits for a result that is never coming. The obvious workarounds are all bad. Make nothing required and the queue stops gating. Make everything required and you have thrown away the selectivity you built. Mark skipped jobs as passing and you are now asserting a green result for work that did not happen.
 
 The way out is to notice that the required-checks contract is **fixed-arity** and change detection is **variable-arity**, and you cannot satisfy a fixed interface with a variable one directly. You need something that collapses the variable set into a single value. So stop trying to make the test jobs the contract, and put the contract at the edges instead.
