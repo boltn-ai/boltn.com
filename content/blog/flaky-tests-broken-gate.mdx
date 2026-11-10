@@ -1,0 +1,94 @@
+---
+title: "A flaky test is not a broken test. It is a broken gate."
+date: 2026-11-10
+excerpt: "Flakiness does not cost you the time the reruns take. It costs you the meaning of a red build, and everything downstream of that assumes red means something."
+category: practice
+published: true
+---
+
+Nobody is promoted for fixing flaky tests. They are tedious to reproduce, they fail for reasons that have nothing to do with the change in front of you, and a fix is invisible: the build was green before you started, in the sense that someone had already pressed rerun.
+
+That is why they are worth taking seriously, and the reason is not the wasted minutes.
+
+## The cost is the meaning of red
+
+A gate works because a red result means stop. The instant a red result also means *possibly nothing*, every engineer who sees one has to make a judgement, and the cheapest correct-most-of-the-time judgement is to press rerun. This is not negligence. It is the rational response to a signal with a high false positive rate, and it happens to any team given enough of them.
+
+What follows is the part that matters. Once rerunning is the default response, a genuine failure gets the same treatment as a flake, because the two are indistinguishable at the moment of the decision. The gate is still there, still running, still reporting, and no longer gating. Real defects reach the main branch through a mechanism that looks exactly like business as usual.
+
+So the first thing to be clear about is that flakiness is not a test-quality problem that can be left in the backlog behind feature work. It is a *correctness* problem in the delivery system, and everything built downstream of the gate inherits it.
+
+## Why they are genuinely hard
+
+Two properties make them resist the normal approach.
+
+They usually do not reproduce locally. The failures are timing-dependent, and timing depends on the environment: a CI runner with different core counts, contended I/O, a shared service responding more slowly under parallel load. A developer who cannot reproduce a failure cannot iterate on it, and a bug you cannot iterate on is one you abandon.
+
+And the obvious mitigation is a band-aid with a condition attached. Skipping or muting the test buys back the signal immediately, which is genuinely worth doing, but only if someone returns. The honest observation is that nobody returns unless returning is somebody's tracked work, because by then the pressure that caused the mute has gone away. A mute with no issue behind it is a silent reduction in coverage, and it will not announce itself.
+
+## Many flakes, one assumption
+
+The approach that actually scales is to stop treating them as individual bugs.
+
+A surprising proportion of timing flakes in one codebase share a root cause, because they share an assumption about some piece of infrastructure. In this case the infrastructure was the search index, and the assumption was about when a write becomes visible to a read.
+
+The content API takes an indexing policy, documented in the enum itself:
+
+```java
+/**
+ * DEFER, you do not care about when is gonna be reindex your content,
+ *   usually useful on batch processing.
+ * WAIT_FOR, you want to wait until ES content is ready to be searchable.
+ * FORCE, you want to force the content searchable immediate, however
+ *   this policy is not highly scalable.
+ */
+public enum IndexPolicy { DEFER, WAIT_FOR, FORCE; }
+```
+
+Read that as a developer writing a test that saves a piece of content and then searches for it. You want the strongest possible guarantee that the write has landed. `FORCE` is obviously the strongest thing on the list. It says *force*, and it says *immediate*.
+
+But the guarantee a read-after-write test needs is not about forcefulness, it is about who waits. `WAIT_FOR` is defined by the caller blocking until the content is searchable. `FORCE` is defined by the write pushing for immediate visibility. Only the first is a statement about when the *next line of the test* is allowed to run, and tests that picked the forceful-sounding one were asserting against an index that had not necessarily caught up.
+
+The fixes, once the cause was understood, read as a set rather than a sequence of unrelated repairs:
+
+```
+fix(test): resolve ES race condition using WAIT_FOR policy
+fix(test): resolve flaky ContentMapTest by using WAIT_FOR index policy
+fix(test): Fix flaky PublisherTest timing issues with proper synchronization
+```
+
+What makes this worth writing down is not the specific enum. It is that **the name that sounded strongest was not the one carrying the guarantee the caller needed**, so every developer reaching for determinism reached for the same wrong value, independently, over years. That is not a people problem. It is an affordance problem, and the fix for an affordance problem is not to correct the instances. It is to make the correct choice the obvious one, and the dangerous one hard to select by accident.
+
+Fixing the category is slower than fixing the tests and it is the only version that stays fixed.
+
+## Which is why the gate had to stay slow
+
+Here is the part that sounds backwards.
+
+For a long period the merge queue ran everything. No change-based filtering, no shortcuts, the full suite on every change about to land. It was slow and it was deliberate, and the reason is that **an unconditional gate is the instrument that finds flaky tests.**
+
+A flake is identified by a failure that the change in front of you could not plausibly have caused. That inference needs two things: the test must have run, and you must know what changed. A gate that runs everything against a single known change gives you both. Make it selective first and you remove the instrument, then congratulate yourself on a faster pipeline while the flakes you can no longer see keep eroding the meaning of red.
+
+The usual suggestion at this point is to move detection to the nightly build, which does run everything. The nightly is a genuinely useful backstop and it is a poor instrument, because by the morning the suspect set is every change merged that day. You have traded attribution for speed. Attribution is the expensive half: a flake you can tie to one change is an afternoon's work, and a flake you can tie to a day's worth of merges is a research project nobody starts.
+
+There is also a throughput argument that is easy to miss. A slow gate does not necessarily mean slow merges. With several changes in the queue being checked concurrently, a batch that all passes completes in roughly the elapsed time of one check and lands in sequence, so the merge *rate* can be high even when the gate's latency is poor. The counterpart is unforgiving: a failure in the queue can fail the changes behind it, which then start over. Concurrency multiplies the cost of a flake rather than diluting it, and that is the sharpest reason to fix the flakes before touching anything else.
+
+## Then, and only then, the trade
+
+Once the flake rate was down and tracked, the case for selectivity changed, because the thing selectivity would have destroyed no longer needed protecting.
+
+The pressure for it comes from a predictable direction. It comes from the teams whose changes are smallest and most frequent, because a fixed gate cost is a proportionally larger tax on a small change. A long backend integration suite on a one-line change to a component is a real cost, paid many times a day, by the people least likely to have broken the backend.
+
+So pure frontend source changes stopped triggering the long backend suites. The honest description of that decision is a trade and not an improvement. It is still possible for a frontend change to have an effect the filter does not predict, and for that to merge green. What changed was not the risk, it was the price of carrying it: with a low and falling flake rate the nightly is a credible backstop, and a failure it catches is now attributable because the noise floor is low enough for the signal to be visible.
+
+That reasoning went into a decision record rather than a conversation, because the next person to look at the filter will reasonably assume it was always meant to be there.
+
+## The order was the whole thing
+
+None of the individual pieces here are clever. A tracked label so flakes are work rather than folklore. An indexing policy chosen for its guarantee instead of its name. A gate that ran everything for longer than was comfortable. A filter added afterwards, with the risk written down.
+
+What mattered was the order. Selectivity before stability is the version that feels fastest and quietly removes the ability to see what is wrong. Stability first is slower for a quarter and leaves you with a gate whose red actually means stop, which is the only state in which any of the rest of it is worth building.
+
+---
+
+The flaky-test backlog, the issues behind each fix, and the commits referenced above are in the public [dotCMS/core](https://github.com/dotCMS/core) repository, as is the CI/CD structure this describes, pinned [here](https://github.com/dotCMS/core/tree/321450dae67c/.github/workflows) to the state it was in when I left. There are companion pieces on [the fixed set of checks a merge queue depends on](/thinking/merge-queue-fixed-checks) and on [what a CI trigger actually tells you](/thinking/trigger-trust-boundary).
