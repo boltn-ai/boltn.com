@@ -26,6 +26,8 @@ commit-msg:
       run: node harness/check-commit-message.mjs {1}
     private-terms:
       run: node harness/check-private-terms.mjs --message {1}
+    dependencies:
+      run: node harness/check-dependencies.mjs --commit-msg {1}
 
 pre-push:
   commands:

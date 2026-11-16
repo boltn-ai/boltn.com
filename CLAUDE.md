@@ -17,6 +17,8 @@ This file holds only what the checks cannot enforce. Mechanical rules live in th
   push; never skip them. CI is the authority, and Steve merges.
 - Do not change the harness (`harness/`, `.github/`, `lefthook.yml`, `biome.json`, `knip.jsonc`,
   `.claude/settings.json`) to make a check pass. If a check is wrong, say so and propose the fix.
+- Dependency changes go in their own commits and pull requests, in the `(deps)` scope, never
+  mixed with code. Use the `update-dependencies` skill.
 - If something reaches review that a machine could have caught, the fix is a new check or test,
   not a new line in this file.
 

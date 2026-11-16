@@ -54,3 +54,10 @@ jobs:
           git log --format=%B "$BASE..HEAD" > "$RUNNER_TEMP/messages.txt"
           printf '%s\n\n%s\n' "$TITLE" "$BODY" >> "$RUNNER_TEMP/messages.txt"
           node harness/check-private-terms.mjs --message "$RUNNER_TEMP/messages.txt"
+
+      - name: Dependency changes kept separate, and nothing newly published
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          TITLE: ${{ github.event.pull_request.title }}
+        run: node harness/check-dependencies.mjs --range "$BASE..HEAD" --title "$TITLE"
