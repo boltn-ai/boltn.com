@@ -1,0 +1,31 @@
+# pnpm settings (pnpm 10). Supply-chain defences first; see docs/harness.md#dependencies and the
+# update-dependencies skill. pnpm 11 turns most of these on by default.
+
+# Never install a version published less than 3 days ago (minutes). Compromised releases are
+# usually found and pulled within days. Exclude a package only for an urgent security fix.
+minimumReleaseAge: 4320
+minimumReleaseAgeExclude: []
+
+# Refuse a version whose publishing trust (provenance, trusted publisher) is weaker than an
+# earlier version's: the signature of a release from a stolen account.
+trustPolicy: no-downgrade
+# ...for releases younger than 30 days (minutes). The threat is a fresh release; older ones have
+# had a month of public scrutiny, and some predate their package's move to provenance.
+trustPolicyIgnoreAfter: 43200
+
+# Transitive dependencies resolve from the registry only, never from git URLs or tarballs.
+blockExoticSubdeps: true
+
+# Dependency install scripts do not run, and an unreviewed one fails the install. Each package
+# with a script is listed here after review.
+strictDepBuilds: true
+allowBuilds:
+  esbuild: false # postinstall only swaps its JS shim for the platform binary it already finds
+  lefthook: false # postinstall installs the git hooks; our prepare script does that
+  sharp: false # builds from source only when no prebuilt binary exists for the platform
+
+# Versions in package.json are exact; the lockfile records integrity hashes for everything else.
+savePrefix: ""
+
+# The pnpm version is pinned, with its hash, in package.json's packageManager field.
+packageManagerStrictVersion: true

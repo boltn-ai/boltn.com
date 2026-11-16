@@ -1,5 +1,5 @@
 [tools]
 node = "22"
-pnpm = "8"
+pnpm = "10.34.9"
 "npm:vercel" = "latest"
 gitleaks = "8.30.1"
