@@ -72,6 +72,18 @@ account or a compromised build, and are usually found and pulled within days. Th
   a pull request that locks any package, direct or transitive, younger than that.
 - **Updates are batched and scheduled.** Dependabot groups npm minor and patch updates weekly and
   action updates monthly; majors come one at a time.
+- **Everything is pinned.** Exact versions in `package.json`, integrity hashes for every package in
+  `pnpm-lock.yaml`, pnpm itself pinned with its hash in `packageManager`, Node and the command-line
+  tools at exact versions in `.mise.toml`, and GitHub Actions by commit SHA (tags can be moved).
+  CI installs only from the frozen lockfile.
+- **pnpm refuses what looks like an attack** (`pnpm-workspace.yaml`): a version younger than three
+  days, a release whose publishing trust is weaker than an earlier one's (the mark of a stolen
+  account), a transitive dependency from a git URL or tarball, and any dependency install script
+  nobody has reviewed. pnpm 11 makes most of these the default; this repo stays on pnpm 10, which
+  has them all as settings, until Dependabot and GitHub's dependency graph read pnpm 11's
+  lockfile.
+- **CI sees as little as possible.** The workflow token is read-only, the checkout keeps no
+  credentials, and secrets are given only to the steps that read them.
 
 ## Budgets
 
@@ -119,14 +131,14 @@ time.
    with email mocked, redirects, the 404 page, RSS and the sitemap), with
    [axe](https://github.com/dequelabs/axe-core) accessibility checks on every route.
 2. **Outer layers:** Lighthouse CI budgets against Vercel preview deployments, actionlint and
-   zizmor on the workflows with actions pinned to commits, grouped Dependabot updates, a weekly
-   check of the production site and its external links, and possibly a few visual snapshots.
+   zizmor on the workflows, a weekly check of the production site and its external links, and
+   possibly a few visual snapshots.
 
 ## Setting up a clone
 
 ```sh
 pnpm install          # also installs the git hooks
-mise install          # gitleaks, pinned in .mise.toml
+mise install          # Node, pnpm and gitleaks, pinned in .mise.toml
 git config --local boltn.privateTermsFile <path to the private list>
 ```
 
