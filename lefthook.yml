@@ -1,0 +1,28 @@
+# Git hooks (https://lefthook.dev). Every command calls a check that package.json and CI also use,
+# so the layers cannot drift apart; they differ only in scope. CI is the authority: these hooks
+# exist to fail fast, and agents are not allowed to skip them (see .claude/settings.json).
+
+pre-commit:
+  parallel: true
+  commands:
+    biome:
+      glob: "*.{ts,tsx,mjs,json,jsonc,css}"
+      run: pnpm exec biome check --error-on-warnings --no-errors-on-unmatched {staged_files}
+    design-rules:
+      run: node harness/check-design-rules.mjs {staged_files}
+    private-terms:
+      run: node harness/check-private-terms.mjs {staged_files}
+    secrets:
+      run: gitleaks git --pre-commit --staged --no-banner --redact .
+
+commit-msg:
+  commands:
+    conventional:
+      run: node harness/check-commit-message.mjs {1}
+    private-terms:
+      run: node harness/check-private-terms.mjs --message {1}
+
+pre-push:
+  commands:
+    check:
+      run: pnpm check

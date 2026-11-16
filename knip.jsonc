@@ -1,0 +1,9 @@
+{
+	"$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+	// velite and the harness scripts are entry points knip cannot discover on its own.
+	"entry": ["velite.config.ts", "harness/**/*.mjs"],
+	// An exported type used in its own file (a function's return type) is public API, not dead code.
+	"ignoreExportsUsedInFile": true,
+	// gitleaks is a Go binary pinned in .mise.toml, not an npm package.
+	"ignoreBinaries": ["gitleaks"]
+}

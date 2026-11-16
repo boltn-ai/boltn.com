@@ -2,3 +2,4 @@
 node = "22"
 pnpm = "8"
 "npm:vercel" = "latest"
+gitleaks = "8.30.1"
