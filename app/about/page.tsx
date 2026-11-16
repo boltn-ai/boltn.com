@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { CopyButton } from "@/components/blog/copy-button";
 import { CtaButton } from "@/components/ui/cta-button";
 import { PageHeader } from "@/components/ui/page-header";
@@ -99,12 +100,13 @@ export default function About() {
 								data-alt="Steve Bolton, head and shoulders"
 								className="aspect-square border border-rule"
 							>
-								<img
+								<Image
 									src={`/${HEADSHOT_FILE}`}
 									alt="Steve Bolton"
 									width={1000}
 									height={1000}
-									fetchPriority="high"
+									sizes="(min-width: 768px) 33vw, 100vw"
+									priority
 								/>
 							</div>
 						</figure>

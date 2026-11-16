@@ -81,6 +81,7 @@ svg {
 	display: block;
 }
 [hidden] {
+	/* biome-ignore lint/complexity/noImportantStyles: the hidden attribute must beat any display utility */
 	display: none !important;
 }
 button,
@@ -127,16 +128,19 @@ td.num {
 	z-index: 1;
 }
 [data-slot]:has(> img) > :not(img):not([data-keep]) {
+	/* biome-ignore lint/complexity/noImportantStyles: a filled slot hides its placeholder whatever its utilities say */
 	display: none !important;
 }
 @media (prefers-reduced-motion: reduce) {
 	*:not(.keep-motion),
 	*:not(.keep-motion)::before,
 	*:not(.keep-motion)::after {
+		/* biome-ignore-start lint/complexity/noImportantStyles: reduced motion must override every component's transitions */
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
 		scroll-behavior: auto !important;
+		/* biome-ignore-end lint/complexity/noImportantStyles: reduced-motion block ends */
 	}
 }
 /* photographs: mono */
