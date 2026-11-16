@@ -1,5 +1,8 @@
 name: CI
 
+# The authority: hooks can be skipped, this cannot (main is protected and requires it).
+# It runs the same `pnpm check` as the pre-push hook, plus the checks that need the PR itself.
+
 on:
   pull_request:
   push:
@@ -14,11 +17,15 @@ concurrency:
 
 jobs:
   check:
-    name: Lint, type-check, test, build
+    name: check
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      PRIVATE_TERMS: ${{ secrets.PRIVATE_TERMS }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # gitleaks scans the whole history
 
       - uses: pnpm/action-setup@v4
 
@@ -27,20 +34,23 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - uses: jdx/mise-action@v2
+        with:
+          install_args: gitleaks # pinned in .mise.toml
+
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+      - name: Check (lint, design rules, private terms, types, tests, secrets, knip, build, budgets)
+        run: pnpm check
 
-      - name: Compile content
-        run: pnpm exec velite build
-
-      - name: Type-check
-        run: pnpm exec tsc --noEmit
-
-      - name: Test
-        run: pnpm test
-
-      - name: Build
-        run: pnpm exec next build
+      - name: Private terms in commit messages, PR title and body
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          TITLE: ${{ github.event.pull_request.title }}
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          git log --format=%B "$BASE..HEAD" > "$RUNNER_TEMP/messages.txt"
+          printf '%s\n\n%s\n' "$TITLE" "$BODY" >> "$RUNNER_TEMP/messages.txt"
+          node harness/check-private-terms.mjs --message "$RUNNER_TEMP/messages.txt"
