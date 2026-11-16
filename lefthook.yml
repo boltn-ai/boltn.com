@@ -2,6 +2,11 @@
 # so the layers cannot drift apart; they differ only in scope. CI is the authority: these hooks
 # exist to fail fast, and agents are not allowed to skip them (see .claude/settings.json).
 
+# Print failures and the one-line summary only: less for a person or an agent to read past.
+output:
+  - failure
+  - summary
+
 pre-commit:
   parallel: true
   commands:
