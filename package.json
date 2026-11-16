@@ -21,32 +21,35 @@
 		"check": "pnpm check:quick && pnpm check:secrets && pnpm knip && pnpm build && pnpm check:budgets"
 	},
 	"dependencies": {
-		"@vercel/analytics": "^2.0.1",
-		"clsx": "^2.1.1",
-		"feed": "^5.2.0",
-		"lucide-react": "^0.577.0",
+		"@vercel/analytics": "2.0.1",
+		"clsx": "2.1.1",
+		"feed": "5.2.0",
+		"lucide-react": "0.577.0",
 		"next": "16.1.6",
 		"react": "19.2.3",
 		"react-dom": "19.2.3",
-		"rehype-autolink-headings": "^7.1.0",
-		"rehype-pretty-code": "^0.14.3",
-		"rehype-slug": "^6.0.0",
-		"remark-gfm": "^4.0.1",
-		"resend": "^6.9.3",
-		"shiki": "^4.0.2",
-		"tailwind-merge": "^3.5.0",
-		"velite": "^0.3.1"
+		"rehype-autolink-headings": "7.1.0",
+		"rehype-pretty-code": "0.14.3",
+		"rehype-slug": "6.0.0",
+		"remark-gfm": "4.0.1",
+		"resend": "6.9.3",
+		"shiki": "4.0.2",
+		"tailwind-merge": "3.5.0",
+		"velite": "0.3.1"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.7",
-		"@tailwindcss/postcss": "^4",
-		"@types/node": "^20",
-		"@types/react": "^19",
-		"@types/react-dom": "^19",
-		"knip": "^6.45.1",
-		"lefthook": "^2.2.2",
-		"tailwindcss": "^4",
-		"typescript": "^5"
+		"@biomejs/biome": "2.4.7",
+		"@tailwindcss/postcss": "4.2.1",
+		"@types/node": "20.19.37",
+		"@types/react": "19.2.14",
+		"@types/react-dom": "19.2.3",
+		"knip": "6.45.1",
+		"lefthook": "2.2.1",
+		"tailwindcss": "4.2.1",
+		"typescript": "5.9.3"
 	},
-	"packageManager": "pnpm@8.15.1+sha1.8adba2d20330c02d3856e18c4eb3819d1d3ca6aa"
+	"packageManager": "pnpm@10.34.9+sha512.f49b5a8ea0fdedb44bb3c0c1d6575092a53c2950d95b7ad15df11f17974877a2de3a01c07e934e9b28ce716e51c09a94962c7306d09be2e1e4b18a8c8762fd32",
+	"engines": {
+		"node": "22.x"
+	}
 }
