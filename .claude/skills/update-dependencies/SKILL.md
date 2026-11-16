@@ -31,13 +31,15 @@ For every package that changes, including new transitive packages in the lockfil
   the lockfile. Exclude a package (`minimumReleaseAgeExclude`) only for a security fix, and say so.
 - **Changelog:** read the release notes between the two versions. Note breaking changes and
   security fixes in the PR body.
-- **Provenance:** `npm view <pkg>@<version> dist.attestations` shows whether it was built and
-  published from CI. If an earlier version had provenance and this one does not, stop and ask:
-  `trustPolicy: no-downgrade` will refuse it, and that is the point.
+- **Provenance:** `npm view <pkg>@<version> _npmUser dist.attestations` shows who published it and
+  whether it was built and published from CI. If an earlier version had provenance and this one
+  does not, `trustPolicy: no-downgrade` refuses it. Do not exclude it: find out why (the project's
+  issues), and prefer the last version that has provenance. Exclude only with a maintainer's
+  public explanation, linked in the commit.
 - **Install scripts:** pnpm blocks dependency build scripts. If an install reports a new one, do
-  not allow it by default. In `pnpm-workspace.yaml`, list it under `ignoredBuiltDependencies`, or
-  under `onlyBuiltDependencies` only when the package does not work without its script, and
-  explain why in the commit. (pnpm 11 renames these to `allowBuilds`.)
+  not allow it by default. Add it to `allowBuilds` in `pnpm-workspace.yaml` as `false`, with a
+  comment saying why the package works without it; `true` only when it cannot, and explain why in
+  the commit.
 - **Weight:** a new package must be worth what it adds. Check the dependency budget and the
   lockfile diff for unexpected new transitive packages.
 
