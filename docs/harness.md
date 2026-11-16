@@ -34,9 +34,9 @@ harness exists to catch five kinds of failure before they reach the live site:
 |---|---|---|---|
 | Edit | Claude Code `PostToolUse` hook, on the edited file | < 1 s | Biome (format and lint), design rules, private terms |
 | End of turn | Claude Code `Stop` hook, when the tree has changes | ~6 s | `pnpm check:quick` |
-| Commit | lefthook `pre-commit` and `commit-msg`, on staged files | < 1 s | Biome, design rules, private terms, gitleaks; commit message format and private terms |
+| Commit | lefthook `pre-commit` and `commit-msg`, on staged files | < 1 s | Biome, design rules, private terms, gitleaks; commit message format, private terms and dependency separation |
 | Push | lefthook `pre-push` | ~15 s | `pnpm check` |
-| Pull request | GitHub Actions, required for `main` | minutes | `pnpm check`, plus private terms in commit messages and the PR title and body |
+| Pull request | GitHub Actions, required for `main` | ~1 min | `pnpm check`, plus private terms in commit messages and the PR title and body, dependency separation across the PR and the release age of newly locked packages |
 
 `pnpm check:quick` is lint, design rules, private terms, type-check and unit tests. `pnpm check`
 adds a full-history secrets scan, knip, a production build and the budgets.
@@ -55,7 +55,23 @@ adds a full-history secrets scan, knip, a production build and the budgets.
 | Private terms | `harness/check-private-terms.mjs` | No tool can do this one: the list must stay out of the public repo, or it would publish what it protects. It comes from a CI secret or a local path, and findings name the list entry's number, never the matched text, so CI logs stay clean. |
 | Commit messages | `harness/check-commit-message.mjs` | Conventional commits in one regular expression, instead of commitlint and its configuration. |
 | Budgets | `harness/check-budgets.mjs` | See below. Bundle-size tools target libraries and fit a statically generated site badly. |
+| Dependency changes | `harness/check-dependencies.mjs` | Keeps dependency changes in their own `(deps)` commits and pull requests, and fails a pull request that locks any package published less than three days ago. Its first run caught a transitive package published that morning. Dependabot's cooldown covers only the packages it updates directly. |
 | Agent guard rails | `.claude/settings.json` | Agents may not skip hooks, force-push, push to `main`, merge or deploy, and must ask before editing the harness. |
+
+## Dependencies
+
+Supply-chain attacks on npm arrive as new releases of trusted packages, published from a stolen
+account or a compromised build, and are usually found and pulled within days. The defences:
+
+- **Dependency changes travel alone.** A commit that changes a version changes nothing else, and a
+  pull request that contains one is a dependency pull request throughout, so each update is
+  reviewed on its own and is easy to revert. The `update-dependencies` skill
+  (`.claude/skills/`) is the procedure: where updates come from, what to check for each one, and
+  how to write the pull request.
+- **Nothing newly published.** Dependabot waits three days before proposing an update, and CI fails
+  a pull request that locks any package, direct or transitive, younger than that.
+- **Updates are batched and scheduled.** Dependabot groups npm minor and patch updates weekly and
+  action updates monthly; majors come one at a time.
 
 ## Budgets
 
