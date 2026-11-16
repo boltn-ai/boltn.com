@@ -9,7 +9,7 @@ import { FOCUS, HEADLINE, LINKEDIN_URL, OPEN_TO, ROLE, SHORT_BIO } from "@/lib/p
 
 export const metadata: Metadata = {
 	title: "About",
-	description: `Steve Bolton: ${ROLE} working on ${FOCUS}. Thirty years in software, from test automation to chief architect, and lately the context and tooling that make AI agents work in large, long-lived codebases.`,
+	description: `Steve Bolton: ${ROLE} working on ${FOCUS}. Twenty-five years in software, from test automation to chief architect, and lately the context and tooling that make AI agents work in large, long-lived codebases.`,
 };
 
 type Role = {
