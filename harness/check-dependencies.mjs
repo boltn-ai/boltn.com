@@ -144,6 +144,20 @@ if (messageFile) {
 	process.exit(2);
 }
 
+async function publishTimes(name) {
+	for (let attempt = 1; attempt <= 3; attempt++) {
+		try {
+			const res = await fetch(`https://registry.npmjs.org/${name.replace("/", "%2f")}`);
+			if (res.ok) return (await res.json()).time;
+			if (res.status === 404) return null;
+		} catch {
+			// a reset connection: retry
+		}
+		await new Promise((r) => setTimeout(r, attempt * 1000));
+	}
+	return null;
+}
+
 async function checkReleaseAge(base, head) {
 	const diff = git("diff", base, head, "--", "pnpm-lock.yaml");
 	if (!diff) return;
@@ -159,21 +173,33 @@ async function checkReleaseAge(base, head) {
 	}
 	const cutoff = Date.now() - minutes * 60_000;
 	const fresh = [];
-	await Promise.all(
-		[...locked].map(async (spec) => {
-			const at = spec.lastIndexOf("@");
-			const [name, version] = [spec.slice(0, at), spec.slice(at + 1)];
-			if (excluded.includes(name) || excluded.includes(spec)) return;
-			const res = await fetch(`https://registry.npmjs.org/${name.replace("/", "%2f")}`);
-			if (!res.ok) {
-				problems.push(`${spec}: could not read its publish date (HTTP ${res.status}).`);
-				return;
+	// One registry document per package name, eight at a time, each retried: a large lockfile
+	// change (a package manager upgrade) can lock hundreds of packages at once.
+	const byName = new Map();
+	for (const spec of locked) {
+		const at = spec.lastIndexOf("@");
+		const [name, version] = [spec.slice(0, at), spec.slice(at + 1)];
+		if (excluded.includes(name) || excluded.includes(spec)) continue;
+		byName.set(name, [...(byName.get(name) ?? []), version]);
+	}
+	const queue = [...byName];
+	const worker = async () => {
+		for (let next = queue.shift(); next; next = queue.shift()) {
+			const [name, versions] = next;
+			const times = await publishTimes(name);
+			if (!times) {
+				problems.push(`${name}: could not read its publish dates from the registry.`);
+				continue;
 			}
-			const published = Date.parse((await res.json()).time?.[version] ?? "");
-			if (!(published <= cutoff))
-				fresh.push(`${spec} (published ${new Date(published).toISOString()})`);
-		}),
-	);
+			for (const version of versions) {
+				const published = Date.parse(times[version] ?? "");
+				if (!(published <= cutoff)) {
+					fresh.push(`${name}@${version} (published ${new Date(published).toISOString()})`);
+				}
+			}
+		}
+	};
+	await Promise.all(Array.from({ length: 8 }, worker));
 	for (const f of fresh.sort()) {
 		problems.push(
 			`${f}: younger than minimumReleaseAge (${minutes} minutes). Wait, or add it to ` +
