@@ -1,0 +1,34 @@
+# Dependency updates arrive as their own PRs, in the (deps) scope that
+# harness/check-dependencies.mjs requires, and only after a cooldown: compromised releases are
+# usually found and pulled within days. CI also checks the age of every newly locked transitive
+# package, which Dependabot's cooldown does not cover. See the update-dependencies skill.
+version: 2
+updates:
+  - package-ecosystem: npm # pnpm, via pnpm-lock.yaml
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    versioning-strategy: increase # versions in package.json are exact; keep them exact
+    commit-message:
+      prefix: build
+      include: scope # build(deps): / build(deps-dev):
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: ci
+      include: scope # ci(deps):
+    groups:
+      actions:
+        patterns: ["*"]
